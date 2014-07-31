@@ -23,6 +23,7 @@ public String getName() {
 
 public void setName(String name) {
 	this.name = name;
-}
+}// Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
+//to their respective "read" methods for processing. Otherwise, skips the tag.
 
 }
