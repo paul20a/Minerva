@@ -1,9 +1,16 @@
 package dcs.gla.ac.uk.minerva;
 
 import java.util.Locale;
+
+import org.osmdroid.DefaultResourceProxyImpl;
+import org.osmdroid.ResourceProxy;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -22,44 +29,74 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private TextToSpeech minervaTTS;
 	private String title;
 	private String description;
-	private MapView myOpenMapView;
-	private MapController myMapController;
-	
+	private MapView minervaMapView;
+	private MapController minervaMapController;
+	MyItemizedOverlay myItemizedOverlay = null;
+	MyLocationNewOverlay myLocationOverlay;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Intent intent=this.getIntent();
-		title=intent.getStringExtra(SelectActivity.NAME);
-		description=intent.getStringExtra(SelectActivity.DESCRIPTION);
-		
-        myOpenMapView = (MapView)findViewById(R.id.openmapview);
-        myOpenMapView.setBuiltInZoomControls(true);
-        myMapController = (MapController) myOpenMapView.getController();
-        myMapController.setZoom(4);
-		
-		TextView titleTextView=(TextView) findViewById(R.id.titleTextView);
-		TextView descriptionTextView=(TextView) findViewById(R.id.textViewDesc);
-		
+		Intent intent = this.getIntent();
+		title = intent.getStringExtra(SelectActivity.NAME);
+		description = intent.getStringExtra(SelectActivity.DESCRIPTION);
+
+		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
+		TextView descriptionTextView = (TextView) findViewById(R.id.textViewDesc);
+
 		Button speakButton = (Button) findViewById(R.id.play_btn);
 		speakButton.setOnClickListener(this);
 		Intent checkTTSIntent = new Intent();
 		checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		startActivityForResult(checkTTSIntent, CHECK_CODE);
-		
+
 		titleTextView.setText(title);
 		descriptionTextView.setText(description);
+
+		startMap();
 	}
-	
+
+	private void startMap() {
+		minervaMapView = (MapView)findViewById(R.id.openmapview);
+		minervaMapView.setBuiltInZoomControls(true);
+        minervaMapController = (MapController) minervaMapView.getController();
+        minervaMapController.setZoom(10);
+       
+        
+        Drawable marker=getResources().getDrawable(android.R.drawable.btn_radio);
+        int markerWidth = marker.getIntrinsicWidth();
+        int markerHeight = marker.getIntrinsicHeight();
+        marker.setBounds(0, markerHeight, markerWidth, 0);
+         
+        ResourceProxy resourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
+         
+        myItemizedOverlay = new MyItemizedOverlay(marker, resourceProxy);
+        minervaMapView.getOverlays().add(myItemizedOverlay);
+         
+        GeoPoint myPoint1 = new GeoPoint(55.964048, -3.204764);
+        myItemizedOverlay.addItem(myPoint1, "myPoint1", "myPoint1");
+        
+        myLocationOverlay = new MyLocationNewOverlay(this, minervaMapView);
+        minervaMapView.getOverlays().add(myLocationOverlay);
+        myLocationOverlay.enableMyLocation();
+        myLocationOverlay.enableFollowLocation();
+        myLocationOverlay.runOnFirstFix(new Runnable(){
+        public void run(){
+       //minervaMapController.setCenter((new GeoPoint(myLocationOverlay.getLastFix().getLatitude(),myLocationOverlay.getLastFix().getLongitude())));
+        }
+        });
+	}
+
 	@Override
 	protected void onDestroy() {
-        // 
-        if (minervaTTS != null) {
-        	minervaTTS.stop();
-        	minervaTTS.shutdown();
-        }
-        super.onDestroy();
+		//
+		if (minervaTTS != null) {
+			minervaTTS.stop();
+			minervaTTS.shutdown();
+		}
+		super.onDestroy();
 	}
 
 	@Override
