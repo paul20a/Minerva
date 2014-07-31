@@ -1,17 +1,9 @@
 package dcs.gla.ac.uk.minerva;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Locale;
-
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -38,7 +30,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		readFile();
+		Intent intent=this.getIntent();
+		title=intent.getStringExtra(SelectActivity.NAME);
+		description=intent.getStringExtra(SelectActivity.DESCRIPTION);
 		
         myOpenMapView = (MapView)findViewById(R.id.openmapview);
         myOpenMapView.setBuiltInZoomControls(true);
@@ -66,7 +60,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
         	minervaTTS.shutdown();
         }
         super.onDestroy();
-		super.onDestroy();
 	}
 
 	@Override
@@ -122,31 +115,4 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		}
 	}
 
-	private void readFile() {
-		AssetManager am = this.getAssets();
-		BufferedReader buf;
-		title = "";
-		description = "";
-		try {
-			InputStream inputStream = am.open("Info.txt");
-			InputStreamReader inputStreamReader = new InputStreamReader(
-					inputStream);
-			buf = new BufferedReader(inputStreamReader);
-			String temp;
-
-			if ((temp = buf.readLine()) != null) {
-				title = temp;
-			}
-			while ((temp = buf.readLine()) != null) {
-				description = description+temp;
-			}
-
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }
