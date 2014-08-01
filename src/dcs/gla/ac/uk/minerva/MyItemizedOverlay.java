@@ -23,6 +23,7 @@ public class MyItemizedOverlay extends ItemizedOverlay<OverlayItem> {
 	  
 	 public void addItem(GeoPoint p, String title, String snippet){
 	  OverlayItem newItem = new OverlayItem(title, snippet, p);
+	  newItem.setMarkerHotspot(OverlayItem.HotspotPlace.LOWER_LEFT_CORNER);
 	  itemList.add(newItem);
 	  populate(); 
 	 }

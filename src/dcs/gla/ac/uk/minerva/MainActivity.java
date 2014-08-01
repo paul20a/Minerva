@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,30 +63,36 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		minervaMapView = (MapView)findViewById(R.id.openmapview);
 		minervaMapView.setBuiltInZoomControls(true);
         minervaMapController = (MapController) minervaMapView.getController();
-        minervaMapController.setZoom(10);
+        minervaMapController.setZoom(12);
        
-        
-        Drawable marker=getResources().getDrawable(android.R.drawable.btn_radio);
+        //set up marker
+        Drawable marker = this.getResources().getDrawable(R.drawable.flag);
+        //Drawable marker=getResources().getDrawable(android.R.drawable.rsz_flag);
         int markerWidth = marker.getIntrinsicWidth();
         int markerHeight = marker.getIntrinsicHeight();
         marker.setBounds(0, markerHeight, markerWidth, 0);
-         
         ResourceProxy resourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
-         
-        myItemizedOverlay = new MyItemizedOverlay(marker, resourceProxy);
-        minervaMapView.getOverlays().add(myItemizedOverlay);
-         
-        GeoPoint myPoint1 = new GeoPoint(55.964048, -3.204764);
-        myItemizedOverlay.addItem(myPoint1, "myPoint1", "myPoint1");
         
+        //my location
         myLocationOverlay = new MyLocationNewOverlay(this, minervaMapView);
         minervaMapView.getOverlays().add(myLocationOverlay);
         myLocationOverlay.enableMyLocation();
         myLocationOverlay.enableFollowLocation();
-        myLocationOverlay.runOnFirstFix(new Runnable(){
-        public void run(){
-       //minervaMapController.setCenter((new GeoPoint(myLocationOverlay.getLastFix().getLatitude(),myLocationOverlay.getLastFix().getLongitude())));
-        }
+
+        //add markers to POI
+        myItemizedOverlay = new MyItemizedOverlay(marker, resourceProxy);
+        minervaMapView.getOverlays().add(myItemizedOverlay); 
+        final GeoPoint myPoint1 = new GeoPoint((int)(55.867401*1000000), (int)(1000000*-4.282309));
+        myItemizedOverlay.addItem(myPoint1, "myPoint1", "myPoint1");
+       
+        
+        //this is a work around for centering issue in osmdriod v4.2
+        ViewTreeObserver vto = minervaMapView.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+            	minervaMapView.getController().setCenter(myPoint1);
+            }
         });
 	}
 
