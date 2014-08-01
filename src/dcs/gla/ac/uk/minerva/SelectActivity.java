@@ -5,39 +5,30 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParserException;
-
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.Toast;
 
 public class SelectActivity extends ActionBarActivity {
 	
     public final static String NAME = "dcs.gla.ac.uk.NAME";
     public final static String DESCRIPTION = "dcs.gla.ac.uk.DESCRIPTION";
-
-    
-	ArrayList<POI> pList;
+	private ArrayList<POI> pList;
+	mFragmentPagerAdapter pagerAdapter;
+	ViewPager viewPager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_select);
 		XmlParser xParser= new XmlParser();
-		final ListView lView =  (ListView) findViewById(R.id.list);
 		
 		try {
-			
 			InputStream in = this.getAssets().open("data.xml");
-			pList=(ArrayList<POI>) xParser.parse(in);
-			lView.setAdapter(new MinervaBaseAdapter(this, pList)) ;
-			
+			setpList((ArrayList<POI>) xParser.parse(in));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,20 +36,21 @@ public class SelectActivity extends ActionBarActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		pagerAdapter = new mFragmentPagerAdapter(getSupportFragmentManager());
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		//viewpager is null here!!!!!!!!!!!!!!!!!
+			viewPager.setAdapter(pagerAdapter);
+
 		
-		lView.setOnItemClickListener(new OnItemClickListener() {
-	            @Override
-	            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-	                Object o = lView.getItemAtPosition(position);
-	                POI point = (POI)o;
-	                Intent detailIntent = new Intent(SelectActivity.this, MainActivity.class);
-	                detailIntent.putExtra(NAME, point.getName());
-	                detailIntent.putExtra(DESCRIPTION, point.getDescription());
-	                Toast.makeText(SelectActivity.this, "Loading details for " + " " + point.getName()
-	                		, Toast.LENGTH_LONG).show();
-	                startActivity(detailIntent);
-	            }
-	        });
+		viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                // When swiping between different app sections, select the corresponding tab.
+                // We can also use ActionBar.Tab#select() to do this if we have a reference to the
+                // Tab.
+            }
+        });
+		
 		
 	}
 
@@ -69,15 +61,13 @@ public class SelectActivity extends ActionBarActivity {
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+	
+	public ArrayList<POI> getpList() {
+		return pList;
 	}
+
+	public void setpList(ArrayList<POI> pList) {
+		this.pList = pList;
+	}
+
 }
