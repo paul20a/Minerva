@@ -6,37 +6,30 @@ import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.Toast;
 
-public class SelectActivity extends ActionBarActivity {
+public class SelectActivity extends ActionBarActivity  {
 	
     public final static String NAME = "dcs.gla.ac.uk.NAME";
     public final static String DESCRIPTION = "dcs.gla.ac.uk.DESCRIPTION";
-
+	mFragmentPagerAdapter pAdapter;
+	ViewPager vPager;
     
 	ArrayList<POI> pList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_select);
+		setContentView(R.layout.pager);
 		XmlParser xParser= new XmlParser();
-		final ListView lView =  (ListView) findViewById(R.id.list);
 		
 		try {
-			
 			InputStream in = this.getAssets().open("data.xml");
 			pList=(ArrayList<POI>) xParser.parse(in);
-			lView.setAdapter(new MinervaBaseAdapter(this, pList)) ;
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -46,20 +39,18 @@ public class SelectActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 		
-		lView.setOnItemClickListener(new OnItemClickListener() {
-	            @Override
-	            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-	                Object o = lView.getItemAtPosition(position);
-	                POI point = (POI)o;
-	                Intent detailIntent = new Intent(SelectActivity.this, MainActivity.class);
-	                detailIntent.putExtra(NAME, point.getName());
-	                detailIntent.putExtra(DESCRIPTION, point.getDescription());
-	                Toast.makeText(SelectActivity.this, "Loading details for " + " " + point.getName()
-	                		, Toast.LENGTH_LONG).show();
-	                startActivity(detailIntent);
-	            }
-	        });
-		
+		pAdapter = new mFragmentPagerAdapter(getSupportFragmentManager());
+		vPager = (ViewPager)findViewById(R.id.pager);
+		vPager.setAdapter(pAdapter);
+	
+	}
+
+	public ArrayList<POI> getpList() {
+		return pList;
+	}
+
+	public void setpList(ArrayList<POI> pList) {
+		this.pList = pList;
 	}
 
 	@Override

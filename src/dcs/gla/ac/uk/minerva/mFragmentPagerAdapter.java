@@ -13,8 +13,10 @@ public class mFragmentPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int arg0) {
-		// TODO Auto-generated method stub
-		return null;
+		if(arg0==0)
+		return ListViewFragment.newInstance("text");
+		else
+		return MapViewFragment.newInstance("text");
 	}
 
 	@Override

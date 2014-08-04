@@ -16,13 +16,14 @@
         android:text="@string/text_view1"
         android:textSize="@dimen/abc_action_bar_title_text_size"
         android:textStyle="normal|bold|italic" />
-  
-    <org.osmdroid.views.MapView
-    android:id="@+id/openmapview"
-    android:layout_width="fill_parent"
-	android:layout_weight="4"
-    android:layout_height="0dp" />
-    
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_weight="4"
+   		android:layout_height="0dp"
+        android:src="@drawable/abc_ab_bottom_solid_light_holo" />
+      
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"

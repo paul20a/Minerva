@@ -1,13 +1,8 @@
 package dcs.gla.ac.uk.minerva;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Locale;
-
-import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.ResourceProxy;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapController;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -19,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,10 +24,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	private TextToSpeech minervaTTS;
 	private String title;
 	private String description;
-	private MapView minervaMapView;
-	private MapController minervaMapController;
-	MyItemizedOverlay myItemizedOverlay = null;
-	MyLocationNewOverlay myLocationOverlay;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,44 +47,16 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		titleTextView.setText(title);
 		descriptionTextView.setText(description);
 
-		startMap();
 	}
-
-	private void startMap() {
-		minervaMapView = (MapView)findViewById(R.id.openmapview);
-		minervaMapView.setBuiltInZoomControls(true);
-        minervaMapController = (MapController) minervaMapView.getController();
-        minervaMapController.setZoom(12);
-       
-        //set up marker
-        Drawable marker = this.getResources().getDrawable(R.drawable.flag);
-        //Drawable marker=getResources().getDrawable(android.R.drawable.rsz_flag);
-        int markerWidth = marker.getIntrinsicWidth();
-        int markerHeight = marker.getIntrinsicHeight();
-        marker.setBounds(0, markerHeight, markerWidth, 0);
-        ResourceProxy resourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
-        
-        //my location
-        myLocationOverlay = new MyLocationNewOverlay(this, minervaMapView);
-        minervaMapView.getOverlays().add(myLocationOverlay);
-        myLocationOverlay.enableMyLocation();
-        myLocationOverlay.enableFollowLocation();
-
-        //add markers to POI
-        myItemizedOverlay = new MyItemizedOverlay(marker, resourceProxy);
-        minervaMapView.getOverlays().add(myItemizedOverlay); 
-        final GeoPoint myPoint1 = new GeoPoint((int)(55.867401*1000000), (int)(1000000*-4.282309));
-        myItemizedOverlay.addItem(myPoint1, "myPoint1", "myPoint1");
-       
-        
-        //this is a work around for centering issue in osmdriod v4.2
-        ViewTreeObserver vto = minervaMapView.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-            	minervaMapView.getController().setCenter(myPoint1);
-            }
-        });
+	
+	public static Drawable LoadImageFromWebOperations(String url) {
+	    try {
+	        InputStream is = (InputStream) new URL(url).getContent();
+	        Drawable d = Drawable.createFromStream(is, "src name");
+	        return d;
+	    } catch (Exception e) {
+	        return null;
+	    }
 	}
 
 	@Override
@@ -148,7 +111,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == CHECK_CODE) {
-			if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+			if ((resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS)&&minervaTTS==null) {
 				minervaTTS = new TextToSpeech(this, this);
 			} else {
 				Intent installTTSIntent = new Intent();
