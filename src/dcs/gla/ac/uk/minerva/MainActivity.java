@@ -44,6 +44,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		startActivityForResult(checkTTSIntent, CHECK_CODE);
 
+		
 		titleTextView.setText(title);
 		descriptionTextView.setText(description);
 

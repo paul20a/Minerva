@@ -41,7 +41,7 @@ public class MapViewFragment extends Fragment {
 		minervaMapView = (MapView) v.findViewById(R.id.openmapview);
 		minervaMapView.setBuiltInZoomControls(true);
 		minervaMapController = (MapController) minervaMapView.getController();
-		minervaMapController.setZoom(12);
+		minervaMapController.setZoom(15);
 
 		// set up marker
 		Drawable marker = this.getResources().getDrawable(R.drawable.flag);
@@ -58,7 +58,9 @@ public class MapViewFragment extends Fragment {
 				minervaMapView);
 		minervaMapView.getOverlays().add(myLocationOverlay);
 		myLocationOverlay.enableMyLocation();
-		myLocationOverlay.enableFollowLocation();
+		
+		//possibly useful but also likely to get annoying
+		//myLocationOverlay.enableFollowLocation();
 
 		// add markers to POI
 		myItemizedOverlay = new MyItemizedOverlay(marker, resourceProxy);
