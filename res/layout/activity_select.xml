@@ -10,6 +10,7 @@
     tools:context="dcs.gla.ac.uk.minerva.SelectActivity" >
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
                     <ListView
                         android:id="@+id/list"
@@ -21,6 +22,8 @@
 
 </LinearLayout>
 =======
+=======
+>>>>>>> parent of 9ecae2e... Reworking
         <ListView
         android:id="@+id/list"
         android:layout_width="match_parent"
@@ -28,4 +31,7 @@
          />
 
 </LinearLayout>
+<<<<<<< HEAD
+>>>>>>> parent of 9ecae2e... Reworking
+=======
 >>>>>>> parent of 9ecae2e... Reworking

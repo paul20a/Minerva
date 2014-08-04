@@ -1093,7 +1093,11 @@ containing a value of this type.
         public static final int action_menu_presenter=0x7f050017;
         public static final int action_mode_close_button=0x7f050024;
 <<<<<<< HEAD
+<<<<<<< HEAD
         public static final int action_settings=0x7f050046;
+=======
+        public static final int action_settings=0x7f050045;
+>>>>>>> parent of 9ecae2e... Reworking
 =======
         public static final int action_settings=0x7f050045;
 >>>>>>> parent of 9ecae2e... Reworking
@@ -1124,7 +1128,10 @@ containing a value of this type.
         public static final int normal=0x7f050000;
         public static final int openmapview=0x7f05003d;
 <<<<<<< HEAD
+<<<<<<< HEAD
         public static final int pager=0x7f050043;
+=======
+>>>>>>> parent of 9ecae2e... Reworking
 =======
 >>>>>>> parent of 9ecae2e... Reworking
         public static final int play_btn=0x7f050040;
@@ -1132,8 +1139,13 @@ containing a value of this type.
         public static final int progress_horizontal=0x7f050019;
         public static final int radio=0x7f05002f;
 <<<<<<< HEAD
+<<<<<<< HEAD
         public static final int rowDescTextView=0x7f050045;
         public static final int rowNameTextView=0x7f050044;
+=======
+        public static final int rowDescTextView=0x7f050044;
+        public static final int rowNameTextView=0x7f050043;
+>>>>>>> parent of 9ecae2e... Reworking
 =======
         public static final int rowDescTextView=0x7f050044;
         public static final int rowNameTextView=0x7f050043;
