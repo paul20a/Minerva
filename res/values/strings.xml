@@ -11,6 +11,5 @@
     <string name="title_activity_map_view">MapViewActivity</string>
     <string name="map_section">Map View</string>
     <string name="List_section">List View</string>
-    <string name="title_activity_home">Home</string>
 
 </resources>
