@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -31,8 +32,10 @@ public class ListViewFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		lView =  (ListView) getView().findViewById(R.id.list);
+		LinearLayout listLayout = (LinearLayout) inflater.inflate(
+                R.layout.activity_select, container, false);
 		
+		lView = new ListView(listLayout, null, mBackStackNesting);
 		lView.setAdapter(new MinervaBaseAdapter(getActivity(),( ((SelectActivity) getActivity()).getpList()))) ;
 		lView.setOnItemClickListener(new OnItemClickListener() {
 	            @Override
@@ -47,6 +50,6 @@ public class ListViewFragment extends ListFragment {
 	                startActivity(detailIntent);
 	            }
 	        });
-		return lView;
+		return listLayout;
 	}
 }
