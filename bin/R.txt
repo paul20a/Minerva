@@ -234,8 +234,10 @@ int drawable abc_textfield_searchview_holo_dark 0x7f020053
 int drawable abc_textfield_searchview_holo_light 0x7f020054
 int drawable abc_textfield_searchview_right_holo_dark 0x7f020055
 int drawable abc_textfield_searchview_right_holo_light 0x7f020056
-int drawable flag 0x7f020057
-int drawable ic_launcher 0x7f020058
+int drawable chinese_hillside 0x7f020057
+int drawable flag 0x7f020058
+int drawable ic_launcher 0x7f020059
+int drawable rock_garden 0x7f02005a
 int id action_bar 0x7f05001c
 int id action_bar_activity_content 0x7f050015
 int id action_bar_container 0x7f05001b
@@ -266,7 +268,7 @@ int id homeAsUp 0x7f050005
 int id icon 0x7f05002a
 int id ifRoom 0x7f05000a
 int id image 0x7f050027
-int id imageView1 0x7f05003d
+int id imageView 0x7f05003d
 int id list 0x7f050042
 int id listMode 0x7f050001
 int id list_item 0x7f050029

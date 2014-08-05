@@ -7,8 +7,9 @@ import org.osmdroid.ResourceProxy;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
+import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-
 import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Toast;
 
 public class MapViewFragment extends Fragment {
 	private MapView minervaMapView;
@@ -28,9 +30,9 @@ public class MapViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		//inflate view
+		// inflate view
 		View v = inflater.inflate(R.layout.map_view, container, false);
-		//create map
+		// create map
 		StartMap(v);
 		return v;
 	}
@@ -41,7 +43,6 @@ public class MapViewFragment extends Fragment {
 
 		return f;
 	}
-	
 
 	private void StartMap(View v) {
 		minervaMapView = (MapView) v.findViewById(R.id.openmapview);
@@ -52,7 +53,6 @@ public class MapViewFragment extends Fragment {
 		// set up marker.... get a nicer flag
 		Drawable marker = this.getResources().getDrawable(R.drawable.flag);
 		// Drawable
-		// marker=getResources().getDrawable(android.R.drawable.rsz_flag);
 		int markerWidth = marker.getIntrinsicWidth();
 		int markerHeight = marker.getIntrinsicHeight();
 		marker.setBounds(0, markerHeight, markerWidth, 0);
@@ -64,38 +64,65 @@ public class MapViewFragment extends Fragment {
 				minervaMapView);
 		minervaMapView.getOverlays().add(myLocationOverlay);
 		myLocationOverlay.enableMyLocation();
-		
-		//possibly useful but also likely to get annoying
-		//myLocationOverlay.enableFollowLocation();
 
-		// add markers to POI
-		ArrayList<POI> pList=((SelectActivity) getActivity()).getpList();
-		for(int i=0;i<pList.size();i++){
-		myItemizedOverlay = new MyItemizedOverlay(marker, resourceProxy);
-		minervaMapView.getOverlays().add(myItemizedOverlay);
-		GeoPoint mPoint = new GeoPoint((int) (pList.get(i).getLat() * 1000000),
-				(int) (pList.get(i).getLon()*1000000));
-		myItemizedOverlay.addItem(mPoint, "mPoint"+i, "mPoint"+i);
-		}
-		final GeoPoint g=new GeoPoint(55.965129, -3.208747);
-		// this is a work around for centering issue in osmdriod v4.2
-
-		minervaMapView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-		    
-
-		    //work around centring bug in 4.2
-			@SuppressWarnings("deprecation")
-			@SuppressLint("NewApi")
+		// possibly useful but also likely to get annoying
+		// myLocationOverlay.enableFollowLocation();
+		OnItemGestureListener<OverlayItem> gListener = new OnItemGestureListener<OverlayItem>() {
 			@Override
-		    public void onGlobalLayout() {
-				minervaMapView.getController().setCenter(g);
-				minervaMapView.getController().setZoom(16);
-		        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-		        	minervaMapView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-		        else
-		        	minervaMapView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-		    }
-		});
+			public boolean onItemLongPress(int arg0, OverlayItem arg1) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			@Override
+			public boolean onItemSingleTapUp(int arg0, OverlayItem item) {
+				
+				Toast.makeText(getActivity(), 
+						 item.getTitle() + "\n"
+						 + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(), 
+						 Toast.LENGTH_LONG).show();
+						 return true;
+			}
+		};
+		// Arrays 
+		ArrayList<POI> pList = ((SelectActivity) getActivity()).getpList();
+		ArrayList<OverlayItem> itemList = new ArrayList<OverlayItem>();
 		
+		//for each item in list add it to items array
+		for (int i = 0; i < pList.size(); i++) {
+			GeoPoint mPoint = new GeoPoint(
+					(int) (pList.get(i).getLat() * 1000000), (int) (pList
+							.get(i).getLon() * 1000000));
+			itemList.add(new OverlayItem(pList.get(i).getName(), "", mPoint));
+		}
+		
+		//create new itemised overlay and add to mapView
+		myItemizedOverlay = new MyItemizedOverlay(itemList, marker, marker, 0,
+				gListener, resourceProxy);
+		minervaMapView.getOverlays().add(myItemizedOverlay);
+		
+		//roughly the centre of the park add dynamically later where trail starts
+		final GeoPoint g = new GeoPoint(55.965129, -3.208747);
+	
+		// this is a work around for centering issue in osmdriod v4.2
+		minervaMapView.getViewTreeObserver().addOnGlobalLayoutListener(
+				new OnGlobalLayoutListener() {
+					// Suppress version warnings
+					@SuppressWarnings("deprecation")
+					@SuppressLint("NewApi")
+					@Override
+					public void onGlobalLayout() {
+						minervaMapView.getController().setCenter(g);
+						minervaMapView.getController().setZoom(16);
+						// check version to remove listener with correct method
+						// version.
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+							minervaMapView.getViewTreeObserver()
+									.removeOnGlobalLayoutListener(this);
+						else
+							minervaMapView.getViewTreeObserver()
+									.removeGlobalOnLayoutListener(this);
+					}
+				});
+
 	}
 }
