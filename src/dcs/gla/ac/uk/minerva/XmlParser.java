@@ -73,7 +73,8 @@ public class XmlParser {
 
 		String name = null;
 		String description = null;
-		
+		double lat = 0;
+		double lon=0;
 		//define start of an entry
 		parser.require(XmlPullParser.START_TAG, ns, "entry");
 		//until closing tag
@@ -85,14 +86,18 @@ public class XmlParser {
 			//process tag name to collect name and description fields or skip
 			String tag = parser.getName();
 			if (tag.equals("name")) {
-				name = readName(parser);
+				name = readTag(parser,"name");
 			} else if (tag.equals("description")) {
-				description = readDescription(parser);
+				description = readTag(parser,"description");
+			} else if (tag.equals("lat")) {
+				lat = Double.parseDouble(readTag(parser,"lat"));
+			} else if (tag.equals("lon")) {
+				lon = Double.parseDouble(readTag(parser,"lon"));
 			} else {
 				skip(parser);
 			}
 		}
-		return new POI(name, description);
+		return new POI(name, description,lat,lon);
 	}
 
 	private void skip(XmlPullParser parser) throws XmlPullParserException,
@@ -117,24 +122,18 @@ public class XmlParser {
 		}
 	}
 
-	private String readName(XmlPullParser parser) throws IOException,
+	private String readTag(XmlPullParser parser, String tagName) throws IOException,
 			XmlPullParserException {
-		parser.require(XmlPullParser.START_TAG, ns, "name");
+		//parse information within name tag
+		parser.require(XmlPullParser.START_TAG, ns, tagName);
 		String name = readText(parser);
-		parser.require(XmlPullParser.END_TAG, ns, "name");
+		parser.require(XmlPullParser.END_TAG, ns, tagName);
 		return name;
-	}
-
-	private String readDescription(XmlPullParser parser) throws IOException,
-			XmlPullParserException {
-		parser.require(XmlPullParser.START_TAG, ns, "description");
-		String description = readText(parser);
-		parser.require(XmlPullParser.END_TAG, ns, "description");
-		return description;
 	}
 
 	private String readText(XmlPullParser parser) throws IOException,
 			XmlPullParserException {
+		//process strings
 		String s = "";
 		if (parser.next() == XmlPullParser.TEXT) {
 			s = parser.getText();

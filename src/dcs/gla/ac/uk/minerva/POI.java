@@ -1,29 +1,48 @@
 package dcs.gla.ac.uk.minerva;
 
 public class POI {
-private String name;
-private String description;
+	//fields to hold data on points of interest
+	private String name;
+	private String description;
+	private double lat;
+	private double lon;
+	
+	public POI(String name, String description,double lat,double lon) {
+		this.name = name;
+		this.description = description;
+		this.lat=lat;
+		this.lon=lon;
+	}
 
-public POI(String name, String description) {
-	this.name = name;
-	this.description = description;
-}
+	public String getDescription() {
+		return description;
+	}
 
-public String getDescription() {
-	return description;
-}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-public void setDescription(String description) {
-	this.description = description;
-}
+	public String getName() {
+		return name;
+	}
 
-public String getName() {
-	return name;
-}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-public void setName(String name) {
-	this.name = name;
-}// Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
-//to their respective "read" methods for processing. Otherwise, skips the tag.
+	public double getLon() {
+		return lon;
+	}
 
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
 }

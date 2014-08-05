@@ -1,39 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
     <entry>
-        <name>The Rock Garden 1</name>
+        <name>The Rock Garden</name>
         <description>
 Until James McNab built the first rock garden at Inverleith in 1871, the Garden&apos;s alpines were cultivated in pots. Rockeries - landscaped effects with rocks - were popular garden features, but rock gardens, designed for true alpines, were something new. McNab&apos;s rock garden comprised numerous small, straight-sided compartments, each planted and distinctly labelled.  
         </description>
+        <lat>55.964120</lat>
+        <lon>-3.205056</lon>
     </entry>
     <entry>
-        <name>Chinese Hillside 1</name>
+        <name>Chinese Hillside</name>
         <description>
 This part of the Garden highlights RBGE&apos;s well-established links with China and its outstanding collection of Chinese plants. RBGE&apos;s close working relationship with China was consolidated with the creation of the Lijiang Botanic Garden and Jade Dragon Field Station.For RBGE, it represents a long-term commitment to the conservation of this area, working closely with local communities who depend on the plants for food, shelter and medicine.
         </description>
-    </entry>
-        <entry>
-        <name>The Rock Garden 2</name>
-        <description>
-Until James McNab built the first rock garden at Inverleith in 1871, the Garden&apos;s alpines were cultivated in pots. Rockeries - landscaped effects with rocks - were popular garden features, but rock gardens, designed for true alpines, were something new. McNab&apos;s rock garden comprised numerous small, straight-sided compartments, each planted and distinctly labelled.  
-        </description>
-    </entry>
-    <entry>
-        <name>Chinese Hillside 2</name>
-        <description>
-This part of the Garden highlights RBGE&apos;s well-established links with China and its outstanding collection of Chinese plants. RBGE&apos;s close working relationship with China was consolidated with the creation of the Lijiang Botanic Garden and Jade Dragon Field Station.For RBGE, it represents a long-term commitment to the conservation of this area, working closely with local communities who depend on the plants for food, shelter and medicine.
-        </description>
-    </entry>
-        <entry>
-        <name>The Rock Garden 3</name>
-        <description>
-Until James McNab built the first rock garden at Inverleith in 1871, the Garden&apos;s alpines were cultivated in pots. Rockeries - landscaped effects with rocks - were popular garden features, but rock gardens, designed for true alpines, were something new. McNab&apos;s rock garden comprised numerous small, straight-sided compartments, each planted and distinctly labelled.  
-        </description>
-    </entry>
-    <entry>
-        <name>Chinese Hillside 3</name>
-        <description>
-This part of the Garden highlights RBGE&apos;s well-established links with China and its outstanding collection of Chinese plants. RBGE&apos;s close working relationship with China was consolidated with the creation of the Lijiang Botanic Garden and Jade Dragon Field Station.For RBGE, it represents a long-term commitment to the conservation of this area, working closely with local communities who depend on the plants for food, shelter and medicine.
-        </description>
+        <lat>55.964165</lat>
+        <lon>-3.209128</lon>
     </entry>
 </data>

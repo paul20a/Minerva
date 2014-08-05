@@ -14,18 +14,20 @@ import android.widget.Toast;
 public class ListViewFragment extends Fragment{
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		//Inflate selection view
 	    View v = inflater.inflate(R.layout.activity_select, container, false);   
-
+	    //create the listView
 	    final ListView lView =  (ListView) v.findViewById(R.id.list);
-
+	    //update this so SelectActivity is not required, stop using pList from SelectActivity
 		lView.setAdapter(new MinervaBaseAdapter(getActivity(),( ((SelectActivity) getActivity()).getpList()))) ;
-
+		//listen for click Actions
 		lView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Object o = lView.getItemAtPosition(position);
                 POI point = (POI)o;
                 Intent detailIntent = new Intent(getActivity(), MainActivity.class);
+                //Need to update this class is too dependent on SelectActivity
                 detailIntent.putExtra(SelectActivity.NAME, point.getName());
                 detailIntent.putExtra(SelectActivity.DESCRIPTION, point.getDescription());
                 Toast.makeText(getActivity(), "Loading details for " + " " + point.getName()
@@ -42,11 +44,8 @@ public class ListViewFragment extends Fragment{
 	public static ListViewFragment newInstance(String text) {
 
 		ListViewFragment f = new ListViewFragment();
-	   // Bundle b = new Bundle();
-	   // b.putString("msg", text);
-
-	    //f.setArguments(b);
-
+		//update this section to pass relevant data to the list
+		//this will provide extra usability of the list fragment
 	    return f;
 	}
 }
