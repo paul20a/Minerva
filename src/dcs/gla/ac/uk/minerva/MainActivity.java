@@ -1,9 +1,12 @@
 package dcs.gla.ac.uk.minerva;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -46,18 +49,40 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		Button stopBtn = (Button) findViewById(R.id.stop_btn);
 		stopBtn.setOnClickListener(this);
 		
+		InputStream in = null;
 		// Set fields
+		try {
+			in=this.getAssets().open(intent.getStringExtra(SelectActivity.IMAGE));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		titleTextView.setText(title);
 		descriptionTextView.setText(description);
 		ImageView imageView = (ImageView) findViewById(R.id.imageView);
-		Drawable marker = this.getResources().getDrawable(
-				R.drawable.chinese_hillside);
-		imageView.setImageDrawable(marker);
+
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		if(in!=null){
+		Bitmap b =BitmapFactory.decodeStream(in);
+		imageView.setImageBitmap(b);
+		}
 
 	}
 
+	
+	@Override
+	protected void onStop() {
+		if (minervaTTS != null) {
+			minervaTTS.stop();
+			}
+		super.onStop();
+	}
+
+
 	@Override
 	protected void onDestroy() {
+
 		// kill TTS ondestroy to avoid leak
 		if (minervaTTS != null) {
 			minervaTTS.stop();

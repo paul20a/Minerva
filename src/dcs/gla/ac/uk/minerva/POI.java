@@ -6,12 +6,14 @@ public class POI {
 	private String description;
 	private double lat;
 	private double lon;
+	private String image;
 	
-	public POI(String name, String description,double lat,double lon) {
+	public POI(String name, String description,double lat,double lon, String image) {
 		this.name = name;
 		this.description = description;
 		this.lat=lat;
 		this.lon=lon;
+		this.image=image;
 	}
 
 	public String getDescription() {
@@ -44,5 +46,13 @@ public class POI {
 
 	public void setLat(double lat) {
 		this.lat = lat;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

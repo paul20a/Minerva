@@ -30,6 +30,7 @@ public class ListViewFragment extends Fragment{
                 //Need to update this class is too dependent on SelectActivity
                 detailIntent.putExtra(SelectActivity.NAME, point.getName());
                 detailIntent.putExtra(SelectActivity.DESCRIPTION, point.getDescription());
+                detailIntent.putExtra(SelectActivity.IMAGE, point.getImage());
                 Toast.makeText(getActivity(), "Loading details for " + " " + point.getName()
                 		, Toast.LENGTH_LONG).show();
                 startActivity(detailIntent);

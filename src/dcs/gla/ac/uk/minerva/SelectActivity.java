@@ -20,6 +20,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 
 	public final static String NAME = "dcs.gla.ac.uk.NAME";
 	public final static String DESCRIPTION = "dcs.gla.ac.uk.DESCRIPTION";
+	public final static String IMAGE = "dcs.gla.ac.uk.IMAGE";
 	mFragmentPagerAdapter pAdapter;
 	ViewPager vPager;
 

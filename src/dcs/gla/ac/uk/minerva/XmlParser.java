@@ -73,6 +73,7 @@ public class XmlParser {
 
 		String name = null;
 		String description = null;
+		String image=null;
 		double lat = 0;
 		double lon=0;
 		//define start of an entry
@@ -93,11 +94,13 @@ public class XmlParser {
 				lat = Double.parseDouble(readTag(parser,"lat"));
 			} else if (tag.equals("lon")) {
 				lon = Double.parseDouble(readTag(parser,"lon"));
+			} else if (tag.equals("image")) {
+				image = readTag(parser,"image");
 			} else {
 				skip(parser);
 			}
 		}
-		return new POI(name, description,lat,lon);
+		return new POI(name, description,lat,lon,image);
 	}
 
 	private void skip(XmlPullParser parser) throws XmlPullParserException,
