@@ -17,9 +17,9 @@ public class ListViewFragment extends Fragment{
 		//Inflate selection view
 	    View v = inflater.inflate(R.layout.activity_select, container, false);   
 	    //create the listView
-	    final ListView lView =  (ListView) v.findViewById(R.id.list);
+	    final ListView lView =  (ListView) v.findViewById(R.id.list_points);
 	    //update this so SelectActivity is not required, stop using pList from SelectActivity
-		lView.setAdapter(new MinervaBaseAdapter(getActivity(),( ((SelectActivity) getActivity()).getpList()))) ;
+		lView.setAdapter(new PointBaseAdapter(getActivity(),( ((SelectActivity) getActivity()).getpList()))) ;
 		//listen for click Actions
 		lView.setOnItemClickListener(new OnItemClickListener() {
             @Override

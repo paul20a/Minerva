@@ -84,15 +84,15 @@ public class MapViewFragment extends Fragment {
 			}
 		};
 		// Arrays 
-		ArrayList<POI> pList = ((SelectActivity) getActivity()).getpList();
+		ArrayList<Object> pList = ((SelectActivity) getActivity()).getpList();
 		ArrayList<OverlayItem> itemList = new ArrayList<OverlayItem>();
 		
 		//for each item in list add it to items array
 		for (int i = 0; i < pList.size(); i++) {
 			GeoPoint mPoint = new GeoPoint(
-					(int) (pList.get(i).getLat() * 1000000), (int) (pList
-							.get(i).getLon() * 1000000));
-			itemList.add(new OverlayItem(pList.get(i).getName(), "", mPoint));
+					(int) (((POI) pList.get(i)).getLat() * 1000000), (int) (((POI) pList
+							.get(i)).getLon() * 1000000));
+			itemList.add(new OverlayItem(((POI) pList.get(i)).getName(), "", mPoint));
 		}
 		
 		//create new itemised overlay and add to mapView

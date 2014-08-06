@@ -3,7 +3,7 @@
     package="dcs.gla.ac.uk.minerva"
     android:versionCode="1"
     android:versionName="1.0" >
-    
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
@@ -33,12 +33,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapViewActivity"
-            android:label="@string/title_activity_map_view" >
-        </activity>
-        <activity
-            android:name=".HomeActivity"
-            android:label="@string/title_activity_home" >
+            android:name=".TrailSelectActivity"
+            android:label="@string/title_activity_trail_select" >
         </activity>
     </application>
 

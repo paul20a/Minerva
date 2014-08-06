@@ -24,20 +24,20 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 	mFragmentPagerAdapter pAdapter;
 	ViewPager vPager;
 
-	ArrayList<POI> pList;
+	ArrayList<Object> pList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		final ActionBar navBar = getActionBar();
-		XmlParser xParser = new XmlParser();
+		XmlPointParser xParser = new XmlPointParser();
 
 		setContentView(R.layout.pager);
 
 		try {
 			InputStream in = this.getAssets().open("data.xml");
-			pList = (ArrayList<POI>) xParser.parse(in);
+			pList = (ArrayList<Object>) xParser.parse(in);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -77,11 +77,11 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		return s;
 	}
 
-	public ArrayList<POI> getpList() {
+	public ArrayList<Object> getpList() {
 		return pList;
 	}
 
-	public void setpList(ArrayList<POI> pList) {
+	public void setpList(ArrayList<Object> pList) {
 		this.pList = pList;
 	}
 

@@ -12,5 +12,6 @@
     <string name="title_activity_map_view">Map View</string>
     <string name="List_section">List View</string>
     <string name="title_activity_home">Home</string>
+    <string name="title_activity_trail_select">TrailSelectActivity</string>
 
 </resources>
