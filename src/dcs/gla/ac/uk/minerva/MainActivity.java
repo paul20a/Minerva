@@ -38,11 +38,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		// locate widgets
 		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
 		TextView descriptionTextView = (TextView) findViewById(R.id.textViewDesc);
-		// set-up TTS
-		// THIS MAY NOT BE REQUIRED ANYOMRE REPLACE WITH MP3????
-		Intent checkTTSIntent = new Intent();
-		checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-		startActivityForResult(checkTTSIntent, CHECK_CODE);
 		
 		Button speakBtn = (Button) findViewById(R.id.play_btn);
 		speakBtn.setOnClickListener(this);
@@ -60,7 +55,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		titleTextView.setText(title);
 		descriptionTextView.setText(description);
 		ImageView imageView = (ImageView) findViewById(R.id.imageView);
-
+		
+		//load image
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 		if(in!=null){
@@ -69,26 +65,22 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		}
 
 	}
-
-	
+	@Override
+	protected void onStart() {
+		Intent checkTTSIntent = new Intent();
+		checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+		startActivityForResult(checkTTSIntent, CHECK_CODE);
+		super.onStart();
+	}
 	@Override
 	protected void onStop() {
-		if (minervaTTS != null) {
-			minervaTTS.stop();
-			}
-		super.onStop();
-	}
-
-
-	@Override
-	protected void onDestroy() {
 
 		// kill TTS ondestroy to avoid leak
 		if (minervaTTS != null) {
 			minervaTTS.stop();
 			minervaTTS.shutdown();
 		}
-		super.onDestroy();
+		super.onStop();
 	}
 
 	@Override
@@ -127,6 +119,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		// If tts passed check
 		if (requestCode == CHECK_CODE) {
 			// if correct language and no instance created initialise

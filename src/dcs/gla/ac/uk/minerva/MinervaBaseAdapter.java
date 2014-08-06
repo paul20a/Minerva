@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
  */
 public abstract class MinervaBaseAdapter extends BaseAdapter {
 	
-	private static ArrayList<Object> content;
+	private ArrayList<Object> content;
 
 	
 	public MinervaBaseAdapter(Context context,ArrayList<Object> in) {

@@ -18,16 +18,21 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class TrailSelectActivity extends Activity {
+	public final static String TITLE = "dcs.gla.ac.uk.TITLE";
+	public final static String TRAILDESCRIPTION = "dcs.gla.ac.uk.TRAILDESCRIPTION";
+	
+	private ListView trailListView;
 	ArrayList<Object> tList;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_trail_select);
-		
+
 		XmlTrailParser xParser = new XmlTrailParser();
-		
+
 		try {
-			InputStream in = this.getAssets().open("data.xml");
+			InputStream in = this.getAssets().open("trails.xml");
 			tList = xParser.parse(in);
 
 		} catch (IOException e) {
@@ -37,26 +42,34 @@ public class TrailSelectActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	    //create the listView
-	    final ListView lView =  (ListView) findViewById(R.id.list_trail);
-	    //update this so SelectActivity is not required, stop using pList from SelectActivity
-		lView.setAdapter(new TrailBaseAdapter(this,tList)) ;
-		//listen for click Actions
-		lView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                Object o = lView.getItemAtPosition(position);
-                Trail trail = (Trail)o;
-                Intent detailIntent = new Intent(TrailSelectActivity.this, MainActivity.class);
-                //Need to update this class is too dependent on SelectActivity
-                detailIntent.putExtra(SelectActivity.NAME, trail.getTitle());
-                detailIntent.putExtra(SelectActivity.DESCRIPTION, trail.getDescription());
-                Toast.makeText(TrailSelectActivity.this, "Loading details for " + " " + trail.getTitle()
-                		, Toast.LENGTH_LONG).show();
-                startActivity(detailIntent);
-            }
-        });
+
+		// create the listView
+		trailListView = (ListView) findViewById(R.id.list_trail);
+		// update this so SelectActivity is not required, stop using pList from
+		// SelectActivity
+		trailListView.setAdapter(new TrailBaseAdapter(TrailSelectActivity.this,
+				tList));
+		// listen for click Actions
+		trailListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> a, View v, int position,
+					long id) {
+					Object o = trailListView.getItemAtPosition(position);
+					Trail trail = (Trail) o;
+					Intent detailIntent = new Intent(TrailSelectActivity.this,
+							SelectActivity.class);
+					// Need to update this class is too dependent on
+					// SelectActivity
+					detailIntent.putExtra(TrailSelectActivity.TITLE,
+							trail.getTitle());
+					detailIntent.putExtra(TrailSelectActivity.TRAILDESCRIPTION,
+							trail.getDescription());
+					Toast.makeText(TrailSelectActivity.this,
+							"Loading details for " + trail.getTitle(),
+							Toast.LENGTH_LONG).show();
+					startActivity(detailIntent);
+			}
+		});
 	}
 
 	@Override
