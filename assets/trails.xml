@@ -3,13 +3,13 @@
     <trail>
     	<title>Short trail</title>
     	<description>A very short walk</description>
-    	    <id>1</id>
-    	     <id>2</id>
+    	    <id>0</id>
+    	     <id>1</id>
     </trail>      
     <trail>
     	<title>Short trail reverse</title>
     	<description>A very short walk, in the other direction</description>
-    	    <id>2</id>
-    	     <id>1</id>
+    	    <id>1</id>
+    	     <id>0</id>
     </trail>  
 </data>

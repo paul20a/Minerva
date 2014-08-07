@@ -19,7 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class TrailSelectActivity extends Activity {
 	public final static String TITLE = "dcs.gla.ac.uk.TITLE";
-	public final static String TRAILDESCRIPTION = "dcs.gla.ac.uk.TRAILDESCRIPTION";
+	public final static String TRAILPATH = "dcs.gla.ac.uk.TRAILPATH";
 	
 	private ListView trailListView;
 	ArrayList<Object> tList;
@@ -34,6 +34,7 @@ public class TrailSelectActivity extends Activity {
 		try {
 			InputStream in = this.getAssets().open("trails.xml");
 			tList = xParser.parse(in);
+			in.close();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -62,8 +63,9 @@ public class TrailSelectActivity extends Activity {
 					// SelectActivity
 					detailIntent.putExtra(TrailSelectActivity.TITLE,
 							trail.getTitle());
-					detailIntent.putExtra(TrailSelectActivity.TRAILDESCRIPTION,
-							trail.getDescription());
+							
+					detailIntent.putExtra(TrailSelectActivity.TRAILPATH,
+							trail.getIdList());
 					Toast.makeText(TrailSelectActivity.this,
 							"Loading details for " + trail.getTitle(),
 							Toast.LENGTH_LONG).show();

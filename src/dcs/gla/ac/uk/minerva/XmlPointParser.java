@@ -2,10 +2,11 @@ package dcs.gla.ac.uk.minerva;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.util.SparseArray;
 import android.util.Xml;
 
 /**
@@ -24,7 +25,7 @@ public class XmlPointParser extends XmlParser {
 	 * @throws XmlPullParserException - parsing errors
 	 * @throws IOException - File reader errors
 	 */
-	public ArrayList<Object> parse(InputStream in) throws XmlPullParserException,
+	public SparseArray<Object> parse(InputStream in) throws XmlPullParserException,
 			IOException {
 		
 		try {
@@ -44,10 +45,10 @@ public class XmlPointParser extends XmlParser {
 		}
 	}
 
-	private ArrayList<Object> readFeed(XmlPullParser parser)
+	private SparseArray<Object> readFeed(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
 		
-		ArrayList<Object> entries = new ArrayList<Object>();
+		SparseArray<Object> entries = new SparseArray<Object>();
 		//define start of list
 		parser.require(XmlPullParser.START_TAG, ns, "data");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -59,7 +60,8 @@ public class XmlPointParser extends XmlParser {
 			// locate an entry in the document
 			if (name.equals("entry")) {
 				//parse entry
-				entries.add(readEntry(parser));
+				POI p=readEntry(parser);
+				entries.append(p.getId(), p);
 			} else {
 				//ignore data
 				skip(parser);

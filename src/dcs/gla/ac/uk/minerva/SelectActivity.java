@@ -13,6 +13,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -23,8 +24,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 	public final static String IMAGE = "dcs.gla.ac.uk.IMAGE";
 	mFragmentPagerAdapter pAdapter;
 	ViewPager vPager;
-
-	ArrayList<Object> pList;
+	ArrayList<Object> pList=new ArrayList<Object>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +34,20 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		XmlPointParser xParser = new XmlPointParser();
 
 		setContentView(R.layout.pager);
-
 		try {
+			SparseArray<Object> pArray=new SparseArray<Object>();
 			InputStream in = this.getAssets().open("data.xml");
-			pList = (ArrayList<Object>) xParser.parse(in);
+			pArray = xParser.parse(in);
+			ArrayList<Integer> idList = getIntent().getIntegerArrayListExtra(
+					TrailSelectActivity.TRAILPATH);
+			in.close();
+			
+			for (int i = 0; i < idList.size(); i++) {
+				if(pArray.get(idList.get(i))!=null){
+				pList.add(pArray.get(idList.get(i)));
+			}
+			}
+			pArray.clear();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -67,13 +77,13 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		}
 
 	}
-	
+
 	private CharSequence getTabTitle(int i) {
-		String s="";
-		if(i==0)
-			s="List View";
+		String s = "";
+		if (i == 0)
+			s = "List View";
 		else
-			s="Map View";
+			s = "Map View";
 		return s;
 	}
 
