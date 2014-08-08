@@ -8,6 +8,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ public class TrailSelectActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_trail_select);
-
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		XmlTrailParser xParser = new XmlTrailParser();
 
 		try {

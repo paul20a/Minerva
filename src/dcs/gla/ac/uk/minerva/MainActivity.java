@@ -2,14 +2,14 @@ package dcs.gla.ac.uk.minerva;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Locale;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,18 +18,24 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity implements OnClickListener,
-		OnInitListener {
-	private int CHECK_CODE = 0;
-	private TextToSpeech minervaTTS;
+public class MainActivity extends ActionBarActivity implements OnClickListener {
+
+	// private int CHECK_CODE = 0;
+	// private TextToSpeech minervaTTS;
 	private String title;
 	private String description;
-
+	AudioManager a;
+	static MediaPlayer mediaPlayer;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		a = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		// Request audio focus for playback
+		mediaPlayer = MediaPlayer.create(this, R.raw.brown_eyed);
+		
 		setContentView(R.layout.activity_main);
 		// retrieve information from intent
 		Intent intent = this.getIntent();
@@ -38,16 +44,17 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		// locate widgets
 		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
 		TextView descriptionTextView = (TextView) findViewById(R.id.textViewDesc);
-		
+
 		Button speakBtn = (Button) findViewById(R.id.play_btn);
 		speakBtn.setOnClickListener(this);
 		Button stopBtn = (Button) findViewById(R.id.stop_btn);
 		stopBtn.setOnClickListener(this);
-		
+
 		InputStream in = null;
 		// Set fields
 		try {
-			in=this.getAssets().open(intent.getStringExtra(SelectActivity.IMAGE));
+			in = this.getAssets().open(
+					intent.getStringExtra(SelectActivity.IMAGE));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -55,31 +62,33 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		titleTextView.setText(title);
 		descriptionTextView.setText(description);
 		ImageView imageView = (ImageView) findViewById(R.id.imageView);
-		
-		//load image
+
+		// load image
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
-		if(in!=null){
-		Bitmap b =BitmapFactory.decodeStream(in);
-		imageView.setImageBitmap(b);
+		if (in != null) {
+			Bitmap b = BitmapFactory.decodeStream(in);
+			imageView.setImageBitmap(b);
 		}
 
 	}
+
 	@Override
 	protected void onStart() {
-		Intent checkTTSIntent = new Intent();
-		checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-		startActivityForResult(checkTTSIntent, CHECK_CODE);
+		// Intent checkTTSIntent = new Intent();
+		// checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+		// startActivityForResult(checkTTSIntent, CHECK_CODE);
 		super.onStart();
 	}
+
 	@Override
 	protected void onStop() {
 
 		// kill TTS ondestroy to avoid leak
-		if (minervaTTS != null) {
-			minervaTTS.stop();
-			minervaTTS.shutdown();
-		}
+		// if (minervaTTS != null) {
+		// minervaTTS.stop();
+		// minervaTTS.shutdown();
+		// }
 		super.onStop();
 	}
 
@@ -102,56 +111,57 @@ public class MainActivity extends ActionBarActivity implements OnClickListener,
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void audioDesc(String desc) {
-		// speak
-		minervaTTS.speak(desc, TextToSpeech.QUEUE_FLUSH, null);
-	}
+	/*
+	 * private void audioDesc(String desc) { // speak minervaTTS.speak(desc,
+	 * TextToSpeech.QUEUE_FLUSH, null); }
+	 */
 
-	@Override
-	public void onInit(int status) {
-		// set language if tts check status is successful
-		if (status == TextToSpeech.SUCCESS) {
-			minervaTTS.setLanguage(Locale.UK);
-		} else {
-			Toast.makeText(this, "Error, Text To Speech initialisation failed",
-					Toast.LENGTH_LONG).show();
-		}
-	}
+	/*
+	 * @Override public void onInit(int status) { // set language if tts check
+	 * status is successful if (status == TextToSpeech.SUCCESS) {
+	 * minervaTTS.setLanguage(Locale.UK); } else { Toast.makeText(this,
+	 * "Error, Text To Speech initialisation failed", Toast.LENGTH_LONG).show();
+	 * } }
+	 */
 
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		// If tts passed check
-		if (requestCode == CHECK_CODE) {
-			// if correct language and no instance created initialise
-			if ((resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS)
-					&& minervaTTS == null) {
-				minervaTTS = new TextToSpeech(this, this);
-				// install if tts not present
-			} else if (minervaTTS == null) {
-				Intent installTTSIntent = new Intent();
-				installTTSIntent
-						.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-				startActivity(installTTSIntent);
-			}
-		}
-	}
+	/*
+	 * protected void onActivityResult(int requestCode, int resultCode, Intent
+	 * data) { super.onActivityResult(requestCode, resultCode, data); // If tts
+	 * passed check if (requestCode == CHECK_CODE) { // if correct language and
+	 * no instance created initialise if ((resultCode ==
+	 * TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) && minervaTTS == null) {
+	 * minervaTTS = new TextToSpeech(this, this); // install if tts not present
+	 * } else if (minervaTTS == null) { Intent installTTSIntent = new Intent();
+	 * installTTSIntent .setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+	 * startActivity(installTTSIntent); } } }
+	 */
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.play_btn:
+			mediaPlayer.start();
 			// onclick play tts
-			if (minervaTTS != null) {
-			TextView text = (TextView) findViewById(R.id.textViewDesc);
-			String desc = text.getText().toString();
-			audioDesc(desc);
-			}
+			/*
+			 * if (minervaTTS != null) { TextView text = (TextView)
+			 * findViewById(R.id.textViewDesc); String desc =
+			 * text.getText().toString(); audioDesc(desc); }
+			 */
 			break;
 		case R.id.stop_btn:
-			if (minervaTTS != null) {
-				minervaTTS.stop();
+			mediaPlayer.stop();
+			try {
+				mediaPlayer.prepare();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			/*
+			 * if (minervaTTS != null) { minervaTTS.stop(); }
+			 */
 		}
 	}
-
 }
