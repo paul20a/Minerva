@@ -8,15 +8,16 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class TrailSelectActivity extends Activity {
 	public final static String TITLE = "dcs.gla.ac.uk.TITLE";
@@ -32,8 +33,10 @@ public class TrailSelectActivity extends Activity {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		XmlTrailParser xParser = new XmlTrailParser();
 
-		try {
-			InputStream in = this.getAssets().open("trails.xml");
+		try {		
+			Resources resources = getResources();
+			int rID = resources.getIdentifier("trails", "raw", getPackageName());  
+			InputStream in= resources.openRawResource(rID);
 			tList = xParser.parse(in);
 			in.close();
 

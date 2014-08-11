@@ -1,94 +1,90 @@
 package dcs.gla.ac.uk.minerva;
 
 import java.io.IOException;
-import java.io.InputStream;
-
+import java.util.ArrayList;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.res.Resources;
 import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-public class MainActivity extends ActionBarActivity implements OnClickListener {
+public class MainActivity extends ActionBarActivity  implements OnClickListener{
 
 	// private int CHECK_CODE = 0;
 	// private TextToSpeech minervaTTS;
-	private String title;
-	private String description;
-	AudioManager a;
+	public static final String ERROR_TAG="error";
+	public ArrayList<POI> pList;
+	Resources resources; 
+	ViewPager vPager;
 	static MediaPlayer mediaPlayer;
+	AudioManager a;
+	mFragmentStatePagerAdapter sPagerAdapter;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		a = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+		resources = getResources();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		// Request audio focus for playback
-		mediaPlayer = MediaPlayer.create(this, R.raw.brown_eyed);
-		
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.point_pager);
 		// retrieve information from intent
 		Intent intent = this.getIntent();
-		title = intent.getStringExtra(SelectActivity.NAME);
-		description = intent.getStringExtra(SelectActivity.DESCRIPTION);
-		// locate widgets
-		TextView titleTextView = (TextView) findViewById(R.id.titleTextView);
-		TextView descriptionTextView = (TextView) findViewById(R.id.textViewDesc);
-
+		Bundle b=intent.getExtras();
+		pList=b.getParcelableArrayList("pList");
+		int Start=b.getInt("pos");
+		sPagerAdapter = new mFragmentStatePagerAdapter(getSupportFragmentManager(),pList.size());
+		vPager = (ViewPager) findViewById(R.id.point_pager);
+		vPager.setAdapter(sPagerAdapter);
+		vPager.setCurrentItem(Start);
+		
 		Button speakBtn = (Button) findViewById(R.id.play_btn);
 		speakBtn.setOnClickListener(this);
 		Button stopBtn = (Button) findViewById(R.id.stop_btn);
 		stopBtn.setOnClickListener(this);
-
-		InputStream in = null;
-		// Set fields
-		try {
-			in = this.getAssets().open(
-					intent.getStringExtra(SelectActivity.IMAGE));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		titleTextView.setText(title);
-		descriptionTextView.setText(description);
-		ImageView imageView = (ImageView) findViewById(R.id.imageView);
-
-		// load image
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		if (in != null) {
-			Bitmap b = BitmapFactory.decodeStream(in);
-			imageView.setImageBitmap(b);
-		}
-
-	}
-
+		
+		vPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+			@Override
+			public void onPageSelected(int position) {
+				
+				int rID =resources.getIdentifier(pList.get(position).getAudio(), "raw",getPackageName()); 
+				mediaPlayer.reset();
+				mediaPlayer=MediaPlayer.create(MainActivity.this, rID);
+			}
+		});
+		
+	} 
+	
+	
 	@Override
-	protected void onStart() {
+	public void onStart() {
 		// Intent checkTTSIntent = new Intent();
 		// checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		// startActivityForResult(checkTTSIntent, CHECK_CODE);
+		a = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+		int rID =resources.getIdentifier(pList.get(vPager.getCurrentItem()).getAudio(), "raw",getPackageName()); 
+		mediaPlayer = MediaPlayer.create(this, rID);
 		super.onStart();
 	}
-
+	
 	@Override
 	protected void onStop() {
-
+		
 		// kill TTS ondestroy to avoid leak
 		// if (minervaTTS != null) {
 		// minervaTTS.stop();
 		// minervaTTS.shutdown();
 		// }
+		mediaPlayer.release();
 		super.onStop();
 	}
 
@@ -101,9 +97,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
@@ -135,12 +128,24 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	 * installTTSIntent .setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
 	 * startActivity(installTTSIntent); } } }
 	 */
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.play_btn:
-			mediaPlayer.start();
+			// Request audio focus for playback
+			int result = a.requestAudioFocus(afChangeListener,
+					AudioManager.STREAM_MUSIC,
+					AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+			if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+				try {
+					mediaPlayer.start();
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					Log.e(ERROR_TAG,"i'm broke",e);
+				}
+				
+			}
+			
 			// onclick play tts
 			/*
 			 * if (minervaTTS != null) { TextView text = (TextView)
@@ -149,7 +154,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			 */
 			break;
 		case R.id.stop_btn:
-			mediaPlayer.stop();
+			    mediaPlayer.stop();
 			try {
 				mediaPlayer.prepare();
 			} catch (IllegalStateException e) {
@@ -163,5 +168,20 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			 * if (minervaTTS != null) { minervaTTS.stop(); }
 			 */
 		}
+
+	
 	}
+	
+	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
+		public void onAudioFocusChange(int focusChange) {
+			if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+				mediaPlayer.pause();
+			} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+				mediaPlayer.start();
+			} else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+				a.abandonAudioFocus(afChangeListener);
+				mediaPlayer.stop();
+			}
+		}
+	};
 }

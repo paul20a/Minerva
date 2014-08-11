@@ -28,9 +28,8 @@ public class ListViewFragment extends Fragment{
                 POI point = (POI)o;
                 Intent detailIntent = new Intent(getActivity(), MainActivity.class);
                 //Need to update this class is too dependent on SelectActivity
-                detailIntent.putExtra(SelectActivity.NAME, point.getName());
-                detailIntent.putExtra(SelectActivity.DESCRIPTION, point.getDescription());
-                detailIntent.putExtra(SelectActivity.IMAGE, point.getImage());
+                detailIntent.putExtra("pList", ((SelectActivity) getActivity()).getpList());
+                detailIntent.putExtra("pos", position);
                 Toast.makeText(getActivity(), "Loading details for " + " " + point.getName()
                 		, Toast.LENGTH_LONG).show();
                 startActivity(detailIntent);
@@ -42,7 +41,7 @@ public class ListViewFragment extends Fragment{
 
 	
 	
-	public static ListViewFragment newInstance(String text) {
+	public static ListViewFragment newInstance() {
 
 		ListViewFragment f = new ListViewFragment();
 		//update this section to pass relevant data to the list

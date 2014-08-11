@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <trail>
+    	<title>Short trail</title>
+    	<description>A very short walk</description>
+    	    <id>0</id>
+    	     <id>1</id>
+    </trail>      
+    <trail>
+    	<title>Short trail reverse</title>
+    	<description>A very short walk, in the other direction</description>
+    	    <id>1</id>
+    	     <id>0</id>
+    </trail>  
+</data>

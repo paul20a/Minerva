@@ -14,7 +14,6 @@ public class Trail{
 		this.description = description;
 		this.idList = idList;
 	}
-	
 	public String getTitle() {
 		return title;
 	}
@@ -33,6 +32,5 @@ public class Trail{
 	public void setIdList(ArrayList<Integer> idList) {
 		this.idList = idList;
 	}
-	
 	
 }

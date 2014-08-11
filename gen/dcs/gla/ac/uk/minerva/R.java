@@ -1094,7 +1094,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f060016;
         public static final int action_menu_presenter=0x7f060017;
         public static final int action_mode_close_button=0x7f060024;
-        public static final int action_settings=0x7f060048;
+        public static final int action_settings=0x7f060049;
         public static final int activity_chooser_view_content=0x7f060025;
         public static final int always=0x7f06000b;
         public static final int beginning=0x7f060011;
@@ -1116,20 +1116,21 @@ containing a value of this type.
         public static final int imageView=0x7f06003d;
         public static final int listMode=0x7f060001;
         public static final int list_item=0x7f060029;
-        public static final int list_points=0x7f060042;
-        public static final int list_trail=0x7f060043;
+        public static final int list_points=0x7f060040;
+        public static final int list_trail=0x7f060041;
         public static final int middle=0x7f060012;
         public static final int never=0x7f060009;
         public static final int none=0x7f060010;
         public static final int normal=0x7f060000;
-        public static final int openmapview=0x7f060044;
-        public static final int pager=0x7f060045;
-        public static final int play_btn=0x7f060040;
+        public static final int openmapview=0x7f060042;
+        public static final int pager=0x7f060043;
+        public static final int play_btn=0x7f060045;
+        public static final int point_pager=0x7f060044;
         public static final int progress_circular=0x7f060018;
         public static final int progress_horizontal=0x7f060019;
         public static final int radio=0x7f06002f;
-        public static final int rowDescTextView=0x7f060047;
-        public static final int rowNameTextView=0x7f060046;
+        public static final int rowDescTextView=0x7f060048;
+        public static final int rowNameTextView=0x7f060047;
         public static final int scrollView1=0x7f06003e;
         public static final int search_badge=0x7f060032;
         public static final int search_bar=0x7f060031;
@@ -1146,7 +1147,7 @@ containing a value of this type.
         public static final int showHome=0x7f060004;
         public static final int showTitle=0x7f060006;
         public static final int split_action_bar=0x7f06001e;
-        public static final int stop_btn=0x7f060041;
+        public static final int stop_btn=0x7f060046;
         public static final int submit_area=0x7f060039;
         public static final int tabMode=0x7f060002;
         public static final int textViewDesc=0x7f06003f;
@@ -1212,8 +1213,9 @@ containing a value of this type.
         public static final int activity_trail_select=0x7f03001a;
         public static final int map_view=0x7f03001b;
         public static final int pager=0x7f03001c;
-        public static final int row_layout=0x7f03001d;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
+        public static final int point_pager=0x7f03001d;
+        public static final int row_layout=0x7f03001e;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
     }
     public static final class menu {
         public static final int home=0x7f0d0000;
@@ -1223,7 +1225,12 @@ containing a value of this type.
         public static final int trail_select=0x7f0d0004;
     }
     public static final class raw {
-        public static final int brown_eyed=0x7f050000;
+        public static final int brown_eyed_mp3=0x7f050000;
+        public static final int chinese_hillside_jpg=0x7f050001;
+        public static final int data=0x7f050002;
+        public static final int dlz=0x7f050003;
+        public static final int rock_garden_jpg=0x7f050004;
+        public static final int trails=0x7f050005;
     }
     public static final class string {
         public static final int List_section=0x7f0b0016;

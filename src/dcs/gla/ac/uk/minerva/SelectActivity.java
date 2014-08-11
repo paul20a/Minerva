@@ -10,6 +10,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -19,12 +20,9 @@ import android.view.MenuItem;
 
 public class SelectActivity extends ActionBarActivity implements TabListener {
 
-	public final static String NAME = "dcs.gla.ac.uk.NAME";
-	public final static String DESCRIPTION = "dcs.gla.ac.uk.DESCRIPTION";
-	public final static String IMAGE = "dcs.gla.ac.uk.IMAGE";
 	mFragmentPagerAdapter pAdapter;
-	ViewPager vPager;
-	ArrayList<Object> pList=new ArrayList<Object>();
+	SwipelessPager vPager;
+	public ArrayList<Object> pList=new ArrayList<Object>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +34,10 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		setContentView(R.layout.pager);
 		try {
 			SparseArray<Object> pArray=new SparseArray<Object>();
-			InputStream in = this.getAssets().open("data.xml");
+			Resources resources = getResources();
+			int rID = resources.getIdentifier("data", "raw", getPackageName());  
+			InputStream in= resources.openRawResource(rID);
+			resources=null;
 			pArray = xParser.parse(in);
 			ArrayList<Integer> idList = getIntent().getIntegerArrayListExtra(
 					TrailSelectActivity.TRAILPATH);
@@ -61,7 +62,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		navBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		pAdapter = new mFragmentPagerAdapter(getSupportFragmentManager());
-		vPager = (ViewPager) findViewById(R.id.pager);
+		vPager = (SwipelessPager) findViewById(R.id.pager);
 		vPager.setAdapter(pAdapter);
 
 		vPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -97,16 +98,12 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.select, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;

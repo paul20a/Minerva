@@ -76,6 +76,7 @@ public class XmlPointParser extends XmlParser {
 		String name = null;
 		String description = null;
 		String image=null;
+		String audio = null;
 		double lat = 0;
 		double lon=0;
 		int id=0;
@@ -99,13 +100,15 @@ public class XmlPointParser extends XmlParser {
 				lon = Double.parseDouble(readTag(parser,"lon"));
 			} else if (tag.equals("image")) {
 				image = readTag(parser,"image");
-			} else if (tag.equals("id")) {
+			} else if (tag.equals("audio")) {
+				audio = readTag(parser,"audio");	
+			}else if (tag.equals("id")) {
 				id = Integer.parseInt(readTag(parser,"id"));
 			} else {
 				skip(parser);
 			}
 		}
-		return new POI(name, description,lat,lon,image, id);
+		return new POI(name, description,lat,lon,image, id,audio);
 	}
 
 }

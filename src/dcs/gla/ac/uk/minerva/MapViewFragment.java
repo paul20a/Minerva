@@ -37,7 +37,7 @@ public class MapViewFragment extends Fragment {
 		return v;
 	}
 
-	public static MapViewFragment newInstance(String text) {
+	public static MapViewFragment newInstance() {
 
 		MapViewFragment f = new MapViewFragment();
 
