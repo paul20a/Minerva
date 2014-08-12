@@ -16,6 +16,10 @@ public final class R {
         public static final int abc_slide_out_bottom=0x7f040004;
         public static final int abc_slide_out_top=0x7f040005;
     }
+    public static final class array {
+        public static final int types=0x7f0d0000;
+        public static final int types_values=0x7f0d0001;
+    }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -1094,7 +1098,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f060016;
         public static final int action_menu_presenter=0x7f060017;
         public static final int action_mode_close_button=0x7f060024;
-        public static final int action_settings=0x7f060049;
+        public static final int action_settings=0x7f06004b;
         public static final int activity_chooser_view_content=0x7f060025;
         public static final int always=0x7f06000b;
         public static final int beginning=0x7f060011;
@@ -1104,6 +1108,7 @@ containing a value of this type.
         public static final int dialog=0x7f06000e;
         public static final int disableHome=0x7f060008;
         public static final int dropdown=0x7f06000f;
+        public static final int earpiece_settings=0x7f060049;
         public static final int edit_query=0x7f060030;
         public static final int end=0x7f060013;
         public static final int expand_activities_button=0x7f060026;
@@ -1146,6 +1151,7 @@ containing a value of this type.
         public static final int showCustom=0x7f060007;
         public static final int showHome=0x7f060004;
         public static final int showTitle=0x7f060006;
+        public static final int speaker_settings=0x7f06004a;
         public static final int split_action_bar=0x7f06001e;
         public static final int stop_btn=0x7f060046;
         public static final int submit_area=0x7f060039;
@@ -1218,11 +1224,10 @@ containing a value of this type.
         public static final int support_simple_spinner_dropdown_item=0x7f03001f;
     }
     public static final class menu {
-        public static final int home=0x7f0d0000;
-        public static final int main=0x7f0d0001;
-        public static final int map_view=0x7f0d0002;
-        public static final int select=0x7f0d0003;
-        public static final int trail_select=0x7f0d0004;
+        public static final int main=0x7f0e0000;
+        public static final int map_view=0x7f0e0001;
+        public static final int select=0x7f0e0002;
+        public static final int trail_select=0x7f0e0003;
     }
     public static final class raw {
         public static final int brown_eyed_mp3=0x7f050000;
@@ -1233,7 +1238,7 @@ containing a value of this type.
         public static final int trails=0x7f050005;
     }
     public static final class string {
-        public static final int List_section=0x7f0b0016;
+        public static final int List_section=0x7f0b0018;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abc_action_bar_home_description=0x7f0b0001;
@@ -1276,15 +1281,17 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
         public static final int action_settings=0x7f0b000e;
         public static final int app_name=0x7f0b000d;
-        public static final int hello_world=0x7f0b0014;
-        public static final int play=0x7f0b000f;
-        public static final int stop=0x7f0b0010;
-        public static final int text_view1=0x7f0b0011;
-        public static final int text_view1_desc=0x7f0b0012;
-        public static final int title_activity_home=0x7f0b0017;
-        public static final int title_activity_map_view=0x7f0b0015;
-        public static final int title_activity_select=0x7f0b0013;
-        public static final int title_activity_trail_select=0x7f0b0018;
+        public static final int audio_output=0x7f0b0011;
+        public static final int earpiece_settings=0x7f0b000f;
+        public static final int play=0x7f0b0012;
+        public static final int speaker_settings=0x7f0b0010;
+        public static final int stop=0x7f0b0013;
+        public static final int text_view1=0x7f0b0014;
+        public static final int text_view1_desc=0x7f0b0015;
+        public static final int title_activity_home=0x7f0b0019;
+        public static final int title_activity_map_view=0x7f0b0017;
+        public static final int title_activity_select=0x7f0b0016;
+        public static final int title_activity_trail_select=0x7f0b001a;
     }
     public static final class style {
         /** 
