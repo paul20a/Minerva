@@ -4,14 +4,9 @@
     tools:context="dcs.gla.ac.uk.minerva.MainActivity" >
 
     <item
-        android:id="@+id/earpiece_settings"
+        android:id="@+id/audio_settings"
         android:orderInCategory="100"
         android:title="@string/earpiece_settings"
-        app:showAsAction="never"/>     
-    <item
-        android:id="@+id/speaker_settings"
-        android:orderInCategory="100"
-        android:title="@string/speaker_settings"
-        app:showAsAction="never"/>  
+        app:showAsAction="ifRoom"/>     
 
 </menu>

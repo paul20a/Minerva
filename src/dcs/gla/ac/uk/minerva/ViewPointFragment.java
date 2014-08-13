@@ -37,9 +37,9 @@ public class ViewPointFragment extends Fragment{
 			TextView descriptionTextView = (TextView) v.findViewById(R.id.textViewDesc);
 		
 			InputStream in = null;
-			int rID =((MainActivity) getActivity()).resources.getIdentifier(image, "raw", getActivity().getPackageName());  
+			int rID =((MainActivity) getActivity()).getResources().getIdentifier(image, "raw", getActivity().getPackageName());  
 			try{
-			in = ((MainActivity) getActivity()).resources.openRawResource(rID);
+			in = ((MainActivity) getActivity()).getResources().openRawResource(rID);
 			titleTextView.setText(title);
 			descriptionTextView.setText(description);
 			ImageView imageView = (ImageView) v.findViewById(R.id.imageView);

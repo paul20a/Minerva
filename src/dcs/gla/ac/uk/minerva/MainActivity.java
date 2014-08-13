@@ -2,9 +2,9 @@ package dcs.gla.ac.uk.minerva;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
 import android.media.AudioManager;
@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,20 +25,18 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	// private int CHECK_CODE = 0;
 	// private TextToSpeech minervaTTS;
 	public static final String RES_PREFIX = "android.resource://";
-	public static final String ERROR_TAG = "error";
 	public ArrayList<POI> pList;
-	Resources resources;
+	private Resources resources;
 	ViewPager vPager;
 	static MediaPlayer mediaPlayer;
 	AudioManager a;
 	mFragmentStatePagerAdapter sPagerAdapter;
-	int StreamType=AudioManager.STREAM_VOICE_CALL;
-	
+	int StreamType;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		resources = getResources();
-		setVolumeControlStream(AudioManager.STREAM_VOICE_CALL);
 		setContentView(R.layout.point_pager);
 		// retrieve information from intent
 		Intent intent = this.getIntent();
@@ -47,7 +44,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		pList = b.getParcelableArrayList("pList");
 		int Start = b.getInt("pos");
 
-		// setup pager
 		sPagerAdapter = new mFragmentStatePagerAdapter(
 				getSupportFragmentManager(), pList.size());
 		vPager = (ViewPager) findViewById(R.id.point_pager);
@@ -76,7 +72,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// Intent checkTTSIntent = new Intent();
 		// checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		// startActivityForResult(checkTTSIntent, CHECK_CODE);
-		mediaPlayer=new MediaPlayer();
+		SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
+		StreamType = settings
+				.getInt("audioOut", AudioManager.STREAM_VOICE_CALL);
+		mediaPlayer = new MediaPlayer();			
+		setVolumeControlStream(StreamType);
 		a = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
 		setupMediaPlayerEarPiece(vPager.getCurrentItem());
 		super.onStart();
@@ -86,31 +86,35 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		int rID = resources.getIdentifier(pList.get(i).getAudio(), "raw",
 				getPackageName());
 		// reset and create media player
-		mediaPlayer.reset();
+		if(mediaPlayer!=null)
+			mediaPlayer.reset();
+		
 		try {
 			mediaPlayer.setDataSource(
 					this,
 					Uri.parse(RES_PREFIX
 							+ resources.getResourcePackageName(rID) + "/"
-							+ resources.getResourceTypeName(rID) + "/"
-							+ rID));
+							+ resources.getResourceTypeName(rID) + "/" + rID));
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
 			mediaPlayer.prepare();
 		} catch (IllegalArgumentException | SecurityException
 				| IllegalStateException | NotFoundException | IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
-	
-	private void setupMediaPlayerSpeaker(int i) {
-		mediaPlayer.reset();
+
+	private void setupMediaPlayerSpeaker(int i) {	
+		if(mediaPlayer!=null)
+			mediaPlayer.reset();
+		
 		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		int rID = resources.getIdentifier(pList.get(i).getAudio(), "raw",
 				getPackageName());
-		mediaPlayer=MediaPlayer.create(MainActivity.this, rID);
+		mediaPlayer = MediaPlayer.create(MainActivity.this, rID);
 
 	}
+
 	@Override
 	protected void onStop() {
 		// TEXT TO SPEECH CODE
@@ -120,6 +124,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// minervaTTS.shutdown();
 		// }
 		mediaPlayer.release();
+		// update preferences to store audio output
+		SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt("audioOut", StreamType);
+		editor.commit();
 		super.onStop();
 	}
 
@@ -133,21 +142,17 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
-		if (id == R.id.speaker_settings) {
-	        // Display the fragment as the main content.
-		    item.setEnabled(false);
-		    MenuItem i=(MenuItem) findViewById(R.id.earpiece_settings);
-		    i.setEnabled(true);
-		    setupMediaPlayerSpeaker(vPager.getCurrentItem());
-		    StreamType=AudioManager.STREAM_MUSIC;
-		}
-		if (id == R.id.earpiece_settings) {
-	        // Display the fragment as the main content.
-		    item.setEnabled(false);
-		    MenuItem i=(MenuItem) findViewById(R.id.speaker_settings);
-		    i.setEnabled(true); 
-		    setupMediaPlayerEarPiece(vPager.getCurrentItem()); 
-		    StreamType=AudioManager.STREAM_VOICE_CALL;
+		if (id == R.id.audio_settings) {
+			if (StreamType == AudioManager.STREAM_VOICE_CALL) {
+				setupMediaPlayerSpeaker(vPager.getCurrentItem());
+				StreamType = AudioManager.STREAM_MUSIC;
+				item.setTitle("Speaker");
+			} else if (StreamType == AudioManager.STREAM_MUSIC) {
+				setupMediaPlayerEarPiece(vPager.getCurrentItem());
+				StreamType = AudioManager.STREAM_VOICE_CALL;
+				item.setTitle("Earpiece");
+			}
+			setVolumeControlStream(StreamType);
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -179,16 +184,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.play_btn:
 			// Request audio focus for playback
-			
-			int result = a.requestAudioFocus(afChangeListener,
-					StreamType,
+
+			int result = a.requestAudioFocus(afChangeListener, StreamType,
 					AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 			if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 				try {
 					mediaPlayer.start();
 				} catch (IllegalStateException e) {
 					// TODO Auto-generated catch block
-					Log.e(ERROR_TAG, "i'm broke", e);
 				}
 			}
 			// TEXT TO SPEECH CODE
@@ -198,7 +201,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			 * text.getText().toString(); audioDesc(desc); }
 			 */
 			break;
-			
+
 		case R.id.stop_btn:
 			mediaPlayer.stop();
 			try {

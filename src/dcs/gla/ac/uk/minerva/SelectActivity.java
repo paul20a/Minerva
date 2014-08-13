@@ -35,7 +35,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		try {
 			SparseArray<Object> pArray=new SparseArray<Object>();
 			Resources resources = getResources();
-			int rID = resources.getIdentifier("data", "raw", getPackageName());  
+			int rID = resources.getIdentifier("glasshouse", "raw", getPackageName());  
 			InputStream in= resources.openRawResource(rID);
 			resources=null;
 			pArray = xParser.parse(in);
@@ -104,10 +104,6 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
 		return super.onOptionsItemSelected(item);
 	}
 

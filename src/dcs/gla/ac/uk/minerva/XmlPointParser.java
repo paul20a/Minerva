@@ -18,7 +18,11 @@ import android.util.Xml;
 public class XmlPointParser extends XmlParser {
 	// Currently unused parameter
 	private static final String ns = null;
-
+	String image;
+	String audio;
+	double lat;
+	double lon;
+	int id;
 	/**
 	 * @param in - An InputStream consisting of XML data
 	 * @return ArrayList - returns an ArrayList of Objects
@@ -48,9 +52,14 @@ public class XmlPointParser extends XmlParser {
 	private SparseArray<Object> readFeed(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
 		
+		image=null;
+		audio = null;
+		lat= 0;
+		lon=0;
+		id=0;
 		SparseArray<Object> entries = new SparseArray<Object>();
 		//define start of list
-		parser.require(XmlPullParser.START_TAG, ns, "data");
+		parser.require(XmlPullParser.START_TAG, ns, "audio_tour");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			//Search for entries
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -58,8 +67,13 @@ public class XmlPointParser extends XmlParser {
 			}
 			String name = parser.getName();
 			// locate an entry in the document
-			if (name.equals("entry")) {
-				//parse entry
+			if (name.equals("point")) {
+				//parse entry			
+				image=parser.getAttributeValue(ns, "image");
+				audio=parser.getAttributeValue(ns, "audio");
+				id=Integer.parseInt(parser.getAttributeValue(ns, "id"));
+				lon= Double.parseDouble(parser.getAttributeValue(ns, "longitude"));
+				lat= Double.parseDouble(parser.getAttributeValue(ns, "latitude"));
 				POI p=readEntry(parser);
 				entries.append(p.getId(), p);
 			} else {
@@ -75,13 +89,8 @@ public class XmlPointParser extends XmlParser {
 
 		String name = null;
 		String description = null;
-		String image=null;
-		String audio = null;
-		double lat = 0;
-		double lon=0;
-		int id=0;
 		//define start of an entry
-		parser.require(XmlPullParser.START_TAG, ns, "entry");
+		parser.require(XmlPullParser.START_TAG, ns, "point");
 		//until closing tag
 		while (parser.next() != XmlPullParser.END_TAG) {
 			//ensure on start
@@ -90,20 +99,10 @@ public class XmlPointParser extends XmlParser {
 			}
 			//process tag name to collect name and description fields or skip
 			String tag = parser.getName();
-			if (tag.equals("name")) {
-				name = readTag(parser,"name");
-			} else if (tag.equals("description")) {
-				description = readTag(parser,"description");
-			} else if (tag.equals("lat")) {
-				lat = Double.parseDouble(readTag(parser,"lat"));
-			} else if (tag.equals("lon")) {
-				lon = Double.parseDouble(readTag(parser,"lon"));
-			} else if (tag.equals("image")) {
-				image = readTag(parser,"image");
-			} else if (tag.equals("audio")) {
-				audio = readTag(parser,"audio");	
-			}else if (tag.equals("id")) {
-				id = Integer.parseInt(readTag(parser,"id"));
+			if (tag.equals("title")) {
+				name = readTag(parser,"title");
+			} else if (tag.equals("summary")) {
+				description = readTag(parser,"summary");
 			} else {
 				skip(parser);
 			}
