@@ -35,32 +35,37 @@ public class ViewPointFragment extends Fragment{
 			// locate widgets
 			TextView titleTextView = (TextView) v.findViewById(R.id.titleTextView);
 			TextView descriptionTextView = (TextView) v.findViewById(R.id.textViewDesc);
-		
-			InputStream in = null;
-			int rID =((MainActivity) getActivity()).getResources().getIdentifier(image, "raw", getActivity().getPackageName());  
-			try{
-			in = ((MainActivity) getActivity()).getResources().openRawResource(rID);
 			titleTextView.setText(title);
 			descriptionTextView.setText(description);
-			ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
-
-			// load image
-			BitmapFactory.Options options = new BitmapFactory.Options();
-			options.inJustDecodeBounds = true;
-			if (in != null) {
-				Bitmap b = BitmapFactory.decodeStream(in);
-				in.close();
-				imageView.setImageBitmap(b);
-			}
-			}
-			catch(IOException e){
-				// TODO handle exception
-
+			
+			if(image!=null){
+			loadImage(v);
 			}
 		    return v;
 		}	
 	
+	private void loadImage(View v){
+		InputStream in = null;
+		ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
+		
+		int rID =((MainActivity) getActivity()).getResources().getIdentifier(image, "raw", getActivity().getPackageName());  
+		try{
+		in = ((MainActivity) getActivity()).getResources().openRawResource(rID);
+		// load image
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		if (in != null) {
+			Bitmap b = BitmapFactory.decodeStream(in);
+			in.close();
+			imageView.setImageBitmap(b);
+		}
+		}
+		catch(IOException e){
+			// TODO handle exception
 
+		}
+	}
+	
 	public static ViewPointFragment newInstance(String text) {
 
 		ViewPointFragment f = new ViewPointFragment();
