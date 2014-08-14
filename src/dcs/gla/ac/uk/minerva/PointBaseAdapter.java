@@ -47,10 +47,6 @@ public class PointBaseAdapter extends MinervaBaseAdapter {
         return convertView;
     }
  
-    /**
-     * @author Paul Cairney
-     * class to hold a list entry
-     */
     static class ViewHolder {
         TextView nameTextView;
         TextView descTextView;
