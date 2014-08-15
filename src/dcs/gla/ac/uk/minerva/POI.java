@@ -8,12 +8,12 @@ public class POI implements Parcelable {
 	private int id;
 	private String name;
 	private String description;
-	private double lat;
-	private double lon;
+	private Double lat;
+	private Double lon;
 	private String image;
 	private String audio;
 
-	public POI(String name, String description, double lat, double lon,
+	public POI(String name, String description, Double lat, Double lon,
 			String image, int id,String audio) {
 		this.id = id;
 		this.name = name;
@@ -40,19 +40,19 @@ public class POI implements Parcelable {
 		this.name = name;
 	}
 
-	public double getLon() {
+	public Double getLon() {
 		return lon;
 	}
 
-	public void setLon(double lon) {
+	public void setLon(Double lon) {
 		this.lon = lon;
 	}
 
-	public double getLat() {
+	public Double getLat() {
 		return lat;
 	}
 
-	public void setLat(double lat) {
+	public void setLat(Double lat) {
 		this.lat = lat;
 	}
 
@@ -89,8 +89,8 @@ public class POI implements Parcelable {
 		dest.writeInt(id);
 		dest.writeString(name);
 		dest.writeString(description);
-		dest.writeDouble(lat);
-		dest.writeDouble(lon);
+		dest.writeValue(lat);
+		dest.writeValue(lon);
 		dest.writeString(image);
 		dest.writeString(audio);
 	}
@@ -110,8 +110,9 @@ public class POI implements Parcelable {
 		id=in.readInt();
 		name=in.readString();
 		description=in.readString();
-		lat=in.readDouble();
-		lon=in.readDouble();
+		Double d = Double.valueOf(0);
+		lat=(Double) in.readValue(d.getClass().getClassLoader());
+		lon=(Double) in.readValue(d.getClass().getClassLoader());
 		image=in.readString();
 		audio=in.readString();
 	}

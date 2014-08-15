@@ -20,8 +20,8 @@ public class XmlPointParser extends XmlParser {
 	private static final String ns = null;
 	String image;
 	String audio;
-	double lat;
-	double lon;
+	Double lat;
+	Double lon;
 	int id;
 	/**
 	 * @param in - An InputStream consisting of XML data
@@ -54,8 +54,8 @@ public class XmlPointParser extends XmlParser {
 		
 		image=null;
 		audio = null;
-		lat= 0;
-		lon=0;
+		lat= null;
+		lon=null;
 		id=0;
 		SparseArray<Object> entries = new SparseArray<Object>();
 		//define start of list
@@ -72,8 +72,13 @@ public class XmlPointParser extends XmlParser {
 				image=parser.getAttributeValue(ns, "image");
 				audio=parser.getAttributeValue(ns, "audio");
 				id=Integer.parseInt(parser.getAttributeValue(ns, "id"));
+				try{
 				lon= Double.parseDouble(parser.getAttributeValue(ns, "longitude"));
 				lat= Double.parseDouble(parser.getAttributeValue(ns, "latitude"));
+				}catch(NumberFormatException e){
+					lon=null;
+					lat=null;
+				}
 				POI p=readEntry(parser);
 				entries.append(p.getId(), p);
 			} else {

@@ -11,6 +11,7 @@ import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,7 +49,6 @@ public class MapViewFragment extends Fragment {
 		minervaMapView = (MapView) v.findViewById(R.id.openmapview);
 		minervaMapView.setBuiltInZoomControls(true);
 		minervaMapController = (MapController) minervaMapView.getController();
-		minervaMapController.setZoom(15);
 
 		// set up marker.... get a nicer flag
 		Drawable marker = this.getResources().getDrawable(R.drawable.flag);
@@ -73,36 +73,60 @@ public class MapViewFragment extends Fragment {
 				// TODO Auto-generated method stub
 				return false;
 			}
+
 			@Override
 			public boolean onItemSingleTapUp(int arg0, OverlayItem item) {
-				
-				Toast.makeText(getActivity(), 
-						 item.getTitle() + "\n"
-						 + item.getPoint().getLatitudeE6() + " : " + item.getPoint().getLongitudeE6(), 
-						 Toast.LENGTH_LONG).show();
-						 return true;
+
+				Toast.makeText(getActivity(), item.getTitle() + "\n",
+						Toast.LENGTH_SHORT).show();
+				Intent detailIntent = new Intent(getActivity(),
+						MainActivity.class);
+				// Need to update this class is too dependent on SelectActivity
+				detailIntent.putExtra("pList",
+						((SelectActivity) getActivity()).getpList());
+				detailIntent.putExtra("pos", Integer.parseInt(item.getUid()));
+				startActivity(detailIntent);
+				return true;
 			}
 		};
-		// Arrays 
+		// Arrays
 		ArrayList<Object> pList = ((SelectActivity) getActivity()).getpList();
 		ArrayList<OverlayItem> itemList = new ArrayList<OverlayItem>();
-		
-		//for each item in list add it to items array
+		double latMin = 1000, latMax = -1000, lonMin = 1000, lonMax = -1000;
+		// for each item in list add it to items array
 		for (int i = 0; i < pList.size(); i++) {
-			GeoPoint mPoint = new GeoPoint(
-					(int) (((POI) pList.get(i)).getLat() * 1000000), (int) (((POI) pList
-							.get(i)).getLon() * 1000000));
-			itemList.add(new OverlayItem(((POI) pList.get(i)).getName(), "", mPoint));
+			POI p = (POI) pList.get(i);
+			Double newLat = p.getLat();
+			Double newLon = p.getLon();
+			if (newLon != null && newLat != null) {
+				GeoPoint mPoint = new GeoPoint((int) (newLat * 1000000),
+						(int) (newLon * 1000000));
+				if (newLat < latMin) {
+					latMin = newLat;
+				} else if (newLat > latMax) {
+					latMax = newLat;
+				}
+				if (newLon < lonMin) {
+					lonMin = newLon;
+				} else if (newLon > lonMax) {
+					lonMax = newLon;
+				}
+				itemList.add(new OverlayItem(Integer.toString(i), p.getName(),
+						"", mPoint));
+			}
+
 		}
-		
-		//create new itemised overlay and add to mapView
+
+		// create new itemised overlay and add to mapView
 		myItemizedOverlay = new MyItemizedOverlay(itemList, marker, marker, 0,
 				gListener, resourceProxy);
 		minervaMapView.getOverlays().add(myItemizedOverlay);
-		
-		//roughly the centre of the park add dynamically later where trail starts
-		final GeoPoint g = new GeoPoint(55.965129, -3.208747);
-	
+
+		// roughly the centre of the park add dynamically later where trail
+		// starts
+		final GeoPoint g = new GeoPoint(((latMin + latMax) / 2),
+				((lonMin + lonMax) / 2));
+
 		// this is a work around for centering issue in osmdriod v4.2
 		minervaMapView.getViewTreeObserver().addOnGlobalLayoutListener(
 				new OnGlobalLayoutListener() {
@@ -111,8 +135,8 @@ public class MapViewFragment extends Fragment {
 					@SuppressLint("NewApi")
 					@Override
 					public void onGlobalLayout() {
-						minervaMapView.getController().setCenter(g);
-						minervaMapView.getController().setZoom(16);
+						minervaMapController.setZoom(17);
+						minervaMapController.setCenter(g);
 						// check version to remove listener with correct method
 						// version.
 						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
