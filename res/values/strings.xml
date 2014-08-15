@@ -6,8 +6,8 @@
      <string name="speaker_settings">Speaker</string> 
     <string name="play">Play</string>
     <string name="stop">Stop</string>
-    <string name="text_view1">No data received</string>
-    <string name="text_view1_desc">No data received</string>
+    <string name="text_view1">Oops</string>
+    <string name="text_view1_desc">Sorry I couldn\&apos;t find your data</string>
     <string name="title_activity_select">Points of Interest</string>
     <string name="title_activity_map_view">Map View</string>
     <string name="List_section">List View</string>

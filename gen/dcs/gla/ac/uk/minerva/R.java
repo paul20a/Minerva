@@ -1224,31 +1224,32 @@ containing a value of this type.
         public static final int trail_select=0x7f0d0003;
     }
     public static final class raw {
-        public static final int data=0x7f050000;
-        public static final int dsc4175=0x7f050001;
-        public static final int g100p=0x7f050002;
-        public static final int g200p=0x7f050003;
-        public static final int g300p=0x7f050004;
-        public static final int g400p=0x7f050005;
-        public static final int g500p=0x7f050006;
-        public static final int g600p=0x7f050007;
-        public static final int g700p=0x7f050008;
-        public static final int g800p=0x7f050009;
-        public static final int g900p=0x7f05000a;
-        public static final int g950p=0x7f05000b;
-        public static final int glasshouse=0x7f05000c;
-        public static final int p1000816=0x7f05000d;
-        public static final int p1000837fixed=0x7f05000e;
-        public static final int p1000975=0x7f05000f;
-        public static final int p19600676_3=0x7f050010;
-        public static final int p19697661_2=0x7f050011;
-        public static final int p19697822a_2=0x7f050012;
-        public static final int p19715095_4=0x7f050013;
-        public static final int p19900728c_2=0x7f050014;
-        public static final int photo_5047153338b02=0x7f050015;
-        public static final int photo_5151882c9d697=0x7f050016;
-        public static final int photo_517fa9e2c3689=0x7f050017;
-        public static final int trails=0x7f050018;
+        public static final int broken=0x7f050000;
+        public static final int data=0x7f050001;
+        public static final int dsc4175=0x7f050002;
+        public static final int g100p=0x7f050003;
+        public static final int g200p=0x7f050004;
+        public static final int g300p=0x7f050005;
+        public static final int g400p=0x7f050006;
+        public static final int g500p=0x7f050007;
+        public static final int g600p=0x7f050008;
+        public static final int g700p=0x7f050009;
+        public static final int g800p=0x7f05000a;
+        public static final int g900p=0x7f05000b;
+        public static final int g950p=0x7f05000c;
+        public static final int glasshouse=0x7f05000d;
+        public static final int p1000816=0x7f05000e;
+        public static final int p1000837fixed=0x7f05000f;
+        public static final int p1000975=0x7f050010;
+        public static final int p19600676_3=0x7f050011;
+        public static final int p19697661_2=0x7f050012;
+        public static final int p19697822a_2=0x7f050013;
+        public static final int p19715095_4=0x7f050014;
+        public static final int p19900728c_2=0x7f050015;
+        public static final int photo_5047153338b02=0x7f050016;
+        public static final int photo_5151882c9d697=0x7f050017;
+        public static final int photo_517fa9e2c3689=0x7f050018;
+        public static final int trails=0x7f050019;
     }
     public static final class string {
         public static final int List_section=0x7f0b0016;
