@@ -21,15 +21,25 @@
         android:theme="@style/AppBaseTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/empty"
+            android:parentActivityName="dcs.gla.ac.uk.minerva.SelectActivity" >
+        <!-- Parent activity meta-data to support 4.0 and lower -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="dcs.gla.ac.uk.minerva.SelectActivity" />
         </activity>
         <activity
             android:name=".SelectActivity"
-            android:label="@string/title_activity_select" >
+            android:label="@string/empty"
+            android:parentActivityName="dcs.gla.ac.uk.minerva.TrailSelectActivity" >
+        <!-- Parent activity meta-data to support 4.0 and lower -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="dcs.gla.ac.uk.minerva.TrailSelectActivity" />
         </activity>
         <activity
             android:name=".TrailSelectActivity"
-            android:label="@string/title_activity_trail_select" >
+            android:label="@string/empty" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

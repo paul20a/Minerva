@@ -32,7 +32,7 @@ public class TrailSelectActivity extends Activity {
 		setContentView(R.layout.activity_trail_select);
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		XmlTrailParser xParser = new XmlTrailParser();
-
+		getActionBar().setIcon(getResources().getIdentifier("logo", "raw", "dcs.gla.ac.uk.minerva"));
 		try {		
 			Resources resources = getResources();
 			int rID = resources.getIdentifier("trails", "raw", getPackageName());  

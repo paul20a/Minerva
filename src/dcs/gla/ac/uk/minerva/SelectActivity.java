@@ -30,7 +30,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 
 		final ActionBar navBar = getActionBar();
 		XmlPointParser xParser = new XmlPointParser();
-
+		navBar.setIcon(getResources().getIdentifier("logo", "raw", "dcs.gla.ac.uk.minerva"));
 		setContentView(R.layout.pager);
 		try {
 			SparseArray<Object> pArray=new SparseArray<Object>();
@@ -57,7 +57,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		navBar.setHomeButtonEnabled(false);
+		navBar.setHomeButtonEnabled(true);
 
 		navBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
@@ -103,7 +103,13 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) {		
+		switch (item.getItemId()) {
+    // Respond to the action bar's Up/Home button
+    case android.R.id.home:
+    	this.finish();
+        return true;
+        }
 		return super.onOptionsItemSelected(item);
 	}
 

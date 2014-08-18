@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Minerva</string>
+    <string name="app_name">My Tours</string>
      <string name="earpiece_settings">Earpiece</string>
      <string name="speaker_settings">Speaker</string> 
     <string name="play">Play</string>
@@ -12,5 +12,6 @@
     <string name="title_activity_map_view">Map View</string>
     <string name="List_section">List View</string>
     <string name="title_activity_trail_select">Select Trail</string>
+    <string name="empty"></string>
 
 </resources>

@@ -30,7 +30,7 @@ public class TrailBaseAdapter extends MinervaBaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
         	//set up a new view consisting of textViews, assign the holder to it.
-            convertView = lInflater.inflate(R.layout.row_layout, parent, false);
+            convertView = lInflater.inflate(R.layout.rows, parent, false);
             holder = new ViewHolder();
             holder.nameTextView = (TextView) convertView.findViewById(R.id.rowNameTextView);
             holder.descTextView = (TextView) convertView.findViewById(R.id.rowDescTextView);

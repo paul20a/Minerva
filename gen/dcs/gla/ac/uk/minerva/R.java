@@ -1096,7 +1096,7 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f060024;
         public static final int activity_chooser_view_content=0x7f060025;
         public static final int always=0x7f06000b;
-        public static final int audio_settings=0x7f060049;
+        public static final int audio_settings=0x7f06004a;
         public static final int beginning=0x7f060011;
         public static final int checkbox=0x7f06002d;
         public static final int collapseActionView=0x7f06000d;
@@ -1129,8 +1129,8 @@ containing a value of this type.
         public static final int progress_circular=0x7f060018;
         public static final int progress_horizontal=0x7f060019;
         public static final int radio=0x7f06002f;
-        public static final int rowDescTextView=0x7f060048;
-        public static final int rowNameTextView=0x7f060047;
+        public static final int rowDescTextView=0x7f060049;
+        public static final int rowNameTextView=0x7f060048;
         public static final int scrollView1=0x7f06003e;
         public static final int search_badge=0x7f060032;
         public static final int search_bar=0x7f060031;
@@ -1151,6 +1151,7 @@ containing a value of this type.
         public static final int submit_area=0x7f060039;
         public static final int tabMode=0x7f060002;
         public static final int textViewDesc=0x7f06003f;
+        public static final int thumbnail=0x7f060047;
         public static final int title=0x7f06002b;
         public static final int titleTextView=0x7f06003c;
         public static final int top_action_bar=0x7f060020;
@@ -1215,7 +1216,8 @@ containing a value of this type.
         public static final int pager=0x7f03001c;
         public static final int point_pager=0x7f03001d;
         public static final int row_layout=0x7f03001e;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
+        public static final int rows=0x7f03001f;
+        public static final int support_simple_spinner_dropdown_item=0x7f030020;
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
@@ -1238,18 +1240,19 @@ containing a value of this type.
         public static final int g900p=0x7f05000b;
         public static final int g950p=0x7f05000c;
         public static final int glasshouse=0x7f05000d;
-        public static final int p1000816=0x7f05000e;
-        public static final int p1000837fixed=0x7f05000f;
-        public static final int p1000975=0x7f050010;
-        public static final int p19600676_3=0x7f050011;
-        public static final int p19697661_2=0x7f050012;
-        public static final int p19697822a_2=0x7f050013;
-        public static final int p19715095_4=0x7f050014;
-        public static final int p19900728c_2=0x7f050015;
-        public static final int photo_5047153338b02=0x7f050016;
-        public static final int photo_5151882c9d697=0x7f050017;
-        public static final int photo_517fa9e2c3689=0x7f050018;
-        public static final int trails=0x7f050019;
+        public static final int logo=0x7f05000e;
+        public static final int p1000816=0x7f05000f;
+        public static final int p1000837fixed=0x7f050010;
+        public static final int p1000975=0x7f050011;
+        public static final int p19600676_3=0x7f050012;
+        public static final int p19697661_2=0x7f050013;
+        public static final int p19697822a_2=0x7f050014;
+        public static final int p19715095_4=0x7f050015;
+        public static final int p19900728c_2=0x7f050016;
+        public static final int photo_5047153338b02=0x7f050017;
+        public static final int photo_5151882c9d697=0x7f050018;
+        public static final int photo_517fa9e2c3689=0x7f050019;
+        public static final int trails=0x7f05001a;
     }
     public static final class string {
         public static final int List_section=0x7f0b0016;
@@ -1295,6 +1298,7 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
         public static final int app_name=0x7f0b000d;
         public static final int earpiece_settings=0x7f0b000e;
+        public static final int empty=0x7f0b0018;
         public static final int play=0x7f0b0010;
         public static final int speaker_settings=0x7f0b000f;
         public static final int stop=0x7f0b0011;

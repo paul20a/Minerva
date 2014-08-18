@@ -12,6 +12,7 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -37,6 +38,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		resources = getResources();
+		getActionBar()
+				.setIcon(
+						resources.getIdentifier("logo", "raw",
+								"dcs.gla.ac.uk.minerva"));
+		getActionBar().setHomeButtonEnabled(true);
 		setContentView(R.layout.point_pager);
 		// retrieve information from intent
 		Intent intent = this.getIntent();
@@ -174,8 +180,12 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.audio_settings) {
+		switch (item.getItemId()) {
+	    // Respond to the action bar's Up/Home button
+	    case android.R.id.home:
+	    	this.finish();
+	        return true;
+		case R.id.audio_settings: 
 			if (streamType == AudioManager.STREAM_VOICE_CALL) {
 				setupMediaPlayerSpeaker(vPager.getCurrentItem());
 				streamType = AudioManager.STREAM_MUSIC;
