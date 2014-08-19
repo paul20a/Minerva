@@ -2,6 +2,7 @@ package dcs.gla.ac.uk.minerva;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -30,7 +31,7 @@ public class PointBaseAdapter extends MinervaBaseAdapter {
 	 * @see android.widget.Adapter#getView(int, android.view.View,
 	 * android.view.ViewGroup)
 	 */
-	@Override
+	@SuppressLint("NewApi") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// holder to represent a single row
 		ViewHolder holder;

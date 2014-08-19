@@ -2,11 +2,11 @@ package dcs.gla.ac.uk.minerva;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.util.SparseArray;
 import android.util.Xml;
 
 /**
@@ -29,7 +29,7 @@ public class XmlPointParser extends XmlParser {
 	 * @throws XmlPullParserException - parsing errors
 	 * @throws IOException - File reader errors
 	 */
-	public SparseArray<Object> parse(InputStream in) throws XmlPullParserException,
+	public ArrayList<Object> parse(InputStream in) throws XmlPullParserException,
 			IOException {
 		
 		try {
@@ -49,15 +49,11 @@ public class XmlPointParser extends XmlParser {
 		}
 	}
 
-	private SparseArray<Object> readFeed(XmlPullParser parser)
+	private ArrayList<Object> readFeed(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
 		
-		image=null;
-		audio = null;
-		lat= null;
-		lon=null;
 		id=0;
-		SparseArray<Object> entries = new SparseArray<Object>();
+		ArrayList<Object> entries = new ArrayList<Object>();
 		//define start of list
 		parser.require(XmlPullParser.START_TAG, ns, "audio_tour");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -80,7 +76,7 @@ public class XmlPointParser extends XmlParser {
 					lat=null;
 				}
 				POI p=readEntry(parser);
-				entries.append(p.getId(), p);
+				entries.add(p);
 			} else {
 				//ignore data
 				skip(parser);

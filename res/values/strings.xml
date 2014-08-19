@@ -5,7 +5,8 @@
      <string name="earpiece_settings">Earpiece</string>
      <string name="speaker_settings">Speaker</string> 
     <string name="play">Play</string>
-    <string name="stop">Stop</string>
+    <string name="pause">Pause</string>
+    <string name="replay">Replay</string>
     <string name="text_view1">Oops</string>
     <string name="text_view1_desc">Sorry I couldn\&apos;t find your data</string>
     <string name="title_activity_select">Points of Interest</string>

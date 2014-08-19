@@ -2,6 +2,7 @@ package dcs.gla.ac.uk.minerva;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,7 +13,6 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -59,9 +59,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// setup buttons
 		Button speakBtn = (Button) findViewById(R.id.play_btn);
 		speakBtn.setOnClickListener(this);
-		Button stopBtn = (Button) findViewById(R.id.stop_btn);
-		stopBtn.setOnClickListener(this);
-
+		Button pauseBtn = (Button) findViewById(R.id.pause_btn);
+		pauseBtn.setOnClickListener(this);
+		Button replayBtn = (Button) findViewById(R.id.replay_btn);
+		replayBtn.setOnClickListener(this);
 		vPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
@@ -133,14 +134,17 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	}
 
 	private boolean checkAudio(int i) {
-		Button b = (Button) this.findViewById(R.id.play_btn);
-		Button c = (Button) this.findViewById(R.id.stop_btn);
-
+		Button a = (Button) this.findViewById(R.id.play_btn);
+		Button b = (Button) this.findViewById(R.id.pause_btn);
+		Button c = (Button) this.findViewById(R.id.replay_btn);
+		
 		if (pList.get(i).getAudio() != null) {
+			a.setEnabled(true);
 			b.setEnabled(true);
 			c.setEnabled(true);
 			return true;
 		}
+		a.setEnabled(false);
 		b.setEnabled(false);
 		c.setEnabled(false);
 		return false;
@@ -245,17 +249,14 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			 */
 			break;
 
-		case R.id.stop_btn:
-			mediaPlayer.stop();
-			try {
-				mediaPlayer.prepare();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		case R.id.pause_btn:
+			mediaPlayer.pause();
+			break;
+		case R.id.replay_btn:
+				mediaPlayer.seekTo(0);
+				if(!mediaPlayer.isPlaying()){
+					mediaPlayer.start();
+				}
 			// TEXT TO SPEECH CODE
 			/*
 			 * if (minervaTTS != null) { minervaTTS.stop(); }

@@ -14,7 +14,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -33,22 +32,14 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		navBar.setIcon(getResources().getIdentifier("logo", "raw", "dcs.gla.ac.uk.minerva"));
 		setContentView(R.layout.pager);
 		try {
-			SparseArray<Object> pArray=new SparseArray<Object>();
 			Resources resources = getResources();
-			int rID = resources.getIdentifier("glasshouse", "raw", getPackageName());  
+			int rID = resources.getIdentifier(getIntent().getStringExtra(
+					TrailSelectActivity.TRAILPATH), "raw", getPackageName());  
 			InputStream in= resources.openRawResource(rID);
 			resources=null;
-			pArray = xParser.parse(in);
-			ArrayList<Integer> idList = getIntent().getIntegerArrayListExtra(
-					TrailSelectActivity.TRAILPATH);
-			in.close();
+			pList = xParser.parse(in);
 			
-			for (int i = 0; i < idList.size(); i++) {
-				if(pArray.get(idList.get(i))!=null){
-				pList.add(pArray.get(idList.get(i)));
-			}
-			}
-			pArray.clear();
+			in.close();
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

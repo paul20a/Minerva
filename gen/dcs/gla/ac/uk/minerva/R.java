@@ -1096,7 +1096,7 @@ containing a value of this type.
         public static final int action_mode_close_button=0x7f060024;
         public static final int activity_chooser_view_content=0x7f060025;
         public static final int always=0x7f06000b;
-        public static final int audio_settings=0x7f06004a;
+        public static final int audio_settings=0x7f06004b;
         public static final int beginning=0x7f060011;
         public static final int checkbox=0x7f06002d;
         public static final int collapseActionView=0x7f06000d;
@@ -1124,13 +1124,15 @@ containing a value of this type.
         public static final int normal=0x7f060000;
         public static final int openmapview=0x7f060042;
         public static final int pager=0x7f060043;
+        public static final int pause_btn=0x7f060046;
         public static final int play_btn=0x7f060045;
         public static final int point_pager=0x7f060044;
         public static final int progress_circular=0x7f060018;
         public static final int progress_horizontal=0x7f060019;
         public static final int radio=0x7f06002f;
-        public static final int rowDescTextView=0x7f060049;
-        public static final int rowNameTextView=0x7f060048;
+        public static final int replay_btn=0x7f060047;
+        public static final int rowDescTextView=0x7f06004a;
+        public static final int rowNameTextView=0x7f060049;
         public static final int scrollView1=0x7f06003e;
         public static final int search_badge=0x7f060032;
         public static final int search_bar=0x7f060031;
@@ -1147,11 +1149,10 @@ containing a value of this type.
         public static final int showHome=0x7f060004;
         public static final int showTitle=0x7f060006;
         public static final int split_action_bar=0x7f06001e;
-        public static final int stop_btn=0x7f060046;
         public static final int submit_area=0x7f060039;
         public static final int tabMode=0x7f060002;
         public static final int textViewDesc=0x7f06003f;
-        public static final int thumbnail=0x7f060047;
+        public static final int thumbnail=0x7f060048;
         public static final int title=0x7f06002b;
         public static final int titleTextView=0x7f06003c;
         public static final int top_action_bar=0x7f060020;
@@ -1255,7 +1256,7 @@ containing a value of this type.
         public static final int trails=0x7f05001a;
     }
     public static final class string {
-        public static final int List_section=0x7f0b0016;
+        public static final int List_section=0x7f0b0017;
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
          */
         public static final int abc_action_bar_home_description=0x7f0b0001;
@@ -1298,15 +1299,16 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0b000b;
         public static final int app_name=0x7f0b000d;
         public static final int earpiece_settings=0x7f0b000e;
-        public static final int empty=0x7f0b0018;
+        public static final int empty=0x7f0b0019;
+        public static final int pause=0x7f0b0011;
         public static final int play=0x7f0b0010;
+        public static final int replay=0x7f0b0012;
         public static final int speaker_settings=0x7f0b000f;
-        public static final int stop=0x7f0b0011;
-        public static final int text_view1=0x7f0b0012;
-        public static final int text_view1_desc=0x7f0b0013;
-        public static final int title_activity_map_view=0x7f0b0015;
-        public static final int title_activity_select=0x7f0b0014;
-        public static final int title_activity_trail_select=0x7f0b0017;
+        public static final int text_view1=0x7f0b0013;
+        public static final int text_view1_desc=0x7f0b0014;
+        public static final int title_activity_map_view=0x7f0b0016;
+        public static final int title_activity_select=0x7f0b0015;
+        public static final int title_activity_trail_select=0x7f0b0018;
     }
     public static final class style {
         /** 

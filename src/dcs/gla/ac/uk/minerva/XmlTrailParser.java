@@ -17,7 +17,7 @@ import android.util.Xml;
 public class XmlTrailParser extends XmlParser {
 	// Currently unused parameter
 	private static final String ns = null;
-
+	String image;
 	/**
 	 * @param in - An InputStream consisting of XML data
 	 * @return ArrayList - returns an ArrayList of Objects
@@ -45,6 +45,7 @@ public class XmlTrailParser extends XmlParser {
 
 	private ArrayList<Object> readFeed(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
+	
 		
 		ArrayList<Object> entries = new ArrayList<Object>();
 		//define start of list
@@ -57,6 +58,7 @@ public class XmlTrailParser extends XmlParser {
 			String name = parser.getName();
 			// locate an entry in the document
 			if (name.equals("trail")) {
+			image=parser.getAttributeValue(ns, "image");
 				//parse entry
 				entries.add(readEntry(parser));
 			} else {
@@ -72,8 +74,7 @@ public class XmlTrailParser extends XmlParser {
 
 		String title = null;
 		String description = null;
-		ArrayList<Integer> idList=new ArrayList<Integer>();
-		Integer id=0;
+		String file = null;
 		//define start of an entry
 		parser.require(XmlPullParser.START_TAG, ns, "trail");
 		//until closing tag
@@ -83,19 +84,18 @@ public class XmlTrailParser extends XmlParser {
 				continue;
 			}
 			//process tag name to collect name and description fields or skip
-			String tag = parser.getName();
+			String tag = parser.getName();	
 			if (tag.equals("title")) {
 				title = readTag(parser,"title");
-			} else if (tag.equals("description")) {
-				description = readTag(parser,"description");
-			} else if (tag.equals("id")) {
-				id = Integer.parseInt(readTag(parser,"id"));
-				idList.add(id);
+			} else if (tag.equals("summary")) {
+				description = readTag(parser,"summary");
+			} else if (tag.equals("file")) {
+				file = readTag(parser,"file");
 			} else {
 				skip(parser);
 			}
 		}
-		return new Trail(title, description,idList);
+		return new Trail(title, description,file,image);
 	}
 
 }

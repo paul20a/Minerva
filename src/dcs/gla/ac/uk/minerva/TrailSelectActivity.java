@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +26,7 @@ public class TrailSelectActivity extends Activity {
 	
 	private ListView trailListView;
 	ArrayList<Object> tList;
-
+	private TrailBaseAdapter tBaseAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,13 +53,15 @@ public class TrailSelectActivity extends Activity {
 		trailListView = (ListView) findViewById(R.id.list_trail);
 		// update this so SelectActivity is not required, stop using pList from
 		// SelectActivity
-		trailListView.setAdapter(new TrailBaseAdapter(TrailSelectActivity.this,
-				tList));
+		tBaseAdapter=new TrailBaseAdapter(TrailSelectActivity.this,tList);
+		trailListView.setAdapter(tBaseAdapter);
+		trailListView.requestLayout();
 		// listen for click Actions
 		trailListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
+					Log.d("", TrailSelectActivity.TRAILPATH);
 					Object o = trailListView.getItemAtPosition(position);
 					Trail trail = (Trail) o;
 					Intent detailIntent = new Intent(TrailSelectActivity.this,
@@ -67,15 +70,22 @@ public class TrailSelectActivity extends Activity {
 					// SelectActivity
 					detailIntent.putExtra(TrailSelectActivity.TITLE,
 							trail.getTitle());
-							
 					detailIntent.putExtra(TrailSelectActivity.TRAILPATH,
-							trail.getIdList());
+							trail.getFile());
 					Toast.makeText(TrailSelectActivity.this,
 							"Loading details for " + trail.getTitle(),
 							Toast.LENGTH_LONG).show();
 					startActivity(detailIntent);
+					Log.d("", 	trail.getFile());
 			}
 		});
+	}
+
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		trailListView.requestLayout();
 	}
 
 	@Override

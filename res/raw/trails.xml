@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-    <trail>
-    	<title>Short trail</title>
-    	<description>A very short walk</description>
-    	    <id>6163</id>
-    	    <id>6165</id>
-    	    <id>6168</id>
-    	    <id>6170</id> 
-    	    <id>6174</id>
-    	    <id>6182</id>
-    	    <id>6185</id>
-    	    <id>6190</id>
-    	    <id>6192</id>
-    	    <id>6176</id>
-    	    <id>6253</id>
-    	    <id>6260</id>
-    </trail>      
+
+    <trail
+        id="6253"
+        image="dsc4175"
+        latitude=""
+        longitude=""
+        source="http://stories.rbge.org.uk/archives/6253"
+        weight="10" >
+        <title>
+<![CDATA[ Glasshouses - Windows on the World ]]></title>
+
+        <summary>
+
+<![CDATA[
+Let the glasshouses take you on a journey of discovery through the world of plants. In our ten landscaped environments you will find plants that have adapted to a variety of different growing conditions, from rainforests to deserts.
+]]>
+        </summary>
+        <file>glasshouse</file>
+    </trail>
 
 </data>

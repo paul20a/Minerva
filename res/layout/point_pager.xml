@@ -16,23 +16,34 @@
         android:layout_weight="1" />
 
     <LinearLayout
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <Button
             android:id="@+id/play_btn"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/play" />
 
         <Button
-            android:id="@+id/stop_btn"
+            android:id="@+id/pause_btn"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/stop" />
+            android:text="@string/pause" />
+
+        <Button
+            android:id="@+id/replay_btn"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/replay" />
 
     </LinearLayout>
 

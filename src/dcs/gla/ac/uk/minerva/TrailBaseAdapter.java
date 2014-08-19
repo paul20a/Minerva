@@ -2,10 +2,14 @@ package dcs.gla.ac.uk.minerva;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -24,7 +28,7 @@ public class TrailBaseAdapter extends MinervaBaseAdapter {
 	/* (non-Javadoc)
 	 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
 	 */
-	@Override
+	@SuppressLint("NewApi") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		//holder to represent a single row
         ViewHolder holder;
@@ -34,19 +38,35 @@ public class TrailBaseAdapter extends MinervaBaseAdapter {
             holder = new ViewHolder();
             holder.nameTextView = (TextView) convertView.findViewById(R.id.rowNameTextView);
             holder.descTextView = (TextView) convertView.findViewById(R.id.rowDescTextView);
- 
+            holder.thumbImageView = (ImageView) convertView.findViewById(R.id.thumbnail);
+            
             convertView.setTag(holder);
         } else {
         	//assign the holder to an existing view
             holder = (ViewHolder) convertView.getTag();
         }
-        //update the view
-        holder.nameTextView.setText(((Trail)super.getItem(position)).getTitle());
-        holder.descTextView.setText(((Trail)super.getItem(position)).getDescription());
- 
-        return convertView;
-    }
- 
+		// update the view
+		Trail item = ((Trail) super.getItem(position));
+		holder.nameTextView.setText(item.getTitle());
+        holder.descTextView.setText(item.getDescription());		
+		LoadBitmap(holder, item);		
+		return convertView;
+
+	}
+
+	public void LoadBitmap(ViewHolder holder, Trail item) {
+		Context context = lInflater.getContext();
+		Resources r = context.getResources();
+		int rID = r.getIdentifier(item.getImage(), "raw",
+				context.getPackageName());
+		if (BitMapProcessor.cancelPotentialWork(rID, holder.thumbImageView)) {
+			final BitMapProcessor task = new BitMapProcessor(holder.thumbImageView, r);
+			task.execute(rID);
+			Bitmap b = null;
+			final AsyncDrawable asyncDrawable = new AsyncDrawable(r, b, task);
+			holder.thumbImageView.setImageDrawable(asyncDrawable);
+		}
+	}
     /**
      * @author Paul Cairney
      * class to hold a list entry
@@ -54,6 +74,7 @@ public class TrailBaseAdapter extends MinervaBaseAdapter {
     static class ViewHolder {
         TextView nameTextView;
         TextView descTextView;
+        ImageView thumbImageView;
 	}
 
 }

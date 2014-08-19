@@ -1,18 +1,19 @@
 package dcs.gla.ac.uk.minerva;
 
-import java.util.ArrayList;
 
 public class Trail{
 
 	private String title;
 	private String description;
-	private ArrayList<Integer> idList;
+	private	String image;
+	private String file;
 	
-	public Trail(String title, String description, ArrayList<Integer> idList) {
+	public Trail(String title, String description,String file,String image) {
 		super();
 		this.title = title;
 		this.description = description;
-		this.idList = idList;
+		this.file=file;
+		this.image=image;
 	}
 	public String getTitle() {
 		return title;
@@ -26,11 +27,19 @@ public class Trail{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public ArrayList<Integer> getIdList() {
-		return idList;
+	public String getImage() {
+		return image;
 	}
-	public void setIdList(ArrayList<Integer> idList) {
-		this.idList = idList;
+	public void setImage(String image) {
+		this.image = image;
 	}
+	public String getFile() {
+		return file;
+	}
+	public void setFile(String file) {
+		this.file = file;
+	}
+
+
 	
 }

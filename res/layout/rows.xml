@@ -2,13 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="left">"
+    android:layout_gravity="left">
     
     <ImageView
         android:id="@+id/thumbnail"
         android:layout_width="64dp"
-        android:scaleType="centerInside"
-        android:layout_height="64dp"
+        android:scaleType="centerCrop"
+        android:layout_height="64dp" 
+        android:maxWidth="64dp"
+        android:maxHeight="64dp"
         android:src="@drawable/abc_ab_solid_dark_holo" />
 
         <TextView
