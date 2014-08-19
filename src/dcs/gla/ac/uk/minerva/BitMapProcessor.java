@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 public class BitMapProcessor extends AsyncTask<Integer, Void, Bitmap> {
@@ -58,14 +59,20 @@ public class BitMapProcessor extends AsyncTask<Integer, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(Integer... params) {
         data = params[0]; 
-        ImageView imageView = imageViewReference.get();
-        if(imageViewReference!=null){
-        int h=imageView.getHeight();
-        int w= imageView.getWidth();
-        return decodeSampledBitmapFromResource(r, data, h, w);
+       
+            try{
+                if(imageViewReference!=null){
+                	int h=imageViewReference.get().getHeight();
+                	int w=imageViewReference.get().getWidth();
+                	Log.d("Size", h+"*"+w);
+                	return decodeSampledBitmapFromResource(r, data, h, w);
+                }
+                }
+                catch(Exception e){
+                	this.cancel(true);
+                }
+            return null;
         }
-		return null;
-    }
 
     // Once complete, see if ImageView is still around and set bitmap.
     @Override

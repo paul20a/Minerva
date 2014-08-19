@@ -12,6 +12,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class ListViewFragment extends Fragment{
+	
+
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//Inflate selection view
@@ -41,6 +44,14 @@ public class ListViewFragment extends Fragment{
 
 	
 	
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+	}
+
+
+
 	public static ListViewFragment newInstance() {
 
 		ListViewFragment f = new ListViewFragment();

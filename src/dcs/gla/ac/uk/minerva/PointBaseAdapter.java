@@ -17,12 +17,12 @@ import android.widget.TextView;
  */
 public class PointBaseAdapter extends MinervaBaseAdapter {
 
+	private LayoutInflater lInflater;
+	
 	public PointBaseAdapter(Context context, ArrayList<Object> in) {
 		super(context, in);
 		lInflater = LayoutInflater.from(context);
 	}
-
-	private LayoutInflater lInflater;
 
 	/*
 	 * (non-Javadoc)
@@ -53,22 +53,24 @@ public class PointBaseAdapter extends MinervaBaseAdapter {
 		POI item = ((POI) super.getItem(position));
 		holder.nameTextView.setText(item.getName());
 
+		LoadBitmap(holder, item);		
+		return convertView;
+
+	}
+
+	public void LoadBitmap(ViewHolder holder, POI item) {
 		Context context = lInflater.getContext();
 		Resources r = context.getResources();
 		int rID = r.getIdentifier(item.getImage(), "raw",
 				context.getPackageName());
-		//set image, this method compress image to an appropriate size
 		if (BitMapProcessor.cancelPotentialWork(rID, holder.thumbImageView)) {
-			final BitMapProcessor task = new BitMapProcessor(holder.thumbImageView,r);
-		    task.execute(rID);
-		    Bitmap b = null;
-	        final AsyncDrawable asyncDrawable =
-	        new AsyncDrawable(r, b, task);
-	        holder.thumbImageView.setImageDrawable(asyncDrawable);
+			final BitMapProcessor task = new BitMapProcessor(holder.thumbImageView, r);
+			task.execute(rID);
+			Bitmap b = null;
+			final AsyncDrawable asyncDrawable = new AsyncDrawable(r, b, task);
+			holder.thumbImageView.setImageDrawable(asyncDrawable);
 		}
-		return convertView;
 	}
-
 
 	static class ViewHolder {
 		TextView nameTextView;
