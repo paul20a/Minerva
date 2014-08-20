@@ -30,10 +30,10 @@ public class TrailBaseAdapter extends MinervaBaseAdapter {
 	 */
 	@SuppressLint("NewApi") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		//holder to represent a single row
+		//view holder
         ViewHolder holder;
         if (convertView == null) {
-        	//set up a new view consisting of textViews, assign the holder to it.
+        	//setup view for the holder class
             convertView = lInflater.inflate(R.layout.rows, parent, false);
             holder = new ViewHolder();
             holder.nameTextView = (TextView) convertView.findViewById(R.id.rowNameTextView);
@@ -55,11 +55,14 @@ public class TrailBaseAdapter extends MinervaBaseAdapter {
 	}
 
 	public void LoadBitmap(ViewHolder holder, Trail item) {
+		//vars
 		Context context = lInflater.getContext();
 		Resources r = context.getResources();
 		int rID = r.getIdentifier(item.getImage(), "raw",
 				context.getPackageName());
+		//check & cancel potential work
 		if (BitMapProcessor.cancelPotentialWork(rID, holder.thumbImageView)) {
+			//
 			final BitMapProcessor task = new BitMapProcessor(holder.thumbImageView, r);
 			task.execute(rID);
 			Bitmap b = null;

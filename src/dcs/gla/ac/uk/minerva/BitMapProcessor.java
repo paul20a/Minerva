@@ -62,8 +62,8 @@ public class BitMapProcessor extends AsyncTask<Integer, Void, Bitmap> {
        
             try{
                 if(imageViewReference!=null){
-                	int h=imageViewReference.get().getHeight();
-                	int w=imageViewReference.get().getWidth();
+                	int h=imageViewReference.get().getMeasuredHeightAndState();
+                	int w=imageViewReference.get().getMeasuredWidthAndState();
                 	Log.d("Size", h+"*"+w);
                 	return decodeSampledBitmapFromResource(r, data, h, w);
                 }

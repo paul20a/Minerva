@@ -114,7 +114,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 							+ resources.getResourcePackageName(rID) + "/"
 							+ resources.getResourceTypeName(rID) + "/" + rID));
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-			mediaPlayer.prepare();
+			mediaPlayer.prepare();					
+			mediaPlayer.setScreenOnWhilePlaying(true);
+
 		} catch (IllegalArgumentException | SecurityException
 				| IllegalStateException | NotFoundException | IOException e) {
 			// TODO Auto-generated catch block
@@ -130,6 +132,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		int rID = resources.getIdentifier(pList.get(i).getAudio(), "raw",
 				getPackageName());
 		mediaPlayer = MediaPlayer.create(MainActivity.this, rID);
+		mediaPlayer.setScreenOnWhilePlaying(true);
 
 	}
 
@@ -255,7 +258,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		case R.id.replay_btn:
 				mediaPlayer.seekTo(0);
 				if(!mediaPlayer.isPlaying()){
-					mediaPlayer.start();
+					mediaPlayer.start();					
 				}
 			// TEXT TO SPEECH CODE
 			/*
