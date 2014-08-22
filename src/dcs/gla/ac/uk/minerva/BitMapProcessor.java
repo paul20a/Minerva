@@ -11,16 +11,16 @@ import android.util.Log;
 import android.widget.ImageView;
 
 public class BitMapProcessor extends AsyncTask<Integer, Void, Bitmap> {
-    private final WeakReference<ImageView> imageViewReference;
-    private int data = 0;
-    private Resources r;
-    
-    public BitMapProcessor(ImageView imageView,Resources r) {
-        // Use a WeakReference to ensure the ImageView can be garbage collected
-        imageViewReference = new WeakReference<ImageView>(imageView);
-        this.r=r;
-    }
-    
+	private final WeakReference<ImageView> imageViewReference;
+	private int data = 0;
+	private Resources r;
+
+	public BitMapProcessor(ImageView imageView, Resources r) {
+		// Use a WeakReference to ensure the ImageView can be garbage collected
+		imageViewReference = new WeakReference<ImageView>(imageView);
+		this.r = r;
+	}
+
 	public static int calculateInSampleSize(BitmapFactory.Options options,
 			int reqWidth, int reqHeight) {
 		final int h = options.outHeight;
@@ -54,69 +54,66 @@ public class BitMapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 		options.inJustDecodeBounds = false;
 		return BitmapFactory.decodeResource(res, resId, options);
 	}
-	
-    // Decode image in background.
-    @Override
-    protected Bitmap doInBackground(Integer... params) {
-        data = params[0]; 
-       
-            try{
-                if(imageViewReference!=null){
-                	int h=imageViewReference.get().getMeasuredHeightAndState();
-                	int w=imageViewReference.get().getMeasuredWidthAndState();
-                	Log.d("Size", h+"*"+w);
-                	return decodeSampledBitmapFromResource(r, data, h, w);
-                }
-                }
-                catch(Exception e){
-                	this.cancel(true);
-                }
-            return null;
-        }
 
-    // Once complete, see if ImageView is still around and set bitmap.
-    @Override
-    protected void onPostExecute(Bitmap bitmap) {   
-    	if (isCancelled()) {
-        bitmap = null;
-    }
-        if (imageViewReference != null && bitmap != null) {
-            final ImageView imageView = imageViewReference.get();
-            final BitMapProcessor bitMapProcessor =
-                    getBitMapProcessor(imageView);
-            if (this == bitMapProcessor && imageView != null) {
-                imageView.setImageBitmap(bitmap);
-            }
-        }
-    }
-    
-    
-    private static BitMapProcessor getBitMapProcessor(ImageView imageView) {
-    	   if (imageView != null) {
-    	       final Drawable drawable = imageView.getDrawable();
-    	       if (drawable instanceof AsyncDrawable) {
-    	           final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
-    	           return asyncDrawable.getBitMapProcessor();
-    	       }
-    	    }
-    	    return null;
-    	}
-    
-    public static boolean cancelPotentialWork(int data, ImageView imageView) {
-        final BitMapProcessor bitMapProcessor = getBitMapProcessor(imageView);
+	// Decode image in background.
+	@Override
+	protected Bitmap doInBackground(Integer... params) {
+		data = params[0];
+		if (imageViewReference != null||!this.isCancelled()) {
+			try {
+				int h = imageViewReference.get().getMeasuredHeightAndState();
+				int w = imageViewReference.get().getMeasuredWidthAndState();
+				Log.d("Size", h + "*" + w);
+				return decodeSampledBitmapFromResource(r, data, w, h);
+			} catch (Exception e) {
+				this.cancel(true);
+			}
+		}
+		return null;
+	}
 
-        if (bitMapProcessor != null) {
-            final int bitmapData = bitMapProcessor.data;
-            // If bitmapData is not yet set or it differs from the new data
-            if (bitmapData == 0 || bitmapData != data) {
-                // Cancel previous task
-            	bitMapProcessor.cancel(true);
-            } else {
-                // The same work is already in progress
-                return false;
-            }
-        }
-        // No task associated with the ImageView, or an existing task was cancelled
-        return true;
-    }
+	// Once complete, see if ImageView is still around and set bitmap.
+	@Override
+	protected void onPostExecute(Bitmap bitmap) {
+		if (isCancelled()) {
+			bitmap = null;
+		}
+		if (imageViewReference != null && bitmap != null) {
+			final ImageView imageView = imageViewReference.get();
+			final BitMapProcessor bitMapProcessor = getBitMapProcessor(imageView);
+			if (this == bitMapProcessor && imageView != null) {
+				imageView.setImageBitmap(bitmap);
+			}
+		}
+	}
+
+	private static BitMapProcessor getBitMapProcessor(ImageView imageView) {
+		if (imageView != null) {
+			final Drawable drawable = imageView.getDrawable();
+			if (drawable instanceof AsyncDrawable) {
+				final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+				return asyncDrawable.getBitMapProcessor();
+			}
+		}
+		return null;
+	}
+
+	public static boolean cancelPotentialWork(int data, ImageView imageView) {
+		final BitMapProcessor bitMapProcessor = getBitMapProcessor(imageView);
+
+		if (bitMapProcessor != null) {
+			final int bitmapData = bitMapProcessor.data;
+			// If bitmapData is not yet set or it differs from the new data
+			if (bitmapData == 0 || bitmapData != data) {
+				// Cancel previous task
+				bitMapProcessor.cancel(true);
+			} else {
+				// The same work is already in progress
+				return false;
+			}
+		}
+		// No task associated with the ImageView, or an existing task was
+		// cancelled
+		return true;
+	}
 }

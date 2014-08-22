@@ -21,6 +21,7 @@
         android:theme="@style/AppBaseTheme" >
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/empty"
             android:parentActivityName="dcs.gla.ac.uk.minerva.SelectActivity" >
         <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -38,8 +39,7 @@
             android:value="dcs.gla.ac.uk.minerva.TrailSelectActivity" />
         </activity>
         <activity
-            android:name=".TrailSelectActivity"
-            android:label="@string/empty" >
+            android:name=".TrailSelectActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,5 +47,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

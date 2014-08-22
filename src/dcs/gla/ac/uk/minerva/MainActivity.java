@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.Resources.NotFoundException;
@@ -32,21 +31,25 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	static MediaPlayer mediaPlayer;
 	AudioManager a;
 	mFragmentStatePagerAdapter sPagerAdapter;
-	int streamType;
+	public static int streamType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
+		
 		resources = getResources();
+		//included to set logo to relevant icon
 		getActionBar()
 				.setIcon(
 						resources.getIdentifier("logo", "raw",
 								"dcs.gla.ac.uk.minerva"));
+		//allow up nav
 		getActionBar().setHomeButtonEnabled(true);
+		
 		setContentView(R.layout.point_pager);
 		// retrieve information from intent
-		Intent intent = this.getIntent();
-		Bundle b = intent.getExtras();
+		Bundle b = this.getIntent().getExtras();
 		pList = b.getParcelableArrayList("pList");
 		int Start = b.getInt("pos");
 
@@ -84,11 +87,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	@Override
 	public void onStart() {
+		
 		// TEXT TO SPEECH CODE
 		// Intent checkTTSIntent = new Intent();
 		// checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		// startActivityForResult(checkTTSIntent, CHECK_CODE);
+		
+		//check if audio file is available
 		if (checkAudio(vPager.getCurrentItem())) {
+			//get audio output method from shared preferences
 			SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
 			streamType = settings.getInt("audioOut",
 					AudioManager.STREAM_VOICE_CALL);
@@ -114,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 							+ resources.getResourcePackageName(rID) + "/"
 							+ resources.getResourceTypeName(rID) + "/" + rID));
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-			mediaPlayer.prepare();					
+			mediaPlayer.prepareAsync();					
 			mediaPlayer.setScreenOnWhilePlaying(true);
 
 		} catch (IllegalArgumentException | SecurityException
@@ -161,7 +168,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// minervaTTS.stop();
 		// minervaTTS.shutdown();
 		// }
+		
+		//release the mediaPlayer
 		mediaPlayer.release();
+		mediaPlayer=null;
 		// update preferences to store audio output
 		SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
@@ -266,6 +276,25 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			 */
 		}
 
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		//check  audio state to continue
+		outState.putBoolean("isPlaying",mediaPlayer.isPlaying());
+		outState.putInt("progress",mediaPlayer.getCurrentPosition());
+		super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		savedInstanceState.getBoolean("isPlaying");
+		mediaPlayer.seekTo(savedInstanceState.getInt("progress"));
+		if(savedInstanceState.getBoolean("isPlaying")){
+			mediaPlayer.start();
+		}
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
