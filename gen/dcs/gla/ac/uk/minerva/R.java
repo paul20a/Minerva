@@ -1095,7 +1095,6 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f060016;
         public static final int action_menu_presenter=0x7f060017;
         public static final int action_mode_close_button=0x7f060024;
-        public static final int action_settings=0x7f06004d;
         public static final int activity_chooser_view_content=0x7f060025;
         public static final int always=0x7f06000b;
         public static final int audio_settings=0x7f06004c;
@@ -1225,10 +1224,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int main=0x7f0d0000;
-        public static final int map_view=0x7f0d0001;
-        public static final int select=0x7f0d0002;
-        public static final int trail=0x7f0d0003;
-        public static final int trail_select=0x7f0d0004;
+        public static final int select=0x7f0d0001;
     }
     public static final class raw {
         public static final int broken=0x7f050000;

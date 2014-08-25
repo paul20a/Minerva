@@ -250,7 +250,6 @@ int id action_context_bar 0x7f06001d
 int id action_menu_divider 0x7f060016
 int id action_menu_presenter 0x7f060017
 int id action_mode_close_button 0x7f060024
-int id action_settings 0x7f06004d
 int id activity_chooser_view_content 0x7f060025
 int id always 0x7f06000b
 int id audio_settings 0x7f06004c
@@ -352,10 +351,7 @@ int layout row_layout 0x7f03001e
 int layout rows 0x7f03001f
 int layout support_simple_spinner_dropdown_item 0x7f030020
 int menu main 0x7f0d0000
-int menu map_view 0x7f0d0001
-int menu select 0x7f0d0002
-int menu trail 0x7f0d0003
-int menu trail_select 0x7f0d0004
+int menu select 0x7f0d0001
 int raw broken 0x7f050000
 int raw data 0x7f050001
 int raw dsc4175 0x7f050002
