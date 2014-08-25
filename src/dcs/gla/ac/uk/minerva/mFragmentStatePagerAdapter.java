@@ -1,5 +1,7 @@
 package dcs.gla.ac.uk.minerva;
 
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,18 +10,22 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class mFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
 	private int size;
+	private ArrayList<POI> points;
 	
-	public mFragmentStatePagerAdapter(FragmentManager fm,int s) {
+	public mFragmentStatePagerAdapter(FragmentManager fm,int s,ArrayList<POI> a) {
 		super(fm);
-		this.size=s;		
+		this.size=s;
+		this.points=a;
 	}
 
 	@Override
 	public Fragment getItem(int i) {
         Fragment fragment = new ViewPointFragment();
         Bundle args = new Bundle();
-        // Our object is just an integer :-P
-        args.putInt(ViewPointFragment.ARG_POS, i);
+        // insert arguments as a bundle
+        args.putString("image", points.get(i).getImage());
+        args.putString("title", points.get(i).getName());
+        args.putString("description", points.get(i).getDescription());
         fragment.setArguments(args);
         return fragment;
 	}

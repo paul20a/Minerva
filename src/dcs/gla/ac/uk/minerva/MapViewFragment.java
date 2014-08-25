@@ -49,8 +49,8 @@ public class MapViewFragment extends Fragment {
 		minervaMapView = (MapView) v.findViewById(R.id.openmapview);
 		minervaMapView.setBuiltInZoomControls(true);
 		minervaMapView.setMultiTouchControls(true);
+		minervaMapView.setMaxZoomLevel(20);
 		minervaMapController = (MapController) minervaMapView.getController();
-
 		// set up marker.... get a nicer flag
 		Drawable marker = this.getResources().getDrawable(R.drawable.flag);
 		// Drawable

@@ -64,8 +64,8 @@ public class PointBaseAdapter extends MinervaBaseAdapter {
 		Resources r = context.getResources();
 		int rID = r.getIdentifier(item.getImage(), "raw",
 				context.getPackageName());
-		if (BitMapProcessor.cancelPotentialWork(rID, holder.thumbImageView)) {
-			final BitMapProcessor task = new BitMapProcessor(holder.thumbImageView, r);
+		if (BitmapProcessor.cancelPotentialWork(rID, holder.thumbImageView)) {
+			final BitmapProcessor task = new BitmapProcessor(holder.thumbImageView, r);
 			task.execute(rID);
 			Bitmap b = null;
 			final AsyncDrawable asyncDrawable = new AsyncDrawable(r, b, task);

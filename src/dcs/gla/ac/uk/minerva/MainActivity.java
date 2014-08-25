@@ -37,7 +37,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		
 		resources = getResources();
 		//included to set logo to relevant icon
 		getActionBar()
@@ -52,9 +51,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		Bundle b = this.getIntent().getExtras();
 		pList = b.getParcelableArrayList("pList");
 		int Start = b.getInt("pos");
-
 		sPagerAdapter = new mFragmentStatePagerAdapter(
-				getSupportFragmentManager(), pList.size());
+				getSupportFragmentManager(), pList.size(),pList);
 		vPager = (ViewPager) findViewById(R.id.point_pager);
 		vPager.setAdapter(sPagerAdapter);
 		vPager.setCurrentItem(Start);

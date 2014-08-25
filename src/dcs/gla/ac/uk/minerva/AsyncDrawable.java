@@ -7,16 +7,16 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 
 public class AsyncDrawable extends BitmapDrawable {
-    private final WeakReference<BitMapProcessor> bitMapProcessorTaskReference;
+    private final WeakReference<BitmapProcessor> bitMapProcessorTaskReference;
 
     public AsyncDrawable(Resources res, Bitmap bitmap,
-    		BitMapProcessor bitMapProcessor) {
+    		BitmapProcessor bitmapProcessor) {
         super(res, bitmap);
         bitMapProcessorTaskReference =
-            new WeakReference<BitMapProcessor>(bitMapProcessor);
+            new WeakReference<BitmapProcessor>(bitmapProcessor);
     }
 
-    public BitMapProcessor getBitMapProcessor() {
+    public BitmapProcessor getBitMapProcessor() {
         return bitMapProcessorTaskReference.get();
     }
 }

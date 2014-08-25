@@ -23,28 +23,34 @@
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/empty"
-            android:parentActivityName="dcs.gla.ac.uk.minerva.SelectActivity" >
-        <!-- Parent activity meta-data to support 4.0 and lower -->
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="dcs.gla.ac.uk.minerva.SelectActivity" />
+            android:parentActivityName=".SelectActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dcs.gla.ac.uk.minerva.SelectActivity" />
         </activity>
         <activity
             android:name=".SelectActivity"
             android:label="@string/empty"
-            android:parentActivityName="dcs.gla.ac.uk.minerva.TrailSelectActivity" >
-        <!-- Parent activity meta-data to support 4.0 and lower -->
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="dcs.gla.ac.uk.minerva.TrailSelectActivity" />
+            android:parentActivityName=".TrailSelectActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dcs.gla.ac.uk.minerva.TrailSelectActivity" />
         </activity>
-        <activity
-            android:name=".TrailSelectActivity" >
+        <activity android:name=".TrailSelectActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".TrailActivity"
+            android:label="@string/title_activity_trail" >
+        </activity>
     </application>
+
 </manifest>

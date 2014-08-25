@@ -16,7 +16,7 @@ import android.widget.TextView;
 public class ViewPointFragment extends Fragment {
 
 	public static final String ARG_POS = "position";
-	private int pos;
+
 	private String title;
 	private String description;
 	private String image;
@@ -29,11 +29,9 @@ public class ViewPointFragment extends Fragment {
 		// create the listView
 		super.onCreate(savedInstanceState);
 		// retrieve information from intent
-		pos = this.getArguments().getInt(ARG_POS);
-		image = ((MainActivity) getActivity()).pList.get(pos).getImage();
-		description = ((MainActivity) getActivity()).pList.get(pos)
-				.getDescription();
-		title = ((MainActivity) getActivity()).pList.get(pos).getName();
+		image = this.getArguments().getString("image");
+		description =this.getArguments().getString("description");
+		title = this.getArguments().getString("title");
 		// locate widgets
 		TextView titleTextView = (TextView) v.findViewById(R.id.titleTextView);
 		TextView descriptionTextView = (TextView) v
@@ -71,8 +69,8 @@ public class ViewPointFragment extends Fragment {
 		Resources r = getResources();
 		int rID = (r
 				.getIdentifier(image, "raw", getActivity().getPackageName()));
-		if (BitMapProcessor.cancelPotentialWork(rID, imageView)) {
-			final BitMapProcessor task = new BitMapProcessor(imageView, r);
+		if (BitmapProcessor.cancelPotentialWork(rID, imageView)) {
+			final BitmapProcessor task = new BitmapProcessor(imageView, r);
 			task.execute(rID);
 			Bitmap b = null;
 			final AsyncDrawable asyncDrawable = new AsyncDrawable(r, b, task);
