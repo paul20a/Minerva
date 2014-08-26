@@ -33,14 +33,14 @@
         <activity
             android:name=".SelectActivity"
             android:label="@string/empty"
-            android:parentActivityName=".TrailSelectActivity" >
+            android:parentActivityName=".TourActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dcs.gla.ac.uk.minerva.TrailSelectActivity" />
         </activity>
-        <activity android:name=".TrailSelectActivity" >
+        <activity android:name=".TourActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

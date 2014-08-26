@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		
+		BitmapProcessor.EmptyBitmapCache();
 		resources = getResources();
 		// included to set logo to relevant icon
 		getActionBar()
@@ -52,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		Bundle b = this.getIntent().getExtras();
 		pList = b.getParcelableArrayList("pList");
 		int Start = b.getInt("pos");
-		//setup pager and adapter
+		// setup pager and adapter
 		sPagerAdapter = new mFragmentStatePagerAdapter(
 				getSupportFragmentManager(), pList.size(), pList);
 		vPager = (ViewPager) findViewById(R.id.point_pager);
@@ -71,13 +71,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			public void onPageSelected(int position) {
 				// retrieve audio file id for current page
 				if (checkAudio(vPager.getCurrentItem())) {
-					switch (streamType) {
-					case AudioManager.STREAM_VOICE_CALL:
-						setupMediaPlayerEarPiece(position);
-						break;
-					case AudioManager.STREAM_MUSIC:
-						setupMediaPlayerSpeaker(position);
-					}
+					chooseOutput(position);
 				}
 
 			}
@@ -94,17 +88,31 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// startActivityForResult(checkTTSIntent, CHECK_CODE);
 
 		// check if audio file is available
-		if (checkAudio(vPager.getCurrentItem())) {
-			// get audio output method from shared preferences
-			SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
-			streamType = settings.getInt("audioOut",
-					AudioManager.STREAM_VOICE_CALL);
-			mediaPlayer = new MediaPlayer();
-			setVolumeControlStream(streamType);
-			a = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-			setupMediaPlayerEarPiece(vPager.getCurrentItem());
+		int i = vPager.getCurrentItem();
+		checkAudio(i);
+		// get audio output method from shared preferences
+		SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
+		streamType = settings
+				.getInt("audioOut", AudioManager.STREAM_VOICE_CALL);
+		mediaPlayer = new MediaPlayer();
+		setVolumeControlStream(streamType);
+		a = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+		if (checkAudio(i)) {
+			chooseOutput(i);
 		}
 		super.onStart();
+	}
+
+	private void chooseOutput(int position) {
+		if (checkAudio(vPager.getCurrentItem())) {
+			switch (streamType) {
+			case AudioManager.STREAM_VOICE_CALL:
+				setupMediaPlayerEarPiece(position);
+				break;
+			case AudioManager.STREAM_MUSIC:
+				setupMediaPlayerSpeaker(position);
+			}
+		}
 	}
 
 	private void setupMediaPlayerEarPiece(int i) {
@@ -197,6 +205,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		int i = vPager.getCurrentItem();
 		switch (item.getItemId()) {
 		// Respond to the action bar's Up/Home button
 		case android.R.id.home:
@@ -204,11 +213,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			return true;
 		case R.id.audio_settings:
 			if (streamType == AudioManager.STREAM_VOICE_CALL) {
-				setupMediaPlayerSpeaker(vPager.getCurrentItem());
+				if (checkAudio(i)) {
+					setupMediaPlayerSpeaker(i);
+				}
 				streamType = AudioManager.STREAM_MUSIC;
 				item.setTitle("Speaker");
 			} else if (streamType == AudioManager.STREAM_MUSIC) {
-				setupMediaPlayerEarPiece(vPager.getCurrentItem());
+				if (checkAudio(i)) {
+					setupMediaPlayerEarPiece(i);
+				}
 				streamType = AudioManager.STREAM_VOICE_CALL;
 				item.setTitle("Earpiece");
 			}

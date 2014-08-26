@@ -26,7 +26,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		BitmapProcessor.EmptyBitmapCache();
 		final ActionBar navBar = getActionBar();
 		XmlPointParser xParser = new XmlPointParser();
 		navBar.setIcon(getResources().getIdentifier("logo", "raw", "dcs.gla.ac.uk.minerva"));
@@ -34,7 +34,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		try {
 			Resources resources = getResources();
 			int rID = resources.getIdentifier(getIntent().getStringExtra(
-					TrailSelectActivity.TRAILPATH), "raw", getPackageName());  
+					TourActivity.TRAILPATH), "raw", getPackageName());  
 			InputStream in= resources.openRawResource(rID);
 			resources=null;
 			pList = xParser.parse(in);

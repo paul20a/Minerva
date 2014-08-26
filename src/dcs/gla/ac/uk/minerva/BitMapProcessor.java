@@ -22,13 +22,11 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 		// Use a WeakReference to ensure the ImageView can be garbage collected
 		imageViewReference = new WeakReference<ImageView>(imageView);
 		this.r = r;
-		bitmapCache=bitmapCache();
 	}
 
-	public LruCache<String,Bitmap> bitmapCache(){
+	public static void initBitmapCache(){
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 		final int size = maxMemory / MEM_DIV;
-		
 			bitmapCache = new LruCache<String, Bitmap>(size) {
 				@Override
 				protected int sizeOf(String key, Bitmap bitmap) {
@@ -36,10 +34,12 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 					return bitmap.getByteCount() / 1024;
 				}
 			};
-			return bitmapCache;
+	}
+	public static void EmptyBitmapCache(){
+		bitmapCache.evictAll();
 	}
 	
-	public static int calculateInSampleSize(BitmapFactory.Options options,
+	public int calculateInSampleSize(BitmapFactory.Options options,
 			int reqWidth, int reqHeight) {
 		final int h = options.outHeight;
 		final int w = options.outWidth;
@@ -47,28 +47,37 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 
 		if (h > reqHeight || w > reqWidth) {
 			// work out sample size
-			while (((h / 2) / sampleSize) > reqHeight
-					&& ((w / 2) / sampleSize) > reqWidth) {
+			while (((h) / sampleSize) > reqHeight
+					&& ((w) / sampleSize) > reqWidth) {
 				sampleSize *= 2;
 			}
 		}
 		return sampleSize;
 	}
 
-	public static Bitmap decodeSampledBitmapFromResource(Resources res,
+	public Bitmap decodeSampledBitmapFromResource(Resources res,
 			int resId, int reqWidth, int reqHeight) {
 
 		// Decode bitmap dimensions only
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
 		BitmapFactory.decodeResource(res, resId, options);
-
+		//check  if cancelled before calculating sample rate
+		if(this.isCancelled())
+		{
+			return null;
+		}
 		// Calculate inSampleSize
 		options.inSampleSize = calculateInSampleSize(options, reqWidth,
 				reqHeight);
 
 		// Decode bitmap with new sampleSize
 		options.inJustDecodeBounds = false;
+		//check  if cancelled before decoding bitmap
+		if(this.isCancelled())
+		{
+			return null;
+		}
 		return BitmapFactory.decodeResource(res, resId, options);
 	}
 
@@ -88,6 +97,7 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 				final Bitmap bitmap = decodeSampledBitmapFromResource(r, data,
 						w, h);
 				cacheBitmap(String.valueOf(params[0]),bitmap);
+				bitmapCache.size();
 				Log.d("ImageSize", bitmap.getByteCount()/1024+"kb");
 				return bitmap;
 			} catch (Exception e) {

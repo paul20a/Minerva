@@ -69,7 +69,6 @@ public class ViewPointFragment extends Fragment {
 		Resources r = getResources();
 		int rID = (r
 				.getIdentifier(image, "raw", getActivity().getPackageName()));
-		
 		Bitmap bitmap = BitmapProcessor.getCachedBitmap(String.valueOf(rID));
 		if (bitmap != null) {
 			Log.d("", "retrieved bitmap from cache");
@@ -84,6 +83,8 @@ public class ViewPointFragment extends Fragment {
 		}
 	}
 
+	
+	
 	public static ViewPointFragment newInstance(String text) {
 
 		ViewPointFragment f = new ViewPointFragment();
