@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class PointBaseAdapter extends MinervaBaseAdapter {
 	
 	public PointBaseAdapter(Context context, ArrayList<Object> in) {
 		super(context, in);
-		lInflater = LayoutInflater.from(context);
+		lInflater = LayoutInflater.from(context); 	    
 	}
 
 	/*
@@ -64,6 +65,12 @@ public class PointBaseAdapter extends MinervaBaseAdapter {
 		Resources r = context.getResources();
 		int rID = r.getIdentifier(item.getImage(), "raw",
 				context.getPackageName());
+		Bitmap bitmap =  BitmapProcessor.getCachedBitmap(String.valueOf(rID));
+		 if (bitmap != null) {
+			 Log.d("","retrieved bitmap from cache");
+			 	holder.thumbImageView.setImageBitmap(bitmap);
+		    	return;
+		    }
 		if (BitmapProcessor.cancelPotentialWork(rID, holder.thumbImageView)) {
 			final BitmapProcessor task = new BitmapProcessor(holder.thumbImageView, r);
 			task.execute(rID);
@@ -71,11 +78,11 @@ public class PointBaseAdapter extends MinervaBaseAdapter {
 			final AsyncDrawable asyncDrawable = new AsyncDrawable(r, b, task);
 			holder.thumbImageView.setImageDrawable(asyncDrawable);
 		}
+		
 	}
 
 	static class ViewHolder {
 		TextView nameTextView;
 		ImageView thumbImageView;
 	}
-
 }

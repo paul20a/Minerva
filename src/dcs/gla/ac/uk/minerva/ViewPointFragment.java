@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 public class ViewPointFragment extends Fragment {
 
 	public static final String ARG_POS = "position";
-
 	private String title;
 	private String description;
 	private String image;
@@ -24,13 +24,13 @@ public class ViewPointFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		this.setRetainInstance(true);
 		// Inflate selection view
 		View v = inflater.inflate(R.layout.activity_main, container, false);
 		// create the listView
-		super.onCreate(savedInstanceState);
 		// retrieve information from intent
 		image = this.getArguments().getString("image");
-		description =this.getArguments().getString("description");
+		description = this.getArguments().getString("description");
 		title = this.getArguments().getString("title");
 		// locate widgets
 		TextView titleTextView = (TextView) v.findViewById(R.id.titleTextView);
@@ -69,7 +69,13 @@ public class ViewPointFragment extends Fragment {
 		Resources r = getResources();
 		int rID = (r
 				.getIdentifier(image, "raw", getActivity().getPackageName()));
-		if (BitmapProcessor.cancelPotentialWork(rID, imageView)) {
+		
+		Bitmap bitmap = BitmapProcessor.getCachedBitmap(String.valueOf(rID));
+		if (bitmap != null) {
+			Log.d("", "retrieved bitmap from cache");
+			imageView.setImageBitmap(bitmap);
+			return;
+		} else if (BitmapProcessor.cancelPotentialWork(rID, imageView)) {
 			final BitmapProcessor task = new BitmapProcessor(imageView, r);
 			task.execute(rID);
 			Bitmap b = null;

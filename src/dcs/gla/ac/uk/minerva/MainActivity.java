@@ -25,34 +25,36 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	// private int CHECK_CODE = 0;
 	// private TextToSpeech minervaTTS;
 	public static final String RES_PREFIX = "android.resource://";
-	public ArrayList<POI> pList;
+	private ArrayList<POI> pList;
 	private Resources resources;
-	ViewPager vPager;
-	static MediaPlayer mediaPlayer;
-	AudioManager a;
-	mFragmentStatePagerAdapter sPagerAdapter;
-	public static int streamType;
+	private ViewPager vPager;
+	private MediaPlayer mediaPlayer;
+	private AudioManager a;
+	private mFragmentStatePagerAdapter sPagerAdapter;
+	private int streamType;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
+		
 		resources = getResources();
-		//included to set logo to relevant icon
+		// included to set logo to relevant icon
 		getActionBar()
 				.setIcon(
 						resources.getIdentifier("logo", "raw",
 								"dcs.gla.ac.uk.minerva"));
-		//allow up nav
+		// allow up nav
 		getActionBar().setHomeButtonEnabled(true);
-		
+
 		setContentView(R.layout.point_pager);
 		// retrieve information from intent
 		Bundle b = this.getIntent().getExtras();
 		pList = b.getParcelableArrayList("pList");
 		int Start = b.getInt("pos");
+		//setup pager and adapter
 		sPagerAdapter = new mFragmentStatePagerAdapter(
-				getSupportFragmentManager(), pList.size(),pList);
+				getSupportFragmentManager(), pList.size(), pList);
 		vPager = (ViewPager) findViewById(R.id.point_pager);
 		vPager.setAdapter(sPagerAdapter);
 		vPager.setCurrentItem(Start);
@@ -85,15 +87,15 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	@Override
 	public void onStart() {
-		
+
 		// TEXT TO SPEECH CODE
 		// Intent checkTTSIntent = new Intent();
 		// checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
 		// startActivityForResult(checkTTSIntent, CHECK_CODE);
-		
-		//check if audio file is available
+
+		// check if audio file is available
 		if (checkAudio(vPager.getCurrentItem())) {
-			//get audio output method from shared preferences
+			// get audio output method from shared preferences
 			SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
 			streamType = settings.getInt("audioOut",
 					AudioManager.STREAM_VOICE_CALL);
@@ -119,7 +121,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 							+ resources.getResourcePackageName(rID) + "/"
 							+ resources.getResourceTypeName(rID) + "/" + rID));
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-			mediaPlayer.prepareAsync();					
+			mediaPlayer.prepareAsync();
 			mediaPlayer.setScreenOnWhilePlaying(true);
 
 		} catch (IllegalArgumentException | SecurityException
@@ -145,7 +147,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		Button a = (Button) this.findViewById(R.id.play_btn);
 		Button b = (Button) this.findViewById(R.id.pause_btn);
 		Button c = (Button) this.findViewById(R.id.replay_btn);
-		
+
 		if (pList.get(i).getAudio() != null) {
 			a.setEnabled(true);
 			b.setEnabled(true);
@@ -166,10 +168,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// minervaTTS.stop();
 		// minervaTTS.shutdown();
 		// }
-		
-		//release the mediaPlayer
+
+		// release the mediaPlayer
 		mediaPlayer.release();
-		mediaPlayer=null;
+		mediaPlayer = null;
 		// update preferences to store audio output
 		SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
@@ -196,11 +198,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-	    // Respond to the action bar's Up/Home button
-	    case android.R.id.home:
-	    	this.finish();
-	        return true;
-		case R.id.audio_settings: 
+		// Respond to the action bar's Up/Home button
+		case android.R.id.home:
+			this.finish();
+			return true;
+		case R.id.audio_settings:
 			if (streamType == AudioManager.STREAM_VOICE_CALL) {
 				setupMediaPlayerSpeaker(vPager.getCurrentItem());
 				streamType = AudioManager.STREAM_MUSIC;
@@ -264,10 +266,10 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			mediaPlayer.pause();
 			break;
 		case R.id.replay_btn:
-				mediaPlayer.seekTo(0);
-				if(!mediaPlayer.isPlaying()){
-					mediaPlayer.start();					
-				}
+			mediaPlayer.seekTo(0);
+			if (!mediaPlayer.isPlaying()) {
+				mediaPlayer.start();
+			}
 			// TEXT TO SPEECH CODE
 			/*
 			 * if (minervaTTS != null) { minervaTTS.stop(); }
@@ -278,9 +280,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		//check  audio state to continue
-		outState.putBoolean("isPlaying",mediaPlayer.isPlaying());
-		outState.putInt("progress",mediaPlayer.getCurrentPosition());
+		// check audio state to continue
+		outState.putBoolean("isPlaying", mediaPlayer.isPlaying());
+		outState.putInt("progress", mediaPlayer.getCurrentPosition());
 		super.onSaveInstanceState(outState);
 	}
 
@@ -288,7 +290,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		savedInstanceState.getBoolean("isPlaying");
 		mediaPlayer.seekTo(savedInstanceState.getInt("progress"));
-		if(savedInstanceState.getBoolean("isPlaying")){
+		if (savedInstanceState.getBoolean("isPlaying")) {
 			mediaPlayer.start();
 		}
 		// TODO Auto-generated method stub
