@@ -69,9 +69,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		vPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
-				// retrieve audio file id for current page
-				if (checkAudio(vPager.getCurrentItem())) {
-					chooseOutput(position);
+				// check audio file id for current page
+				boolean audioPresent=checkAudio(vPager.getCurrentItem());
+				if (audioPresent) {
+					setMediaButtonsEnabled(audioPresent);
+					setupMediaPlayer(position);
 				}
 
 			}
@@ -97,40 +99,32 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		mediaPlayer = new MediaPlayer();
 		setVolumeControlStream(streamType);
 		a = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
-		if (checkAudio(i)) {
-			chooseOutput(i);
+		boolean audioPresent=checkAudio(i);
+		if (audioPresent) {
+			setMediaButtonsEnabled(audioPresent);
+			setupMediaPlayer(i);
 		}
 		super.onStart();
 	}
 
-	private void chooseOutput(int position) {
-		if (checkAudio(vPager.getCurrentItem())) {
-			switch (streamType) {
-			case AudioManager.STREAM_VOICE_CALL:
-				setupMediaPlayerEarPiece(position);
-				break;
-			case AudioManager.STREAM_MUSIC:
-				setupMediaPlayerSpeaker(position);
-			}
-		}
-	}
-
-	private void setupMediaPlayerEarPiece(int i) {
+	private void setupMediaPlayer(int i) {
+		// get audio file
 		int rID = resources.getIdentifier(pList.get(i).getAudio(), "raw",
 				getPackageName());
 		// reset and create media player
 		if (mediaPlayer != null)
 			mediaPlayer.reset();
-
+		// try to initialise media using audio file
 		try {
 			mediaPlayer.setDataSource(
 					this,
 					Uri.parse(RES_PREFIX
 							+ resources.getResourcePackageName(rID) + "/"
 							+ resources.getResourceTypeName(rID) + "/" + rID));
-			mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-			mediaPlayer.prepareAsync();
+			mediaPlayer.setAudioStreamType(streamType);
 			mediaPlayer.setScreenOnWhilePlaying(true);
+			mediaPlayer.prepare();
+			
 
 		} catch (IllegalArgumentException | SecurityException
 				| IllegalStateException | NotFoundException | IOException e) {
@@ -139,35 +133,23 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		}
 	}
 
-	private void setupMediaPlayerSpeaker(int i) {
-		if (mediaPlayer != null)
-			mediaPlayer.reset();
-
-		mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-		int rID = resources.getIdentifier(pList.get(i).getAudio(), "raw",
-				getPackageName());
-		mediaPlayer = MediaPlayer.create(MainActivity.this, rID);
-		mediaPlayer.setScreenOnWhilePlaying(true);
-
-	}
-
 	private boolean checkAudio(int i) {
-		Button a = (Button) this.findViewById(R.id.play_btn);
-		Button b = (Button) this.findViewById(R.id.pause_btn);
-		Button c = (Button) this.findViewById(R.id.replay_btn);
-
 		if (pList.get(i).getAudio() != null) {
-			a.setEnabled(true);
-			b.setEnabled(true);
-			c.setEnabled(true);
 			return true;
 		}
-		a.setEnabled(false);
-		b.setEnabled(false);
-		c.setEnabled(false);
 		return false;
 	}
 
+	private void setMediaButtonsEnabled(boolean enable){
+		Button a = (Button) this.findViewById(R.id.play_btn);
+		Button b = (Button) this.findViewById(R.id.pause_btn);
+		Button c = (Button) this.findViewById(R.id.replay_btn);
+		
+		a.setEnabled(enable);
+		b.setEnabled(enable);
+		c.setEnabled(enable);
+	}
+	
 	@Override
 	protected void onStop() {
 		// TEXT TO SPEECH CODE
@@ -178,6 +160,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// }
 
 		// release the mediaPlayer
+		super.onStop();
 		mediaPlayer.release();
 		mediaPlayer = null;
 		// update preferences to store audio output
@@ -185,7 +168,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putInt("audioOut", streamType);
 		editor.commit();
-		super.onStop();
 	}
 
 	@Override
@@ -210,24 +192,29 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		// Respond to the action bar's Up/Home button
 		case android.R.id.home:
 			this.finish();
-			return true;
+			break;
 		case R.id.audio_settings:
 			if (streamType == AudioManager.STREAM_VOICE_CALL) {
-				if (checkAudio(i)) {
-					setupMediaPlayerSpeaker(i);
-				}
 				streamType = AudioManager.STREAM_MUSIC;
 				item.setTitle("Speaker");
 			} else if (streamType == AudioManager.STREAM_MUSIC) {
-				if (checkAudio(i)) {
-					setupMediaPlayerEarPiece(i);
-				}
 				streamType = AudioManager.STREAM_VOICE_CALL;
 				item.setTitle("Earpiece");
 			}
+			//check if audio is applicable
+			if (checkAudio(i)) {
+				//setup media player to same state user had before using different output
+				boolean playing = mediaPlayer.isPlaying();
+				int t = mediaPlayer.getCurrentPosition();
+				setupMediaPlayer(i);
+				mediaPlayer.seekTo(t);
+				if (playing) {
+					mediaPlayer.start();
+				}
+			}
 			setVolumeControlStream(streamType);
 		}
-		return super.onOptionsItemSelected(item);
+		return true;
 	}
 
 	// TEXT TO SPEECH CODE
@@ -257,7 +244,6 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.play_btn:
 			// Request audio focus for playback
-
 			int result = a.requestAudioFocus(afChangeListener, streamType,
 					AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 			if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {

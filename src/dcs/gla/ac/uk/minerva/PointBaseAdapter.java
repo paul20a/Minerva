@@ -65,6 +65,7 @@ public class PointBaseAdapter extends MinervaBaseAdapter {
 		Resources r = context.getResources();
 		int rID = r.getIdentifier(item.getImage(), "raw",
 				context.getPackageName());
+		
 		Bitmap bitmap =  BitmapProcessor.getCachedBitmap(String.valueOf(rID));
 		 if (bitmap != null) {
 			 Log.d("","retrieved bitmap from cache");
