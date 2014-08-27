@@ -29,10 +29,10 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		BitmapProcessor.EmptyBitmapCache();
 		final ActionBar navBar = getActionBar();
 		XmlPointParser xParser = new XmlPointParser();
-		navBar.setIcon(getResources().getIdentifier("logo", "raw", "dcs.gla.ac.uk.minerva"));
+		Resources resources = getResources();
+		navBar.setIcon(resources.getIdentifier("logo", "raw", "dcs.gla.ac.uk.minerva"));
 		setContentView(R.layout.pager);
 		try {
-			Resources resources = getResources();
 			int rID = resources.getIdentifier(getIntent().getStringExtra(
 					TourActivity.TRAILPATH), "raw", getPackageName());  
 			InputStream in= resources.openRawResource(rID);
@@ -73,9 +73,9 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 	private CharSequence getTabTitle(int i) {
 		String s = "";
 		if (i == 0)
-			s = "List View";
+			s = getResources().getString(R.string.list_section);
 		else
-			s = "Map View";
+			s = getResources().getString(R.string.map_section);
 		return s;
 	}
 

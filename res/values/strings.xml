@@ -5,18 +5,16 @@
     <string name="earpiece_settings">Earpiece</string>
     <string name="speaker_settings">Speaker</string>
     <string name="play">Play</string>
-    <string name="start">Take the Tour</string>
+    <string name="start">Start the Tour</string>
     <string name="pause">Pause</string>
     <string name="replay">Replay</string>
     <string name="text_view1">Oops</string>
     <string name="text_view1_desc">Sorry I couldn\&apos;t find your data</string>
     <string name="title_activity_select">Points of Interest</string>
-    <string name="title_activity_map_view">Map View</string>
-    <string name="List_section">List View</string>
+    <string name="map_section">Map View</string>
+    <string name="list_section">List View</string>
     <string name="title_activity_trail_select">Select Trail</string>
     <string name="empty"></string>
-    <string name="title_activity_trail">TrailActivity</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
 </resources>

@@ -150,4 +150,17 @@ public class MapViewFragment extends Fragment {
 				});
 
 	}
+
+	@Override
+	public void onPause() {
+		// TODO Handle release of gps tracking
+		myLocationOverlay.disableMyLocation();
+		super.onPause();
+	}
+	@Override
+	public void onResume() {
+		// TODO Handle release of gps tracking
+		myLocationOverlay.enableMyLocation();
+		super.onResume();
+	}
 }
