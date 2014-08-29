@@ -10,6 +10,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay.OnItemGestureListener;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -49,7 +50,9 @@ public class MapViewFragment extends Fragment {
 		minervaMapView = (MapView) v.findViewById(R.id.openmapview);
 		minervaMapView.setBuiltInZoomControls(true);
 		minervaMapView.setMultiTouchControls(true);
-		minervaMapView.setMaxZoomLevel(20);
+		minervaMapView.setMaxZoomLevel(18);
+		minervaMapView.setMinZoomLevel(16);
+		minervaMapView.setUseDataConnection(false);
 		minervaMapController = (MapController) minervaMapView.getController();
 		// set up marker.... get a nicer flag
 		Drawable marker = this.getResources().getDrawable(R.drawable.flag);
@@ -138,6 +141,7 @@ public class MapViewFragment extends Fragment {
 					public void onGlobalLayout() {
 						minervaMapController.setZoom(17);
 						minervaMapController.setCenter(g);
+					
 						// check version to remove listener with correct method
 						// version.
 						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
@@ -150,6 +154,7 @@ public class MapViewFragment extends Fragment {
 				});
 
 	}
+
 
 	@Override
 	public void onPause() {
