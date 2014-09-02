@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v4.util.LruCache;
-import android.util.Log;
 import android.widget.ImageView;
 
 public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
@@ -25,17 +24,21 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 	}
 
 	public static void initBitmapCache(){
+		
+		//calcualte memory to allocate to cache
 		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
 		final int size = maxMemory / MEM_DIV;
 			bitmapCache = new LruCache<String, Bitmap>(size) {
 				@Override
 				protected int sizeOf(String key, Bitmap bitmap) {
-					// size in kb
+					// size in kb rather than entries
 					return bitmap.getByteCount() / 1024;
 				}
 			};
 	}
+	
 	public static void EmptyBitmapCache(){
+		//empty cache, allows cache to use same id for thumbnails and larger images
 		bitmapCache.evictAll();
 	}
 	
@@ -92,13 +95,11 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 				// get dimensions of imageView
 				int h = iView.getMeasuredHeightAndState();
 				int w = iView.getMeasuredWidthAndState();
-				// log image size for bug finding
-				
+				// log image size for bug finding 
 				final Bitmap bitmap = decodeSampledBitmapFromResource(r, data,
 						w, h);
+				//add bitmap to cache
 				cacheBitmap(String.valueOf(params[0]),bitmap);
-				bitmapCache.size();
-				Log.d("ImageSize", bitmap.getByteCount()/1024+"kb");
 				return bitmap;
 			} catch (Exception e) {
 				this.cancel(true);
@@ -110,23 +111,27 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 	// Once complete, see if ImageView is still around and set bitmap.
 	@Override
 	protected void onPostExecute(Bitmap bitmap) {
-		// if
+		// if the thread is cancelled return null
 		if (isCancelled()) {
 			bitmap = null;
 		} else if (imageViewReference != null && bitmap != null) {
 			final ImageView imageView = imageViewReference.get();
 			final BitmapProcessor bitMapProcessor = getBitMapProcessor(imageView);
 			if (this == bitMapProcessor && imageView != null) {
+				//set the imageViews image
 				imageView.setImageBitmap(bitmap);
 			}
 		}
 	}
 
 	private static BitmapProcessor getBitMapProcessor(ImageView imageView) {
+		//if imageView isn't null
 		if (imageView != null) {
 			final Drawable drawable = imageView.getDrawable();
+			//if the drawable's is AsyncDrawable
 			if (drawable instanceof AsyncDrawable) {
 				final AsyncDrawable asyncDrawable = (AsyncDrawable) drawable;
+				// return the drawable's BitmapProcessor
 				return asyncDrawable.getBitMapProcessor();
 			}
 		}
@@ -135,7 +140,7 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 
 	public static boolean cancelPotentialWork(int data, ImageView imageView) {
 		final BitmapProcessor bitMapProcessor = getBitMapProcessor(imageView);
-
+		//check for null values
 		if (bitMapProcessor != null) {
 			final int bitmapData = bitMapProcessor.data;
 			// If bitmapData is not yet set or it differs from the new data
@@ -155,11 +160,13 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 	public void cacheBitmap(String key, Bitmap bitmap) {
 		// ensure entries don't repeat
 		if (getCachedBitmap(key) == null) {
+			//add to cache
 			bitmapCache.put(key, bitmap);
 		}
 	}
 
 	public static Bitmap getCachedBitmap(String key) {
+		//retrieve entry
 		return bitmapCache.get(key);
 	}
 }
