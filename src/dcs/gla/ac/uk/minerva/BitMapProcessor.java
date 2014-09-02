@@ -116,8 +116,8 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 			bitmap = null;
 		} else if (imageViewReference != null && bitmap != null) {
 			final ImageView imageView = imageViewReference.get();
-			final BitmapProcessor bitMapProcessor = getBitMapProcessor(imageView);
-			if (this == bitMapProcessor && imageView != null) {
+			final BitmapProcessor bitmapProcessor = getBitMapProcessor(imageView);
+			if (this == bitmapProcessor && imageView != null) {
 				//set the imageViews image
 				imageView.setImageBitmap(bitmap);
 			}

@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
-        android:gravity="center"
+        android:gravity="center_vertical|center_horizontal"
+        android:minLines="2"
         android:text="@string/text_view1"
         android:textSize="@dimen/abc_action_bar_title_text_size"
         android:textStyle="normal|bold|italic" />
@@ -20,12 +21,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+         >
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_height="match_parent"
                 android:layout_width="0dp" 
+                android:layout_marginRight="8dp" 
+               
                 android:layout_weight="3"
                 android:background="#000000"
                 android:scaleType="centerCrop"
@@ -36,7 +41,6 @@
             android:layout_height="match_parent"
             android:layout_width="0dp" 
             android:layout_weight="2"
-            android:layout_marginTop="8dp"
             
            >
 

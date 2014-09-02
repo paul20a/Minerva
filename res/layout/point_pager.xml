@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true"
-	android:layout_marginLeft="8dp"
-	android:layout_marginRight="8dp"
     android:orientation="vertical" >
 
     <android.support.v4.view.ViewPager
@@ -14,38 +12,10 @@
         android:id="@+id/point_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_weight="1" />
 
-    <LinearLayout
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/play_btn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/play" />
-
-        <Button
-            android:id="@+id/pause_btn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/pause" />
-
-        <Button
-            android:id="@+id/replay_btn"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/replay" />
-
-    </LinearLayout>
+    <include layout="@layout/media_button_layout" />
 
 </LinearLayout>

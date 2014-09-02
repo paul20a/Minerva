@@ -12,13 +12,14 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 public class MainActivity extends ActionBarActivity implements OnClickListener {
 
@@ -28,7 +29,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	private ArrayList<POI> pList;
 	private Resources resources;
 	private ViewPager vPager;
-	private MediaPlayer mediaPlayer;
+	protected MediaPlayer mediaPlayer;
 	private AudioManager a;
 	private mFragmentStatePagerAdapter sPagerAdapter;
 	private int streamType;
@@ -60,11 +61,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		vPager.setCurrentItem(Start);
 
 		// setup buttons
-		Button speakBtn = (Button) findViewById(R.id.play_btn);
+		ImageButton speakBtn = (ImageButton) findViewById(R.id.play_btn);
 		speakBtn.setOnClickListener(this);
-		Button pauseBtn = (Button) findViewById(R.id.pause_btn);
+		ImageButton pauseBtn = (ImageButton) findViewById(R.id.pause_btn);
 		pauseBtn.setOnClickListener(this);
-		Button replayBtn = (Button) findViewById(R.id.replay_btn);
+		ImageButton replayBtn = (ImageButton) findViewById(R.id.replay_btn);
 		replayBtn.setOnClickListener(this);
 		vPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
@@ -73,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 				boolean audioPresent=checkAudio(vPager.getCurrentItem());
 				if (audioPresent) {
 					setMediaButtonsEnabled(audioPresent);
-					setupMediaPlayer(position);
+					setupMediaPlayer(getAudioFile(position));
 				}
 
 			}
@@ -102,15 +103,18 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		boolean audioPresent=checkAudio(i);
 		if (audioPresent) {
 			setMediaButtonsEnabled(audioPresent);
-			setupMediaPlayer(i);
+			setupMediaPlayer(getAudioFile(i));
 		}
 		super.onStart();
 	}
 
-	private void setupMediaPlayer(int i) {
+	private int getAudioFile(int i){
 		// get audio file
-		int rID = resources.getIdentifier(pList.get(i).getAudio(), "raw",
+		return resources.getIdentifier(pList.get(i).getAudio(), "raw",
 				getPackageName());
+	}
+	
+	public int setupMediaPlayer(int i) {
 		// reset and create media player
 		if (mediaPlayer != null)
 			mediaPlayer.reset();
@@ -119,8 +123,8 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			mediaPlayer.setDataSource(
 					this,
 					Uri.parse(RES_PREFIX
-							+ resources.getResourcePackageName(rID) + "/"
-							+ resources.getResourceTypeName(rID) + "/" + rID));
+							+ resources.getResourcePackageName(i) + "/"
+							+ resources.getResourceTypeName(i) + "/" + i));
 			mediaPlayer.setAudioStreamType(streamType);
 			mediaPlayer.setScreenOnWhilePlaying(true);
 			mediaPlayer.prepare();
@@ -130,7 +134,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 				| IllegalStateException | NotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
+			return 0;
 		}
+		return 1;
 	}
 
 	private boolean checkAudio(int i) {
@@ -141,9 +147,9 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 	}
 
 	private void setMediaButtonsEnabled(boolean enable){
-		Button a = (Button) this.findViewById(R.id.play_btn);
-		Button b = (Button) this.findViewById(R.id.pause_btn);
-		Button c = (Button) this.findViewById(R.id.replay_btn);
+		ImageButton a = (ImageButton) this.findViewById(R.id.play_btn);
+		ImageButton b = (ImageButton) this.findViewById(R.id.pause_btn);
+		ImageButton c = (ImageButton) this.findViewById(R.id.replay_btn);
 		
 		a.setEnabled(enable);
 		b.setEnabled(enable);
@@ -193,6 +199,11 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		case android.R.id.home:
 			this.finish();
 			break;
+			case R.id.audio_file_search:
+				FragmentManager m= getFragmentManager();
+				AudioLookupDialogFragment dialog=new AudioLookupDialogFragment();
+				dialog.show(m, "Audio Playback");
+				break;
 		case R.id.audio_settings:
 			if (streamType == AudioManager.STREAM_VOICE_CALL) {
 				streamType = AudioManager.STREAM_MUSIC;
@@ -206,7 +217,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 				//setup media player to same state user had before using different output
 				boolean playing = mediaPlayer.isPlaying();
 				int t = mediaPlayer.getCurrentPosition();
-				setupMediaPlayer(i);
+				setupMediaPlayer(getAudioFile(i));
 				mediaPlayer.seekTo(t);
 				if (playing) {
 					mediaPlayer.start();
