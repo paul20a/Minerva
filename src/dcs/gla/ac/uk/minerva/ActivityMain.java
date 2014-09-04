@@ -31,7 +31,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	private ViewPager vPager;
 	protected MediaPlayer mediaPlayer;
 	private AudioManager a;
-	private mFragmentStatePagerAdapter sPagerAdapter;
+	private MinervaFragmentStatePagerAdapter sPagerAdapter;
 	private int streamType;
 
 	@Override
@@ -54,8 +54,8 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		pList = b.getParcelableArrayList("pList");
 		int Start = b.getInt("pos");
 		// setup pager and adapter
-		sPagerAdapter = new mFragmentStatePagerAdapter(
-				getSupportFragmentManager(), pList.size(), pList);
+		sPagerAdapter = new MinervaFragmentStatePagerAdapter(
+				getSupportFragmentManager(), pList);
 		vPager = (ViewPager) findViewById(R.id.point_pager);
 		vPager.setAdapter(sPagerAdapter);
 		vPager.setCurrentItem(Start);

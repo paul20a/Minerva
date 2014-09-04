@@ -19,7 +19,7 @@ import android.view.MenuItem;
 
 public class ActivitySelect extends ActionBarActivity implements TabListener {
 
-	mFragmentPagerAdapter pAdapter;
+	MinervaFragmentPagerAdapter pAdapter;
 	SwipelessPager vPager;
 	public ArrayList<Object> pList=new ArrayList<Object>();
 
@@ -52,7 +52,7 @@ public class ActivitySelect extends ActionBarActivity implements TabListener {
 
 		navBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		pAdapter = new mFragmentPagerAdapter(getSupportFragmentManager());
+		pAdapter = new MinervaFragmentPagerAdapter(getSupportFragmentManager());
 		vPager = (SwipelessPager) findViewById(R.id.pager);
 		vPager.setAdapter(pAdapter);
 

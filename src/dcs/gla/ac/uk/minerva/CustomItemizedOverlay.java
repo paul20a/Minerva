@@ -14,7 +14,7 @@ import android.graphics.drawable.Drawable;
  * 
  * @author user
  */
-public class MyItemizedOverlay extends ItemizedOverlayWithFocus<OverlayItem> {
+public class CustomItemizedOverlay extends ItemizedOverlayWithFocus<OverlayItem> {
 
 	/**
 	 * @param aList
@@ -24,7 +24,7 @@ public class MyItemizedOverlay extends ItemizedOverlayWithFocus<OverlayItem> {
 	 * @param aOnItemTapListener
 	 * @param pResourceProxy
 	 */
-	public MyItemizedOverlay(List<OverlayItem> aList, Drawable pMarker,
+	public CustomItemizedOverlay(List<OverlayItem> aList, Drawable pMarker,
 			Drawable pMarkerFocused, int pFocusedBackgroundColor,
 			OnItemGestureListener<OverlayItem> aOnItemTapListener,
 			ResourceProxy pResourceProxy) {

@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 public class FragmentListView extends Fragment {
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -42,13 +45,5 @@ public class FragmentListView extends Fragment {
 		});
 
 		return v;
-	}
-
-	public static FragmentListView newInstance() {
-
-		FragmentListView f = new FragmentListView();
-		// update this section to pass relevant data to the list
-		// this will provide extra usability of the list fragment
-		return f;
 	}
 }

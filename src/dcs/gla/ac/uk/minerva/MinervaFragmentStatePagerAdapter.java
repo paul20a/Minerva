@@ -7,17 +7,26 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class mFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
+public class MinervaFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
-	private int size;
 	private ArrayList<Waypoint> points;
 	
-	public mFragmentStatePagerAdapter(FragmentManager fm,int s,ArrayList<Waypoint> a) {
+	/**
+	 * 
+	 * constructor with parameters
+	 * 
+	 * @param fm - FragmentManager
+	 * @param s - Int size
+	 * @param a - ArrayList of waypoints
+	 */
+	public MinervaFragmentStatePagerAdapter(FragmentManager fm,ArrayList<Waypoint> a) {
 		super(fm);
-		this.size=s;
 		this.points=a;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentStatePagerAdapter#getItem(int)
+	 */
 	@Override
 	public Fragment getItem(int i) {
         Fragment fragment = new FragmentViewPoint();
@@ -30,10 +39,12 @@ public class mFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
         return fragment;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.view.PagerAdapter#getCount()
+	 */
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
-		return size;
+		return points.size();
 	}
 
 }
