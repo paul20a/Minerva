@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-public class AudioLookupDialogFragment extends DialogFragment implements
+public class FragmentDialogAudioLookup extends DialogFragment implements
 		OnClickListener {
 
 	ImageButton btnPlay;
@@ -50,7 +50,7 @@ public class AudioLookupDialogFragment extends DialogFragment implements
 	private void searchAudioFiles() {
 		int r = Integer.parseInt(((EditText) getView().findViewById(
 				R.id.numberInTxt)).getText().toString().trim());
-		MainActivity m = (MainActivity) getActivity();
+		ActivityMain m = (ActivityMain) getActivity();
 		r = m.getResources().getIdentifier("_" + r, "raw", m.getPackageName());
 		int i = m.setupMediaPlayer(r);
 		if (i == 1) {

@@ -14,7 +14,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ViewPointFragment extends Fragment {
+public class FragmentViewPoint extends Fragment {
 
 	public static final String ARG_POS = "position";
 	private String title;
@@ -85,9 +85,9 @@ public class ViewPointFragment extends Fragment {
 
 	
 	
-	public static ViewPointFragment newInstance(String text) {
+	public static FragmentViewPoint newInstance(String text) {
 
-		ViewPointFragment f = new ViewPointFragment();
+		FragmentViewPoint f = new FragmentViewPoint();
 		return f;
 	}
 }

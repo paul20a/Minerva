@@ -21,12 +21,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 
-public class MainActivity extends ActionBarActivity implements OnClickListener {
+public class ActivityMain extends ActionBarActivity implements OnClickListener {
 
 	// private int CHECK_CODE = 0;
 	// private TextToSpeech minervaTTS;
 	public static final String RES_PREFIX = "android.resource://";
-	private ArrayList<POI> pList;
+	private ArrayList<Waypoint> pList;
 	private Resources resources;
 	private ViewPager vPager;
 	protected MediaPlayer mediaPlayer;
@@ -94,7 +94,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		int i = vPager.getCurrentItem();
 		checkAudio(i);
 		// get audio output method from shared preferences
-		SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
+		SharedPreferences settings = getPreferences(ActivityMain.MODE_PRIVATE);
 		streamType = settings
 				.getInt("audioOut", AudioManager.STREAM_VOICE_CALL);
 		mediaPlayer = new MediaPlayer();
@@ -170,7 +170,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 		mediaPlayer.release();
 		mediaPlayer = null;
 		// update preferences to store audio output
-		SharedPreferences settings = getPreferences(MainActivity.MODE_PRIVATE);
+		SharedPreferences settings = getPreferences(ActivityMain.MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putInt("audioOut", streamType);
 		editor.commit();
@@ -201,7 +201,7 @@ public class MainActivity extends ActionBarActivity implements OnClickListener {
 			break;
 			case R.id.audio_file_search:
 				FragmentManager m= getFragmentManager();
-				AudioLookupDialogFragment dialog=new AudioLookupDialogFragment();
+				FragmentDialogAudioLookup dialog=new FragmentDialogAudioLookup();
 				dialog.show(m, "Audio Playback");
 				break;
 		case R.id.audio_settings:

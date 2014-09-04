@@ -17,7 +17,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class SelectActivity extends ActionBarActivity implements TabListener {
+public class ActivitySelect extends ActionBarActivity implements TabListener {
 
 	mFragmentPagerAdapter pAdapter;
 	SwipelessPager vPager;
@@ -34,7 +34,7 @@ public class SelectActivity extends ActionBarActivity implements TabListener {
 		setContentView(R.layout.pager);
 		try {
 			int rID = resources.getIdentifier(getIntent().getStringExtra(
-					TourActivity.TRAILPATH), "raw", getPackageName());  
+					ActivityTour.TRAILPATH), "raw", getPackageName());  
 			InputStream in= resources.openRawResource(rID);
 			resources=null;
 			pList = xParser.parse(in);

@@ -14,9 +14,9 @@ public class mFragmentPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int arg0) {
 		if(arg0==0)
-		return ListViewFragment.newInstance();
+		return FragmentListView.newInstance();
 		else
-		return MapViewFragment.newInstance();
+		return FragmentMapView.newInstance();
 	}
 
 	@Override

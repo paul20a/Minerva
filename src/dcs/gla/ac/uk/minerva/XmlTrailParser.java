@@ -1,101 +1,88 @@
 package dcs.gla.ac.uk.minerva;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.util.Xml;
-
 /**
- * @author Paul Cairney
  * 
- * This class extracts information required by Minerva from an Xml document
- *
+ * This class extracts information on a trail
+ * 
  */
 public class XmlTrailParser extends XmlParser {
-	// Currently unused parameter
-	private static final String ns = null;
 	String image;
-	/**
-	 * @param in - An InputStream consisting of XML data
-	 * @return ArrayList - returns an ArrayList of Objects
-	 * @throws XmlPullParserException - parsing errors
-	 * @throws IOException - File reader errors
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * dcs.gla.ac.uk.minerva.XmlParser#readFeed(org.xmlpull.v1.XmlPullParser)
 	 */
-	public ArrayList<Object> parse(InputStream in) throws XmlPullParserException,
-			IOException {
-		try {
-			XmlPullParser parser = Xml.newPullParser();
-			//namespace processing turned off
-			parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-			
-			parser.setInput(in, null);
-			parser.nextTag();
-			
-			//return ArrayList processed by ReadFeed
-			return readFeed(parser);
-
-		} finally {
-			//close stream
-			in.close();
-		}
-	}
-
-	private ArrayList<Object> readFeed(XmlPullParser parser)
+	@Override
+	protected ArrayList<Object> readFeed(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
-	
-		
 		ArrayList<Object> entries = new ArrayList<Object>();
-		//define start of list
+
+		// define start of list
 		parser.require(XmlPullParser.START_TAG, ns, "data");
+		// while next is not at an end tag
 		while (parser.next() != XmlPullParser.END_TAG) {
-			//Search for entries
+			// Restart search if next is not a start tag
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
+			// get tag name
 			String name = parser.getName();
-			// locate an entry in the document
+			// check for correct entry
 			if (name.equals("trail")) {
-			image=parser.getAttributeValue(ns, "image");
-				//parse entry
+				// get image name
+				image = parser.getAttributeValue(ns, "image");
+				// add + parse entry
 				entries.add(readEntry(parser));
 			} else {
-				//ignore data
+				// ignore data
 				skip(parser);
 			}
 		}
 		return entries;
 	}
 
-	public Trail readEntry(XmlPullParser parser) throws XmlPullParserException,
-			IOException {
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * dcs.gla.ac.uk.minerva.XmlParser#readEntry(org.xmlpull.v1.XmlPullParser)
+	 */
+	@Override
+	protected Trail readEntry(XmlPullParser parser)
+			throws XmlPullParserException, IOException {
+		// initialise variables
 		String title = null;
 		String description = null;
 		String file = null;
-		//define start of an entry
+		// define start tag
 		parser.require(XmlPullParser.START_TAG, ns, "trail");
-		//until closing tag
+		// while next is not at an end tag
 		while (parser.next() != XmlPullParser.END_TAG) {
-			//ensure on start
+			// Restart search if next is not a start tag
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
 			}
-			//process tag name to collect name and description fields or skip
-			String tag = parser.getName();	
+			// get tag name
+			String tag = parser.getName();
+			// extract information form selected tags
 			if (tag.equals("title")) {
-				title = readTag(parser,"title");
+				title = readTag(parser, "title");
 			} else if (tag.equals("summary")) {
-				description = readTag(parser,"summary");
+				description = readTag(parser, "summary");
 			} else if (tag.equals("file")) {
-				file = readTag(parser,"file");
+				file = readTag(parser, "file");
 			} else {
 				skip(parser);
 			}
 		}
-		return new Trail(title, description,file,image);
+		return new Trail(title, description, image, file);
 	}
-
 }

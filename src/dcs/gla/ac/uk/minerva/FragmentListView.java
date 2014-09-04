@@ -11,7 +11,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ListViewFragment extends Fragment {
+public class FragmentListView extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -20,20 +20,20 @@ public class ListViewFragment extends Fragment {
 		View v = inflater.inflate(R.layout.activity_select, container, false);
 		// create the listView
 		final ListView lView = (ListView) v.findViewById(R.id.list_points);
-		// update this so SelectActivity is not required, stop using pList from
-		// SelectActivity
+		// update this so ActivitySelect is not required, stop using pList from
+		// ActivitySelect
 		lView.setAdapter(new PointBaseAdapter(getActivity(),
-				(((SelectActivity) getActivity()).getpList())));
+				(((ActivitySelect) getActivity()).getpList())));
 		// listen for click Actions
 		lView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v, int position,
 					long id) {
 				Intent detailIntent = new Intent(getActivity(),
-						MainActivity.class);
-				// Need to update this class is too dependent on SelectActivity
+						ActivityMain.class);
+				// Need to update this class is too dependent on ActivitySelect
 				detailIntent.putExtra("pList",
-						((SelectActivity) getActivity()).getpList());
+						((ActivitySelect) getActivity()).getpList());
 				detailIntent.putExtra("pos", position);
 				Toast.makeText(getActivity(), "Loading", Toast.LENGTH_SHORT)
 						.show();
@@ -44,9 +44,9 @@ public class ListViewFragment extends Fragment {
 		return v;
 	}
 
-	public static ListViewFragment newInstance() {
+	public static FragmentListView newInstance() {
 
-		ListViewFragment f = new ListViewFragment();
+		FragmentListView f = new FragmentListView();
 		// update this section to pass relevant data to the list
 		// this will provide extra usability of the list fragment
 		return f;

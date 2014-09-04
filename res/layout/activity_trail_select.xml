@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="dcs.gla.ac.uk.minerva.TourActivity" >
+    tools:context="dcs.gla.ac.uk.minerva.ActivityTour" >
 
     <FrameLayout
         android:id="@+id/trail_container"

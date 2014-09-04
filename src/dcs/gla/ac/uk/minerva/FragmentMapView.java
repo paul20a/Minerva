@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Toast;
 
-public class MapViewFragment extends Fragment {
+public class FragmentMapView extends Fragment {
 	private MapView minervaMapView;
 	private MapController minervaMapController;
 	MyItemizedOverlay myItemizedOverlay = null;
@@ -39,9 +39,9 @@ public class MapViewFragment extends Fragment {
 		return v;
 	}
 
-	public static MapViewFragment newInstance() {
+	public static FragmentMapView newInstance() {
 
-		MapViewFragment f = new MapViewFragment();
+		FragmentMapView f = new FragmentMapView();
 
 		return f;
 	}
@@ -84,22 +84,22 @@ public class MapViewFragment extends Fragment {
 				Toast.makeText(getActivity(), item.getTitle() + "\n",
 						Toast.LENGTH_SHORT).show();
 				Intent detailIntent = new Intent(getActivity(),
-						MainActivity.class);
-				// Need to update this class is too dependent on SelectActivity
+						ActivityMain.class);
+				// Need to update this class is too dependent on ActivitySelect
 				detailIntent.putExtra("pList",
-						((SelectActivity) getActivity()).getpList());
+						((ActivitySelect) getActivity()).getpList());
 				detailIntent.putExtra("pos", Integer.parseInt(item.getUid()));
 				startActivity(detailIntent);
 				return true;
 			}
 		};
 		// Arrays
-		ArrayList<Object> pList = ((SelectActivity) getActivity()).getpList();
+		ArrayList<Object> pList = ((ActivitySelect) getActivity()).getpList();
 		ArrayList<OverlayItem> itemList = new ArrayList<OverlayItem>();
 		double latMin = 1000, latMax = -1000, lonMin = 1000, lonMax = -1000;
 		// for each item in list add it to items array
 		for (int i = 0; i < pList.size(); i++) {
-			POI p = (POI) pList.get(i);
+			Waypoint p = (Waypoint) pList.get(i);
 			Double newLat = p.getLat();
 			Double newLon = p.getLon();
 			if (newLon != null && newLat != null) {
@@ -115,7 +115,7 @@ public class MapViewFragment extends Fragment {
 				} else if (newLon > lonMax) {
 					lonMax = newLon;
 				}
-				itemList.add(new OverlayItem(Integer.toString(i), p.getName(),
+				itemList.add(new OverlayItem(Integer.toString(i), p.getTitle(),
 						"", mPoint));
 			}
 

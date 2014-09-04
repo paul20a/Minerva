@@ -10,9 +10,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class mFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
 	private int size;
-	private ArrayList<POI> points;
+	private ArrayList<Waypoint> points;
 	
-	public mFragmentStatePagerAdapter(FragmentManager fm,int s,ArrayList<POI> a) {
+	public mFragmentStatePagerAdapter(FragmentManager fm,int s,ArrayList<Waypoint> a) {
 		super(fm);
 		this.size=s;
 		this.points=a;
@@ -20,11 +20,11 @@ public class mFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public Fragment getItem(int i) {
-        Fragment fragment = new ViewPointFragment();
+        Fragment fragment = new FragmentViewPoint();
         Bundle args = new Bundle();
         // insert arguments as a bundle
         args.putString("image", points.get(i).getImage());
-        args.putString("title", points.get(i).getName());
+        args.putString("title", points.get(i).getTitle());
         args.putString("description", points.get(i).getDescription());
         fragment.setArguments(args);
         return fragment;

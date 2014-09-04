@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class TourActivity extends FragmentActivity implements OnClickListener {
+public class ActivityTour extends FragmentActivity implements OnClickListener {
 	public final static String TITLE = "dcs.gla.ac.uk.TITLE";
 	public final static String TRAILPATH = "dcs.gla.ac.uk.TRAILPATH";
 	
@@ -52,7 +52,7 @@ public class TourActivity extends FragmentActivity implements OnClickListener {
 		bundle.putString("description", ((Trail)tList.get(0)).getDescription());
 		
 		if (savedInstanceState == null) {
-			ViewPointFragment vpf = ViewPointFragment.newInstance("");
+			FragmentViewPoint vpf = FragmentViewPoint.newInstance("");
 			vpf.setArguments(bundle);
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.trail_container, vpf ).commit();
@@ -81,7 +81,7 @@ public class TourActivity extends FragmentActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if(v.getId()==(R.id.start_btn)){
-			Intent intent=new Intent(this, SelectActivity.class);
+			Intent intent=new Intent(this, ActivitySelect.class);
 			intent.putExtra(TRAILPATH, ((Trail)tList.get(0)).getFile());
 			startActivity(intent);
 			}

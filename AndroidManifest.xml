@@ -23,27 +23,27 @@
         android:label="@string/app_name"
         android:theme="@style/AppBaseTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityMain"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/empty"
-            android:parentActivityName=".SelectActivity" >
+            android:parentActivityName=".ActivitySelect" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="dcs.gla.ac.uk.minerva.SelectActivity" />
+                android:value="dcs.gla.ac.uk.minerva.ActivitySelect" />
         </activity>
         <activity
-            android:name=".SelectActivity"
+            android:name=".ActivitySelect"
             android:label="@string/empty"
-            android:parentActivityName=".TourActivity" >
+            android:parentActivityName=".ActivityTour" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="dcs.gla.ac.uk.minerva.TrailSelectActivity" />
+                android:value="dcs.gla.ac.uk.minerva.ActivityTrailSelect" />
         </activity>
-        <activity android:name=".TourActivity" >
+        <activity android:name=".ActivityTour" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
