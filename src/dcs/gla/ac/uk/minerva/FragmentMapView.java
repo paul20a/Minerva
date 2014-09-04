@@ -24,7 +24,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Toast;
 
 public class FragmentMapView extends Fragment implements
-		OnItemGestureListener<OverlayItem>, OnGlobalLayoutListener {
+		OnItemGestureListener<OverlayItem> {
 	private MapView minervaMapView;
 	CustomItemizedOverlay customItemizedOverlay = null;
 	MyLocationNewOverlay myLocationOverlay;
@@ -214,11 +214,5 @@ public class FragmentMapView extends Fragment implements
 		detailIntent.putExtra("pos", Integer.parseInt(item.getUid()));
 		startActivity(detailIntent);
 		return true;
-	}
-
-	@Override
-	public void onGlobalLayout() {
-		// TODO Auto-generated method stub
-
 	}
 }
