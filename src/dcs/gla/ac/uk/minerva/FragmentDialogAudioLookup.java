@@ -85,7 +85,6 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 			btnPlay.setEnabled(true);
 			btnPause.setEnabled(true);
 			btnStop.setEnabled(true);
-			player.play();
 		} else {
 			Toast.makeText(getActivity(), "Audio file not found",
 					Toast.LENGTH_SHORT).show();
