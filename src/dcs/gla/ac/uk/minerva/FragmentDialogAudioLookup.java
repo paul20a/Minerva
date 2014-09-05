@@ -19,7 +19,7 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 	private ImageButton btnPause;
 	private ImageButton btnStop;
 	private MinervaMediaPlayer player;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,12 +36,12 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 		btnPlay.setEnabled(false);
 		btnPause.setEnabled(false);
 		btnStop.setEnabled(false);
-		player=new MinervaMediaPlayer(getActivity());
 		return v;
 	}
 
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
 	@Override
@@ -58,21 +58,28 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 			player.pause();
 			break;
 		case R.id.replay_btn:
-		    player.restart();
+			player.restart();
 		}
 	}
-	
+
 	@Override
-	public void onDestroyView() {
-		player.release();
-		super.onDestroyView();
+	public void onStart() {
+		super.onStart();
+		player = new MinervaMediaPlayer(getActivity());
 	}
-	
+
+	@Override
+	public void onStop() {
+		player.release();
+		super.onStop();
+	}
+
 	private void searchAudioFiles() {
 		int r = Integer.parseInt(((EditText) getView().findViewById(
 				R.id.numberInTxt)).getText().toString().trim());
-		
-		r = getActivity().getResources().getIdentifier("_" + r, "raw", getActivity().getPackageName());
+
+		r = getActivity().getResources().getIdentifier("_" + r, "raw",
+				getActivity().getPackageName());
 		int i = player.setupMediaPlayer(r);
 		if (i == 1) {
 			btnPlay.setEnabled(true);

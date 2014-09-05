@@ -15,10 +15,11 @@ import android.widget.ImageButton;
 
 /**
  * 
- * Activity that displays a Point on screen using an instance of FragmentViewPoint 
+ * Activity that displays a Point on screen using an instance of
+ * FragmentViewPoint
  * 
  * @author Paul
- *
+ * 
  */
 public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	public static final String RES_PREFIX = "android.resource://";
@@ -27,7 +28,10 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	private ViewPager vPager;
 	protected MinervaMediaPlayer player;
 	private MinervaFragmentStatePagerAdapter sPagerAdapter;
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -67,10 +71,11 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 			@Override
 			public void onPageSelected(int position) {
 				// check audio file id for current page
-				boolean audioPresent=checkAudio(vPager.getCurrentItem());
+				boolean audioPresent = checkAudio(vPager.getCurrentItem());
 				if (audioPresent) {
 					setMediaButtonsEnabled(audioPresent);
-					player.setupMediaPlayer(player.getAudioFile(pList.get(position).getAudio()));
+					player.setupMediaPlayer(player.getAudioFile(pList.get(
+							position).getAudio()));
 				}
 
 			}
@@ -78,7 +83,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.support.v4.app.FragmentActivity#onStart()
 	 */
 	@Override
@@ -88,10 +95,11 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		checkAudio(i);
 		// get audio output method from shared preferences
 		player = new MinervaMediaPlayer(this);
-		boolean audioPresent=checkAudio(i);
+		boolean audioPresent = checkAudio(i);
 		if (audioPresent) {
 			setMediaButtonsEnabled(audioPresent);
-			player.setupMediaPlayer(player.getAudioFile(pList.get(i).getAudio()));
+			player.setupMediaPlayer(player
+					.getAudioFile(pList.get(i).getAudio()));
 		}
 		super.onStart();
 	}
@@ -103,18 +111,18 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		return false;
 	}
 
-	private void setMediaButtonsEnabled(boolean enable){
+	private void setMediaButtonsEnabled(boolean enable) {
 		ImageButton a = (ImageButton) this.findViewById(R.id.play_btn);
 		ImageButton b = (ImageButton) this.findViewById(R.id.pause_btn);
 		ImageButton c = (ImageButton) this.findViewById(R.id.replay_btn);
-		
+
 		a.setEnabled(enable);
 		b.setEnabled(enable);
 		c.setEnabled(enable);
 	}
-	
+
 	@Override
-	protected void onStop(){
+	protected void onStop() {
 		// release the mediaPlayer
 		super.onStop();
 		player.savePref();
@@ -134,7 +142,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
@@ -145,23 +155,27 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		case android.R.id.home:
 			this.finish();
 			break;
-			case R.id.audio_file_search:
-				FragmentManager m= getFragmentManager();
-				FragmentDialogAudioLookup dialog=new FragmentDialogAudioLookup();
-				dialog.show(m, "Audio Playback");
-				break;
+		case R.id.audio_file_search:
+			player.pause();
+			FragmentManager m = getFragmentManager();
+			FragmentDialogAudioLookup dialog = new FragmentDialogAudioLookup();
+			dialog.show(m, "Audio Playback");
+			break;
 		case R.id.audio_settings:
-				item.setTitle(player.changeStreamType());
-			//check if audio is applicable
+			item.setTitle(player.changeStreamType());
+			// check if audio is applicable
 			if (checkAudio(i)) {
-				//setup media player to same state user had before using different output
+				// setup media player to same state user had before using
+				// different output
 				player.continuePlayingOnChange(pList.get(i).getAudio());
 			}
-}
+		}
 		return true;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
 	@Override
@@ -175,30 +189,39 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 			player.pause();
 			break;
 		case R.id.replay_btn:
-		    player.restart();
+			player.restart();
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os
+	 * .Bundle)
 	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// check audio state to continue
-		outState.putBoolean("isPlaying", MinervaMediaPlayer.mediaPlayer.isPlaying());
-		outState.putInt("progress",  MinervaMediaPlayer.mediaPlayer.getCurrentPosition());
+		outState.putBoolean("isPlaying",
+				player.mediaPlayer.isPlaying());
+		outState.putInt("progress",
+				player.mediaPlayer.getCurrentPosition());
 		super.onSaveInstanceState(outState);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
 	 */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		savedInstanceState.getBoolean("isPlaying");
-		 MinervaMediaPlayer.mediaPlayer.seekTo(savedInstanceState.getInt("progress"));
+		player.mediaPlayer.seekTo(savedInstanceState
+				.getInt("progress"));
 		if (savedInstanceState.getBoolean("isPlaying")) {
-			 player.play();
+			player.play();
 		}
 		super.onRestoreInstanceState(savedInstanceState);
 	}
