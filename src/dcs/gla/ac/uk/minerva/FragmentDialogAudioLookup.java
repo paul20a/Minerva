@@ -46,7 +46,7 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 			break;
 		}
 	}
-
+	
 	private void searchAudioFiles() {
 		int r = Integer.parseInt(((EditText) getView().findViewById(
 				R.id.numberInTxt)).getText().toString().trim());

@@ -21,10 +21,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 
+/**
+ * 
+ * Activity that displays a Point on screen using an instance of FragmentViewPoint 
+ * 
+ * @author Paul
+ *
+ */
 public class ActivityMain extends ActionBarActivity implements OnClickListener {
-
-	// private int CHECK_CODE = 0;
-	// private TextToSpeech minervaTTS;
 	public static final String RES_PREFIX = "android.resource://";
 	private ArrayList<Waypoint> pList;
 	private Resources resources;
@@ -34,6 +38,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	private MinervaFragmentStatePagerAdapter sPagerAdapter;
 	private int streamType;
 
+	/* (non-Javadoc)
+	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -82,14 +89,11 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onStart()
+	 */
 	@Override
 	public void onStart() {
-
-		// TEXT TO SPEECH CODE
-		// Intent checkTTSIntent = new Intent();
-		// checkTTSIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-		// startActivityForResult(checkTTSIntent, CHECK_CODE);
-
 		// check if audio file is available
 		int i = vPager.getCurrentItem();
 		checkAudio(i);
@@ -108,12 +112,20 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		super.onStart();
 	}
 
+	/**
+	 * @param i
+	 * @return
+	 */
 	private int getAudioFile(int i){
 		// get audio file
 		return resources.getIdentifier(pList.get(i).getAudio(), "raw",
 				getPackageName());
 	}
 	
+	/**
+	 * @param i
+	 * @return
+	 */
 	public int setupMediaPlayer(int i) {
 		// reset and create media player
 		if (mediaPlayer != null)
@@ -157,14 +169,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	}
 	
 	@Override
-	protected void onStop() {
-		// TEXT TO SPEECH CODE
-		// kill TTS ondestroy to avoid leak
-		// if (minervaTTS != null) {
-		// minervaTTS.stop();
-		// minervaTTS.shutdown();
-		// }
-
+	protected void onStop(){
 		// release the mediaPlayer
 		super.onStop();
 		mediaPlayer.release();
@@ -227,28 +232,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		}
 		return true;
 	}
-
-	// TEXT TO SPEECH CODE
-	/*
-	 * private void audioDesc(String desc) { // speak minervaTTS.speak(desc,
-	 * TextToSpeech.QUEUE_FLUSH, null); }
-	 * 
-	 * @Override public void onInit(int status) { // set language if tts check
-	 * status is successful if (status == TextToSpeech.SUCCESS) {
-	 * minervaTTS.setLanguage(Locale.UK); } else { Toast.makeText(this,
-	 * "Error, Text To Speech initialisation failed", Toast.LENGTH_LONG).show();
-	 * } }
-	 * 
-	 * 
-	 * protected void onActivityResult(int requestCode, int resultCode, Intent
-	 * data) { super.onActivityResult(requestCode, resultCode, data); // If tts
-	 * passed check if (requestCode == CHECK_CODE) { // if correct language and
-	 * no instance created initialise if ((resultCode ==
-	 * TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) && minervaTTS == null) {
-	 * minervaTTS = new TextToSpeech(this, this); // install if tts not present
-	 * } else if (minervaTTS == null) { Intent installTTSIntent = new Intent();
-	 * installTTSIntent .setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-	 * startActivity(installTTSIntent); } } }
+	
+	/* (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 */
 	@Override
 	public void onClick(View v) {
@@ -264,12 +250,6 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 					// TODO Auto-generated catch block
 				}
 			}
-			// TEXT TO SPEECH CODE
-			/*
-			 * if (minervaTTS != null) { TextView text = (TextView)
-			 * findViewById(R.id.textViewDesc); String desc =
-			 * text.getText().toString(); audioDesc(desc); }
-			 */
 			break;
 
 		case R.id.pause_btn:
@@ -280,14 +260,13 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 			if (!mediaPlayer.isPlaying()) {
 				mediaPlayer.start();
 			}
-			// TEXT TO SPEECH CODE
-			/*
-			 * if (minervaTTS != null) { minervaTTS.stop(); }
-			 */
 		}
 
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onSaveInstanceState(android.os.Bundle)
+	 */
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// check audio state to continue
@@ -296,6 +275,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		super.onSaveInstanceState(outState);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onRestoreInstanceState(android.os.Bundle)
+	 */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		savedInstanceState.getBoolean("isPlaying");

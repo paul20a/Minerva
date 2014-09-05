@@ -16,11 +16,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+/**
+ * 
+ * Activity for displaying initial tour description
+ * this reads in tour data and displays it in a FragmentViewPoint
+ * 
+ * @author Paul Cairney
+ */
 public class ActivityTour extends FragmentActivity implements OnClickListener {
 	public final static String TITLE = "dcs.gla.ac.uk.TITLE";
 	public final static String TRAILPATH = "dcs.gla.ac.uk.TRAILPATH";
+	private ArrayList<Object> tList;
 	
-	ArrayList<Object> tList;
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -45,22 +55,27 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		//bundle arguements up to give them to the fragment
 		Bundle bundle = new Bundle();
 		bundle.putString("title", ((Trail)tList.get(0)).getTitle());
 		bundle.putString("image", ((Trail)tList.get(0)).getImage());
 		bundle.putString("description", ((Trail)tList.get(0)).getDescription());
-		
+		//if there isn't a saved instance of this activity
 		if (savedInstanceState == null) {
-			FragmentViewPoint vpf = FragmentViewPoint.newInstance("");
+			//create a new FragmentViewPoint and give it the bundle as it's arguement
+			FragmentViewPoint vpf =new FragmentViewPoint();
 			vpf.setArguments(bundle);
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.trail_container, vpf ).commit();
 		}
+		//setup tour start button
 		Button startBtn = (Button) findViewById(R.id.start_btn);
 		startBtn.setOnClickListener(this);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -68,16 +83,17 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		//holder for options
-		int id = item.getItemId();
-		if (id == R.id.audio_settings) {
-
-			}
 		return super.onOptionsItemSelected(item);
 	}
 
+	/* (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	@Override
 	public void onClick(View v) {
 		if(v.getId()==(R.id.start_btn)){
