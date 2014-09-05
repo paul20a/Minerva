@@ -41,24 +41,31 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 	}
 
 	
-	
-	
-	@Override
-	public void onDestroyView() {
-		player.release();
-		super.onDestroyView();
-	}
-
-
-
-
+	/* (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.goBtn:
 			searchAudioFiles();
 			break;
+		case R.id.play_btn:
+			// Request audio focus for playback
+			player.play();
+			break;
+		case R.id.pause_btn:
+			player.pause();
+			break;
+		case R.id.replay_btn:
+		    player.restart();
 		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		player.release();
+		super.onDestroyView();
 	}
 	
 	private void searchAudioFiles() {
