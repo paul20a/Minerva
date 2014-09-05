@@ -15,10 +15,11 @@ import android.widget.Toast;
 public class FragmentDialogAudioLookup extends DialogFragment implements
 		OnClickListener {
 
-	ImageButton btnPlay;
-	ImageButton btnPause;
-	ImageButton btnStop;
-
+	private ImageButton btnPlay;
+	private ImageButton btnPause;
+	private ImageButton btnStop;
+	private MinervaMediaPlayer player;
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -35,8 +36,21 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 		btnPlay.setEnabled(false);
 		btnPause.setEnabled(false);
 		btnStop.setEnabled(false);
+		player=new MinervaMediaPlayer(getActivity());
 		return v;
 	}
+
+	
+	
+	
+	@Override
+	public void onDestroyView() {
+		player.release();
+		super.onDestroyView();
+	}
+
+
+
 
 	@Override
 	public void onClick(View v) {
@@ -50,14 +64,14 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 	private void searchAudioFiles() {
 		int r = Integer.parseInt(((EditText) getView().findViewById(
 				R.id.numberInTxt)).getText().toString().trim());
-		ActivityMain m = (ActivityMain) getActivity();
-		r = m.getResources().getIdentifier("_" + r, "raw", m.getPackageName());
-		int i = m.setupMediaPlayer(r);
+		
+		r = getActivity().getResources().getIdentifier("_" + r, "raw", getActivity().getPackageName());
+		int i = player.setupMediaPlayer(r);
 		if (i == 1) {
 			btnPlay.setEnabled(true);
 			btnPause.setEnabled(true);
 			btnStop.setEnabled(true);
-			m.mediaPlayer.start();
+			player.play();
 		} else {
 			Toast.makeText(getActivity(), "Audio file not found",
 					Toast.LENGTH_SHORT).show();

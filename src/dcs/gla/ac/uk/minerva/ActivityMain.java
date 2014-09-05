@@ -1,18 +1,10 @@
 package dcs.gla.ac.uk.minerva;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.content.res.Resources.NotFoundException;
-import android.media.AudioManager;
-import android.media.AudioManager.OnAudioFocusChangeListener;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.FragmentManager;
+import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -33,11 +25,8 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	private ArrayList<Waypoint> pList;
 	private Resources resources;
 	private ViewPager vPager;
-	protected MediaPlayer mediaPlayer;
-	private AudioManager a;
+	protected MinervaMediaPlayer player;
 	private MinervaFragmentStatePagerAdapter sPagerAdapter;
-	private int streamType;
-
 	/* (non-Javadoc)
 	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
 	 */
@@ -81,7 +70,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 				boolean audioPresent=checkAudio(vPager.getCurrentItem());
 				if (audioPresent) {
 					setMediaButtonsEnabled(audioPresent);
-					setupMediaPlayer(getAudioFile(position));
+					player.setupMediaPlayer(player.getAudioFile(pList.get(position).getAudio()));
 				}
 
 			}
@@ -98,57 +87,13 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		int i = vPager.getCurrentItem();
 		checkAudio(i);
 		// get audio output method from shared preferences
-		SharedPreferences settings = getPreferences(ActivityMain.MODE_PRIVATE);
-		streamType = settings
-				.getInt("audioOut", AudioManager.STREAM_VOICE_CALL);
-		mediaPlayer = new MediaPlayer();
-		setVolumeControlStream(streamType);
-		a = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+		player = new MinervaMediaPlayer(this);
 		boolean audioPresent=checkAudio(i);
 		if (audioPresent) {
 			setMediaButtonsEnabled(audioPresent);
-			setupMediaPlayer(getAudioFile(i));
+			player.setupMediaPlayer(player.getAudioFile(pList.get(i).getAudio()));
 		}
 		super.onStart();
-	}
-
-	/**
-	 * @param i
-	 * @return
-	 */
-	private int getAudioFile(int i){
-		// get audio file
-		return resources.getIdentifier(pList.get(i).getAudio(), "raw",
-				getPackageName());
-	}
-	
-	/**
-	 * @param i
-	 * @return
-	 */
-	public int setupMediaPlayer(int i) {
-		// reset and create media player
-		if (mediaPlayer != null)
-			mediaPlayer.reset();
-		// try to initialise media using audio file
-		try {
-			mediaPlayer.setDataSource(
-					this,
-					Uri.parse(RES_PREFIX
-							+ resources.getResourcePackageName(i) + "/"
-							+ resources.getResourceTypeName(i) + "/" + i));
-			mediaPlayer.setAudioStreamType(streamType);
-			mediaPlayer.setScreenOnWhilePlaying(true);
-			mediaPlayer.prepare();
-			
-
-		} catch (IllegalArgumentException | SecurityException
-				| IllegalStateException | NotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
-			return 0;
-		}
-		return 1;
 	}
 
 	private boolean checkAudio(int i) {
@@ -172,13 +117,10 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	protected void onStop(){
 		// release the mediaPlayer
 		super.onStop();
-		mediaPlayer.release();
-		mediaPlayer = null;
+		player.savePref();
+		player.release();
 		// update preferences to store audio output
-		SharedPreferences settings = getPreferences(ActivityMain.MODE_PRIVATE);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putInt("audioOut", streamType);
-		editor.commit();
+
 	}
 
 	@Override
@@ -188,14 +130,13 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		getMenuInflater().inflate(R.menu.main, menu);
 		super.onCreateOptionsMenu(menu);
 		MenuItem item = menu.findItem(R.id.audio_settings);
-		if (streamType == AudioManager.STREAM_MUSIC) {
-			item.setTitle("Speaker");
-		} else if (streamType == AudioManager.STREAM_VOICE_CALL) {
-			item.setTitle("Earpiece");
-		}
+		item.setTitle(player.initialiseStreamType());
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int i = vPager.getCurrentItem();
@@ -210,26 +151,13 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 				dialog.show(m, "Audio Playback");
 				break;
 		case R.id.audio_settings:
-			if (streamType == AudioManager.STREAM_VOICE_CALL) {
-				streamType = AudioManager.STREAM_MUSIC;
-				item.setTitle("Speaker");
-			} else if (streamType == AudioManager.STREAM_MUSIC) {
-				streamType = AudioManager.STREAM_VOICE_CALL;
-				item.setTitle("Earpiece");
-			}
+				item.setTitle(player.changeStreamType());
 			//check if audio is applicable
 			if (checkAudio(i)) {
 				//setup media player to same state user had before using different output
-				boolean playing = mediaPlayer.isPlaying();
-				int t = mediaPlayer.getCurrentPosition();
-				setupMediaPlayer(getAudioFile(i));
-				mediaPlayer.seekTo(t);
-				if (playing) {
-					mediaPlayer.start();
-				}
+				player.continuePlayingOnChange(pList.get(i).getAudio());
 			}
-			setVolumeControlStream(streamType);
-		}
+}
 		return true;
 	}
 	
@@ -241,27 +169,14 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.play_btn:
 			// Request audio focus for playback
-			int result = a.requestAudioFocus(afChangeListener, streamType,
-					AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-			if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-				try {
-					mediaPlayer.start();
-				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
-				}
-			}
+			player.play();
 			break;
-
 		case R.id.pause_btn:
-			mediaPlayer.pause();
+			player.pause();
 			break;
 		case R.id.replay_btn:
-			mediaPlayer.seekTo(0);
-			if (!mediaPlayer.isPlaying()) {
-				mediaPlayer.start();
-			}
+		    player.restart();
 		}
-
 	}
 
 	/* (non-Javadoc)
@@ -270,8 +185,8 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// check audio state to continue
-		outState.putBoolean("isPlaying", mediaPlayer.isPlaying());
-		outState.putInt("progress", mediaPlayer.getCurrentPosition());
+		outState.putBoolean("isPlaying", MinervaMediaPlayer.mediaPlayer.isPlaying());
+		outState.putInt("progress",  MinervaMediaPlayer.mediaPlayer.getCurrentPosition());
 		super.onSaveInstanceState(outState);
 	}
 
@@ -281,24 +196,10 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		savedInstanceState.getBoolean("isPlaying");
-		mediaPlayer.seekTo(savedInstanceState.getInt("progress"));
+		 MinervaMediaPlayer.mediaPlayer.seekTo(savedInstanceState.getInt("progress"));
 		if (savedInstanceState.getBoolean("isPlaying")) {
-			mediaPlayer.start();
+			 player.play();
 		}
-		// TODO Auto-generated method stub
 		super.onRestoreInstanceState(savedInstanceState);
 	}
-
-	OnAudioFocusChangeListener afChangeListener = new OnAudioFocusChangeListener() {
-		public void onAudioFocusChange(int focusChange) {
-			if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-				mediaPlayer.pause();
-			} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-				mediaPlayer.start();
-			} else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-				mediaPlayer.stop();
-				a.abandonAudioFocus(afChangeListener);
-			}
-		}
-	};
 }

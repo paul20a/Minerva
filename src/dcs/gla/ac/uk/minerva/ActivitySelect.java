@@ -17,12 +17,26 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * 
+ * this activity allows the user to select Waypoints either from a
+ * FragmentListView or a FragemntMapView ActionBar tabs are used to navigate
+ * between the two fragments, Swipe is disabled due to the way a user interacts
+ * with a map
+ * 
+ * @author Paul Cairney
+ * 
+ */
 public class ActivitySelect extends ActionBarActivity implements TabListener {
-
 	MinervaFragmentPagerAdapter pAdapter;
 	SwipelessPager vPager;
 	public ArrayList<Object> pList = new ArrayList<Object>();
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.support.v7.app.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,7 +47,7 @@ public class ActivitySelect extends ActionBarActivity implements TabListener {
 		navBar.setIcon(resources.getIdentifier("logo", "raw",
 				"dcs.gla.ac.uk.minerva"));
 		setContentView(R.layout.pager);
-		//try and parse xml document
+		// try and parse xml document
 		try {
 			int rID = resources.getIdentifier(
 					getIntent().getStringExtra(ActivityTour.TRAILPATH), "raw",
@@ -41,7 +55,7 @@ public class ActivitySelect extends ActionBarActivity implements TabListener {
 			InputStream in = resources.openRawResource(rID);
 			resources = null;
 			pList = xParser.parse(in);
-			//close stream
+			// close stream
 			in.close();
 
 		} catch (IOException e) {
