@@ -12,6 +12,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+/**
+ * Dialog fragment that allows the user to enter a number and listen to the
+ * relevant audio file
+ * 
+ * @author Paul Cairney
+ */
 public class FragmentDialogAudioLookup extends DialogFragment implements
 		OnClickListener {
 
@@ -20,19 +26,29 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 	private ImageButton btnStop;
 	private MinervaMediaPlayer player;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Fragment#onCreateView(android.view.LayoutInflater,
+	 * android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+		//Instantiate view
 		this.getDialog().setTitle("Numbered Audio Search");
 		View v = inflater.inflate(R.layout.lookup_layout, container);
+		//get Buttons
 		Button btnGo = (Button) v.findViewById(R.id.goBtn);
 		btnPlay = (ImageButton) v.findViewById(R.id.play_btn);
 		btnPause = (ImageButton) v.findViewById(R.id.pause_btn);
 		btnStop = (ImageButton) v.findViewById(R.id.replay_btn);
+		//set listeners
 		btnGo.setOnClickListener(this);
 		btnPlay.setOnClickListener(this);
 		btnPause.setOnClickListener(this);
 		btnStop.setOnClickListener(this);
+		//disable buttons
 		btnPlay.setEnabled(false);
 		btnPause.setEnabled(false);
 		btnStop.setEnabled(false);
@@ -51,7 +67,6 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 			searchAudioFiles();
 			break;
 		case R.id.play_btn:
-			// Request audio focus for playback
 			player.play();
 			break;
 		case R.id.pause_btn:
@@ -62,30 +77,45 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.DialogFragment#onStart()
+	 */
 	@Override
 	public void onStart() {
 		super.onStart();
 		player = new MinervaMediaPlayer(getActivity());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.DialogFragment#onStop()
+	 */
 	@Override
 	public void onStop() {
 		player.release();
 		super.onStop();
 	}
 
+	/**
+	 * search for audio files in format _XXX.mp3 where XXX can be any number.
+	 */
 	private void searchAudioFiles() {
 		int r = Integer.parseInt(((EditText) getView().findViewById(
 				R.id.numberInTxt)).getText().toString().trim());
 
 		r = getActivity().getResources().getIdentifier("_" + r, "raw",
 				getActivity().getPackageName());
-		int i = player.setupMediaPlayer(r);
-		if (i == 1) {
+		boolean setupCheck = player.setupMediaPlayer(r);
+		if (setupCheck) {
+			//enable buttons
 			btnPlay.setEnabled(true);
 			btnPause.setEnabled(true);
 			btnStop.setEnabled(true);
 		} else {
+			//inform user audio file isn't present
 			Toast.makeText(getActivity(), "Audio file not found",
 					Toast.LENGTH_SHORT).show();
 		}

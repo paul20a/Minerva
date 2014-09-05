@@ -11,6 +11,12 @@ import android.media.MediaPlayer;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.Uri;
 
+/**
+ * MediaPlayer control class to allow the MediaPlayer to be used easily over
+ * different activities and fragments
+ * 
+ * @author Paul Cairney
+ */
 public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 	public static final String RES_PREFIX = "android.resource://";
 	public MediaPlayer mediaPlayer = new MediaPlayer();
@@ -18,6 +24,12 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 	private int streamType;
 	private Activity context;
 
+	/**
+	 * 
+	 * Parameterised constructor
+	 * 
+	 * @param context - Actiity context
+	 */
 	public MinervaMediaPlayer(Activity context) {
 		this.context = context;
 		SharedPreferences settings = context
@@ -29,10 +41,10 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 	}
 
 	/**
-	 * @param i
-	 * @return
+	 * @param i - resource identifier
+	 * @return - true if successful.
 	 */
-	public int setupMediaPlayer(int i) {
+	public boolean setupMediaPlayer(int i) {
 		// reset and create media player
 		if (mediaPlayer != null)
 			mediaPlayer.reset();
@@ -46,18 +58,20 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 							+ context.getResources().getResourceTypeName(i)
 							+ "/" + i));
 			mediaPlayer.setAudioStreamType(streamType);
-			mediaPlayer.setScreenOnWhilePlaying(true);
 			mediaPlayer.prepare();
 
 		} catch (IllegalArgumentException | SecurityException
 				| IllegalStateException | NotFoundException | IOException e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
-			return 0;
+			return false;
 		}
-		return 1;
+		return true;
 	}
 
+	/**
+	 * begin playing audio
+	 */
 	public void play() {
 		int result = a.requestAudioFocus(this, streamType,
 				AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
@@ -70,10 +84,16 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 		}
 	}
 
+	/**
+	 * pause audio
+	 */
 	public void pause() {
 		mediaPlayer.pause();
 	}
 
+	/* (non-Javadoc)
+	 * @see android.media.AudioManager.OnAudioFocusChangeListener#onAudioFocusChange(int)
+	 */
 	@Override
 	public void onAudioFocusChange(int focusChange) {
 		if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
@@ -86,6 +106,9 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 		}
 	}
 
+	/**
+	 * move back to start of track
+	 */
 	public void restart() {
 		boolean playing = mediaPlayer.isPlaying();
 		mediaPlayer.seekTo(0);
@@ -94,14 +117,17 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 		}
 	}
 
+	/**
+	 * release mediaPlayer resources
+	 */
 	public void release() {
 		mediaPlayer.release();
 		mediaPlayer = null;
 	}
 
 	/**
-	 * @param i
-	 * @return
+	 * @param s - name of audio file
+	 * @return associated resource identifier
 	 */
 	public int getAudioFile(String s) {
 		// get audio file
@@ -109,6 +135,9 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 				context.getPackageName());
 	}
 
+	/**
+	 * @param s name of audio file
+	 */
 	public void continuePlayingOnChange(String s) {
 		boolean playing = mediaPlayer.isPlaying();
 		int t = mediaPlayer.getCurrentPosition();
@@ -120,6 +149,12 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 		context.setVolumeControlStream(streamType);
 	}
 
+	/**
+	 * 
+	 * change current stream type
+	 * 
+	 * @return String for options menu
+	 */
 	public String changeStreamType() {
 		String s = "";
 		if (streamType == AudioManager.STREAM_VOICE_CALL) {
@@ -133,6 +168,12 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 		return s;
 	}
 
+	/**
+	 * 
+	 * setup default stream type
+	 * 
+	 * @return String for options menu
+	 */
 	public String initialiseStreamType() {
 		if (streamType == AudioManager.STREAM_MUSIC) {
 			return "Speaker";
@@ -141,6 +182,9 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 		}
 	}
 
+	/**
+	 * save stream type to preferences
+	 */
 	public void savePref() {
 		SharedPreferences settings = context
 				.getPreferences(ActivityMain.MODE_PRIVATE);
