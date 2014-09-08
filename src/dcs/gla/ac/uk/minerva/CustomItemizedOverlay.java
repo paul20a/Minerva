@@ -10,11 +10,13 @@ import android.graphics.drawable.Drawable;
 
 /**
  * 
- * Class to describe an item on the map
+ * Class to describe an item on the map this class alters the position of the
+ * marker to align it to the lower left corner of the drawable
  * 
  * @author user
  */
-public class CustomItemizedOverlay extends ItemizedOverlayWithFocus<OverlayItem> {
+public class CustomItemizedOverlay extends
+		ItemizedOverlayWithFocus<OverlayItem> {
 
 	/**
 	 * @param aList
@@ -33,16 +35,19 @@ public class CustomItemizedOverlay extends ItemizedOverlayWithFocus<OverlayItem>
 	}
 
 	/**
-	 * @param p -Geo location of item
-	 * @param title - Title of item
-	 * @param snippet - String description of item
+	 * @param p
+	 *            -Geo location of item
+	 * @param title
+	 *            - Title of item
+	 * @param snippet
+	 *            - String description of item
 	 */
 	public void addItem(GeoPoint p, String title, String snippet) {
-		//create new item
+		// create new item
 		OverlayItem newItem = new OverlayItem(title, snippet, p);
 		// align image
 		newItem.setMarkerHotspot(OverlayItem.HotspotPlace.LOWER_LEFT_CORNER);
-		//add image to overlay and populate it
+		// add image to overlay and populate it
 		super.addItem(newItem);
 		populate();
 	}

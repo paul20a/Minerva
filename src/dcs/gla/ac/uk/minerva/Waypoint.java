@@ -12,7 +12,7 @@ import android.os.Parcelable;
 public class Waypoint extends Point implements Parcelable {
 	private int id;
 	private Double lat;
-	private Double lon;
+	private Double lng;
 	private String audio;
 
 	/**
@@ -21,7 +21,7 @@ public class Waypoint extends Point implements Parcelable {
 	 * @param file - filename of XML document containing Waypoints
 	 * @param image - filename of image
 	 * @param lat - latitude
-	 * @param lon - longitude
+	 * @param lng - longitude
 	 * @param id - identifier
 	 * @param audio - name of audio file
 	 */
@@ -30,22 +30,22 @@ public class Waypoint extends Point implements Parcelable {
 		super(title,description,image);
 		this.id = id;
 		this.lat = lat;
-		this.lon = lon;
+		this.lng = lon;
 		this.setAudio(audio);
 	}
 
 	/**
 	 * @return longitude
 	 */
-	public Double getLon() {
-		return lon;
+	public Double getLng() {
+		return lng;
 	}
 
 	/**
-	 * @param lon - longitude
+	 * @param lng - longitude
 	 */
-	public void setLon(Double lon) {
-		this.lon = lon;
+	public void setLng(Double lon) {
+		this.lng = lon;
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class Waypoint extends Point implements Parcelable {
 		dest.writeString(image);
 		dest.writeInt(id);
 		dest.writeValue(lat);
-		dest.writeValue(lon);
+		dest.writeValue(lng);
 		dest.writeString(audio);
 	}
 
@@ -138,7 +138,7 @@ public class Waypoint extends Point implements Parcelable {
 		id=in.readInt();
 		Double d = Double.valueOf(0);
 		lat=(Double) in.readValue(d.getClass().getClassLoader());
-		lon=(Double) in.readValue(d.getClass().getClassLoader());
+		lng=(Double) in.readValue(d.getClass().getClassLoader());
 		audio=in.readString();	
 	}
 }

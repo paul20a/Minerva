@@ -6,11 +6,12 @@
     
     <ImageView
         android:id="@+id/thumbnail"
-        android:layout_width="64dp"
+        android:layout_width="@dimen/row_size"
         android:scaleType="centerCrop"
-        android:layout_height="64dp"
+        android:layout_height="@dimen/row_size"
         android:layout_marginRight="8dp"
-        android:src="@drawable/abc_ab_solid_dark_holo" />
+        android:src="@drawable/abc_ab_solid_dark_holo"
+        android:contentDescription="@string/image"/>
 
         <TextView
             android:id="@+id/rowNameTextView"
