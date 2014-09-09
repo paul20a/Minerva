@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class DirectionsDialogFragment extends DialogFragment  {
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -19,7 +20,7 @@ public class DirectionsDialogFragment extends DialogFragment  {
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		//Instantiate view
-		this.getDialog().setTitle("Numbered Audio Search");
+		this.getDialog().setTitle("Directions");
 		View v = inflater.inflate(R.layout.directions_layout, container);
 		TextView tView = (TextView) v.findViewById(R.id.txtViewDirect);
 		tView.setText("Directions to be made");
