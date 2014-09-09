@@ -43,11 +43,11 @@ public class FragmentViewPoint extends Fragment {
 		description = this.getArguments().getString("description");
 		title = this.getArguments().getString("title");
 		// locate widgets
-		TextView titleTextView = (TextView) v.findViewById(R.id.titleTextView);
-		final ImageView imageView = (ImageView) v.findViewById(R.id.imageView);
+		TextView titleTextView = (TextView) v.findViewById(R.id.txtViewTitle);
+		final ImageView imageView = (ImageView) v.findViewById(R.id.imageViewPoint);
 
 		TextView descriptionTextView = (TextView) v
-				.findViewById(R.id.textViewDesc);
+				.findViewById(R.id.txtViewDesc);
 		// set widget text
 		titleTextView.setText(title);
 		descriptionTextView.setText(description);

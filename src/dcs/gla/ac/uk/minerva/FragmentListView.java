@@ -29,7 +29,7 @@ public class FragmentListView extends Fragment {
 		// Inflate selection view
 		View v = inflater.inflate(R.layout.activity_select, container, false);
 		// create the listView
-		final ListView lView = (ListView) v.findViewById(R.id.list_points);
+		final ListView lView = (ListView) v.findViewById(R.id.listView);
 		// update this so ActivitySelect is not required, stop using pList from
 		// ActivitySelect
 		lView.setAdapter(new PointBaseAdapter(getActivity(),

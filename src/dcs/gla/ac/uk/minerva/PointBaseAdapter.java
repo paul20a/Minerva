@@ -80,9 +80,9 @@ public class PointBaseAdapter extends BaseAdapter {
 			convertView = lInflater.inflate(R.layout.row_layout, parent, false);
 			holder = new ViewHolder();
 			holder.nameTextView = (TextView) convertView
-					.findViewById(R.id.rowNameTextView);
+					.findViewById(R.id.txtViewRowTitle);
 			holder.thumbImageView = (ImageView) convertView
-					.findViewById(R.id.thumbnail);
+					.findViewById(R.id.imageViewThumbnail);
 
 			convertView.setTag(holder);
 		} else {

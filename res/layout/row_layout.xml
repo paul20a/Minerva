@@ -5,7 +5,7 @@
     android:layout_gravity="left">
     
     <ImageView
-        android:id="@+id/thumbnail"
+        android:id="@+id/imageViewThumbnail"
         android:layout_width="@dimen/row_size"
         android:scaleType="centerCrop"
         android:layout_height="@dimen/row_size"
@@ -14,9 +14,9 @@
         android:contentDescription="@string/image"/>
 
         <TextView
-            android:id="@+id/rowNameTextView"
-            android:layout_toRightOf="@id/thumbnail"
-            android:layout_alignBaseline="@id/thumbnail"
+            android:id="@+id/txtViewRowTitle"
+            android:layout_toRightOf="@id/imageViewThumbnail"
+            android:layout_alignBaseline="@id/imageViewThumbnail"
             android:text="@string/text_view1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

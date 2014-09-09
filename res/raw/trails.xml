@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
-
     <trail
         id="6253"
         image="dsc4175"
         latitude=""
         longitude=""
-        source="http://stories.rbge.org.uk/archives/6253"
-        weight="10" >
+        source="http://stories.rbge.org.uk/archives/6253">
         <title>
 <![CDATA[ Glasshouses - Windows on the World ]]></title>
 
@@ -19,5 +17,4 @@ Let the glasshouses take you on a journey of discovery through the world of plan
         </summary>
         <file>glasshouse</file>
     </trail>
-
 </data>

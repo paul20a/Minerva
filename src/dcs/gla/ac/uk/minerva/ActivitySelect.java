@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.ActionBar;
+import android.app.FragmentManager;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
@@ -72,7 +73,7 @@ public class ActivitySelect extends ActionBarActivity implements TabListener {
 		pAdapter = new MinervaFragmentPagerAdapter(getSupportFragmentManager());
 		// use a custom Swipeless ViewPager to avoid annoying accidental swipes
 		// while panning in the map view
-		vPager = (SwipelessPager) findViewById(R.id.pager);
+		vPager = (SwipelessPager) findViewById(R.id.pagerSwipeless);
 		vPager.setAdapter(pAdapter);
 		// listen for page changes
 		vPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -127,7 +128,9 @@ public class ActivitySelect extends ActionBarActivity implements TabListener {
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.select, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
+		MenuItem item = menu.findItem(R.id.audio_settings);
+		item.setIcon(MinervaMediaPlayer.initialiseStreamType());
 		return true;
 	}
 
@@ -143,8 +146,16 @@ public class ActivitySelect extends ActionBarActivity implements TabListener {
 		case android.R.id.home:
 			this.finish();
 			return true;
+		case R.id.audio_file_search:
+			FragmentManager m = getFragmentManager();
+			FragmentDialogAudioLookup dialog = new FragmentDialogAudioLookup();
+			dialog.show(m, "Audio Playback");
+			return true;
+		case R.id.audio_settings:
+			item.setIcon(MinervaMediaPlayer.changeStreamType(this));
+			return true;
 		}
-		return super.onOptionsItemSelected(item);
+		return false;
 	}
 
 	/*

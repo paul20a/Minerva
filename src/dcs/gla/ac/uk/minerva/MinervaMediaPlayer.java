@@ -21,7 +21,7 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 	public static final String RES_PREFIX = "android.resource://";
 	public MediaPlayer mediaPlayer = new MediaPlayer();
 	private AudioManager a;
-	private int streamType;
+	private static int streamType;
 	private Activity context;
 
 	/**
@@ -136,9 +136,12 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 	}
 
 	/**
+	 * 
+	 * continue audio playback in new stream output
+	 * 
 	 * @param s name of audio file
 	 */
-	public void continuePlayingOnChange(String s) {
+	public void continuePlayingAfterChange(String s) {
 		boolean playing = mediaPlayer.isPlaying();
 		int t = mediaPlayer.getCurrentPosition();
 		setupMediaPlayer(getAudioFile(s));
@@ -152,20 +155,21 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 	/**
 	 * 
 	 * change current stream type
-	 * 
+	 * @param cont - activity context
 	 * @return String for options menu
 	 */
-	public String changeStreamType() {
-		String s = "";
+	public static int changeStreamType(Activity cont) {
+
+		int rId;
 		if (streamType == AudioManager.STREAM_VOICE_CALL) {
 			streamType = AudioManager.STREAM_MUSIC;
-			s = "Speaker";
+			rId=R.drawable.selecta;
 		} else {
 			streamType = AudioManager.STREAM_VOICE_CALL;
-			s = "Earpiece";
+			rId=R.drawable.selectb;
 		}
-		savePref();
-		return s;
+		savePref(cont);
+		return rId;
 	}
 
 	/**
@@ -174,19 +178,19 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 	 * 
 	 * @return String for options menu
 	 */
-	public String initialiseStreamType() {
+	public static int initialiseStreamType() {
 		if (streamType == AudioManager.STREAM_MUSIC) {
-			return "Speaker";
+			return R.drawable.selecta;
 		} else {
-			return "Earpiece";
+			return R.drawable.selectb;
 		}
 	}
 
 	/**
 	 * save stream type to preferences
 	 */
-	public void savePref() {
-		SharedPreferences settings = context
+	private static void savePref(Activity cont) {
+		SharedPreferences settings = cont
 				.getPreferences(ActivityMain.MODE_PRIVATE);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putInt("audioOut", streamType);

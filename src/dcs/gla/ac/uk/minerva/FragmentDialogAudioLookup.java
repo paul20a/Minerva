@@ -40,9 +40,9 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 		View v = inflater.inflate(R.layout.lookup_layout, container);
 		//get Buttons
 		Button btnGo = (Button) v.findViewById(R.id.goBtn);
-		btnPlay = (ImageButton) v.findViewById(R.id.play_btn);
-		btnPause = (ImageButton) v.findViewById(R.id.pause_btn);
-		btnStop = (ImageButton) v.findViewById(R.id.replay_btn);
+		btnPlay = (ImageButton) v.findViewById(R.id.btnPlay);
+		btnPause = (ImageButton) v.findViewById(R.id.btnPause);
+		btnStop = (ImageButton) v.findViewById(R.id.btnReplay);
 		//set listeners
 		btnGo.setOnClickListener(this);
 		btnPlay.setOnClickListener(this);
@@ -66,13 +66,13 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 		case R.id.goBtn:
 			searchAudioFiles();
 			break;
-		case R.id.play_btn:
+		case R.id.btnPlay:
 			player.play();
 			break;
-		case R.id.pause_btn:
+		case R.id.btnPause:
 			player.pause();
 			break;
-		case R.id.replay_btn:
+		case R.id.btnReplay:
 			player.restart();
 		}
 	}
@@ -106,7 +106,7 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 		int r = Integer.parseInt(((EditText) getView().findViewById(
 				R.id.numberInTxt)).getText().toString().trim());
 
-		r = getActivity().getResources().getIdentifier("_" + r, "raw",
+		r = getActivity().getResources().getIdentifier("g" + r+"p", "raw",
 				getActivity().getPackageName());
 		boolean setupCheck = player.setupMediaPlayer(r);
 		if (setupCheck) {

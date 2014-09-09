@@ -7,7 +7,7 @@
         android:orientation="horizontal">
     
         <ImageButton
-            android:id="@+id/replay_btn"
+            android:id="@+id/btnReplay"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
             android:text="@string/replay" />
 
         <ImageButton
-            android:id="@+id/play_btn"
+            android:id="@+id/btnPlay"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:text="@string/play" />
 
         <ImageButton
-            android:id="@+id/pause_btn"
+            android:id="@+id/btnPause"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
