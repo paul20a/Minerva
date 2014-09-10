@@ -1,6 +1,7 @@
 package dcs.gla.ac.uk.minerva;
 
 import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
@@ -22,7 +23,7 @@ import android.widget.TextView;
 public class PointBaseAdapter extends BaseAdapter {
 	private LayoutInflater lInflater;
 	private ArrayList<Object> content;
-
+	private static MinervaLruCache mLruCache;	
 	
 	/**
 	 * @param context
@@ -33,6 +34,7 @@ public class PointBaseAdapter extends BaseAdapter {
 	public PointBaseAdapter(Context context,ArrayList<Object> in) {
 		content=in;
 		lInflater = LayoutInflater.from(context);
+		mLruCache=new MinervaLruCache();
 	}
 
 	/* (non-Javadoc)
@@ -108,7 +110,7 @@ public class PointBaseAdapter extends BaseAdapter {
 		Resources r = context.getResources();
 		int rID = r.getIdentifier(item.getImage(), "raw",
 				context.getPackageName());
-		Bitmap bitmap = BitmapProcessor.getCachedBitmap(String.valueOf(rID));
+		Bitmap bitmap = mLruCache.getCachedBitmap(String.valueOf(rID));
 		//If the bitmap is null
 		if (bitmap != null) {
 			//set the image and return
@@ -118,7 +120,7 @@ public class PointBaseAdapter extends BaseAdapter {
 		// otherwise cancel any potential work
 		else if (BitmapProcessor.cancelPotentialWork(rID, holder.thumbImageView)) {
 			final BitmapProcessor task = new BitmapProcessor(
-					holder.thumbImageView, r);
+					holder.thumbImageView, r,mLruCache);
 			task.execute(rID);
 			Bitmap b = null;
 			//create an async drawable from the task

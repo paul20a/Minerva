@@ -18,8 +18,8 @@ import android.widget.Toast;
  * @author Paul Cairney
  *
  */
-public class FragmentListView extends Fragment {
-
+public class FragmentListView extends Fragment {	
+	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
@@ -30,10 +30,12 @@ public class FragmentListView extends Fragment {
 		View v = inflater.inflate(R.layout.activity_select, container, false);
 		// create the listView
 		final ListView lView = (ListView) v.findViewById(R.id.listView);
+		
 		// update this so ActivitySelect is not required, stop using pList from
 		// ActivitySelect
 		lView.setAdapter(new PointBaseAdapter(getActivity(),
 				(((ActivitySelect) getActivity()).getpList())));
+		
 		// listen for click Actions
 		lView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -52,5 +54,5 @@ public class FragmentListView extends Fragment {
 		});
 
 		return v;
-	}
+	}	
 }

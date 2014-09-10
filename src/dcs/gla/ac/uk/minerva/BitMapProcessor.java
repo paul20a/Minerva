@@ -1,60 +1,28 @@
 package dcs.gla.ac.uk.minerva;
 
 import java.lang.ref.WeakReference;
-
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.support.v4.util.LruCache;
 import android.widget.ImageView;
 
 public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 	private final WeakReference<ImageView> imageViewReference;
 	private int data = 0;
 	private Resources res;
-	private static LruCache<String, Bitmap> bitmapCache;
-	//divisor to assign memory to cache
-	private static final int MEM_DIV = 15;
+	private MinervaLruCache mLruCache;
 
 	/**
 	 * @param imageView
 	 * @param r
 	 */
-	public BitmapProcessor(ImageView imageView, Resources r) {
+	public BitmapProcessor(ImageView imageView, Resources r,MinervaLruCache mLruCache) {
 		// Use a WeakReference to ensure the ImageView can be garbage collected
 		imageViewReference = new WeakReference<ImageView>(imageView);
 		this.res = r;
-	}
-
-	/**
-	 * 
-	 * setup the cache 
-	 * 
-	 */
-	public static void initBitmapCache() {
-		// calcualte memory to allocate to cache
-		final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-		final int size = maxMemory / MEM_DIV;
-		bitmapCache = new LruCache<String, Bitmap>(size) {
-			@Override
-			protected int sizeOf(String key, Bitmap bitmap) {
-				// size in kb rather than entries
-				return bitmap.getByteCount() / 1024;
-			}
-		};
-	}
-
-	/**
-	 * 
-	 * remove all elements from the cache
-	 * 
-	 */
-	public static void EmptyBitmapCache() {
-		// empty cache, allows cache to use same id for thumbnails and larger
-		// image
-		bitmapCache.evictAll();
+		this.mLruCache=mLruCache;
 	}
 
 	/**
@@ -119,16 +87,15 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 		// check image isn't recycled or task hasn't been cancelled
 		if (imageViewReference != null || !this.isCancelled()) {
 			ImageView iView = imageViewReference.get();
-			// try to process the bitmap if not in cache
+			// try to process the bitmap
 			try {
 				// get dimensions of imageView
 				int h = iView.getMeasuredHeightAndState();
 				int w = iView.getMeasuredWidthAndState();
-				// log image size for bug finding
+				//decode and sample bitmap
 				final Bitmap bitmap = decodeSampledBitmapFromResource(res, data,
 						w, h);
-				// add bitmap to cache
-				cacheBitmap(String.valueOf(params[0]), bitmap);
+				mLruCache.cacheBitmap(String.valueOf( params[0]), bitmap);
 				return bitmap;
 			} catch (Exception e) {
 				this.cancel(true);
@@ -202,33 +169,5 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 		return true;
 	}
 
-	/**
-	 * 
-	 * Store an entry into the cache
-	 * 
-	 * @param key
-	 *            - identifier of bitmap
-	 * @param bitmap
-	 *            - the Bitmap to be stored
-	 */
-	public void cacheBitmap(String key, Bitmap bitmap) {
-		// ensure entries don't repeat
-		if (getCachedBitmap(key) == null) {
-			// add to cache
-			bitmapCache.put(key, bitmap);
-		}
-	}
 
-	/**
-	 * 
-	 * retrieve Bitmap from the cache
-	 * 
-	 * @param key
-	 *            - identifier of bitmap
-	 * @return - cached Bitmap or null
-	 */
-	public static Bitmap getCachedBitmap(String key) {
-		// retrieve entry
-		return bitmapCache.get(key);
-	}
 }

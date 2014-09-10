@@ -39,7 +39,6 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		BitmapProcessor.EmptyBitmapCache();
 		resources = getResources();
 		// included to set logo to relevant icon
 		getActionBar()

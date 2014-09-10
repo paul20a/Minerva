@@ -25,7 +25,7 @@ public class FragmentViewPoint extends Fragment {
 	private String title;
 	private String description;
 	private String image;
-
+	private static MinervaLruCache mLruCache;
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -36,6 +36,9 @@ public class FragmentViewPoint extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		if(mLruCache==null){
+		mLruCache=new MinervaLruCache();
+		}
 		// Inflate selection view
 		View v = inflater.inflate(R.layout.activity_main, container, false);
 		// retrieve information from intent
@@ -93,7 +96,7 @@ public class FragmentViewPoint extends Fragment {
 		int rID = (r
 				.getIdentifier(image, "raw", getActivity().getPackageName()));
 		// check cache for bitmap
-		Bitmap bitmap = BitmapProcessor.getCachedBitmap(String.valueOf(rID));
+		Bitmap bitmap = mLruCache.getCachedBitmap(String.valueOf(rID));
 		// if bitmap is found in cache set it and return
 		if (bitmap != null) {
 			imageView.setImageBitmap(bitmap);
@@ -102,7 +105,7 @@ public class FragmentViewPoint extends Fragment {
 		// otherwise if the same working isn't being carried out
 		else if (BitmapProcessor.cancelPotentialWork(rID, imageView)) {
 			// create and execute anew bitmapProcessor task
-			final BitmapProcessor task = new BitmapProcessor(imageView, r);
+			final BitmapProcessor task = new BitmapProcessor(imageView, r,mLruCache);
 			task.execute(rID);
 			// create and assign an async drawable to the Imageview
 			final AsyncDrawable asyncDrawable = new AsyncDrawable(r, null, task);

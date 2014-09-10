@@ -38,7 +38,6 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		// As this is lead activity initialise global image cache
-		BitmapProcessor.initBitmapCache();
 
 		setContentView(R.layout.activity_trail_select);
 		XmlTrailParser xParser = new XmlTrailParser();

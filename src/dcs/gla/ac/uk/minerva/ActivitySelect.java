@@ -41,7 +41,6 @@ public class ActivitySelect extends ActionBarActivity implements TabListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		BitmapProcessor.EmptyBitmapCache();
 		final ActionBar navBar = getActionBar();
 		XmlPointParser xParser = new XmlPointParser();
 		Resources resources = getResources();

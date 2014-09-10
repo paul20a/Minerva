@@ -21,7 +21,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,9 +172,7 @@ public class FragmentMapView extends Fragment implements
 				.getResources(), BitmapFactory.decodeResource(getActivity()
 				.getResources(), R.raw.map, options)));
 		groundOverlay.setDimensions(length);		
-		minervaMapView.getOverlays().add(groundOverlay);
-		Log.d("Map Measure","Height: "+groundOverlay.getHeight());
-		Log.d("Map Measure","Width: "+groundOverlay.getImage().getIntrinsicHeight());
+		minervaMapView.getOverlays().add(0,groundOverlay);
 	}
 
 	/**
@@ -209,6 +206,8 @@ public class FragmentMapView extends Fragment implements
 	public void onPause() {
 		// stop gps tracking when view loses focus
 		myLocationOverlay.disableMyLocation();
+		GroundOverlay groundOverlay=(GroundOverlay) minervaMapView.getOverlays().get(0);
+		groundOverlay.setImage(null);
 		super.onPause();
 	}
 
@@ -221,6 +220,7 @@ public class FragmentMapView extends Fragment implements
 	public void onResume() {
 		// enable gps tracking when view comes back into focus
 		myLocationOverlay.enableMyLocation();
+		createGroundOverlay();
 		super.onResume();
 	}
 
