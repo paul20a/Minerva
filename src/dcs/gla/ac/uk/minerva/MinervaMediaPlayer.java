@@ -69,6 +69,10 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 		return true;
 	}
 
+	public void noMedia(){
+		if (mediaPlayer != null)
+			mediaPlayer.reset();
+	}
 	/**
 	 * begin playing audio
 	 */

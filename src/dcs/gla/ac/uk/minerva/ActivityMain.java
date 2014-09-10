@@ -78,6 +78,8 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 					setMediaButtonsEnabled(audioPresent);
 					player.setupMediaPlayer(player.getAudioFile(pList.get(
 							position).getAudio()));
+				}else {
+					player.noMedia();
 				}
 
 			}
@@ -102,6 +104,8 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 			setMediaButtonsEnabled(audioPresent);
 			player.setupMediaPlayer(player
 					.getAudioFile(pList.get(i).getAudio()));
+		} else {
+			player.noMedia();
 		}
 		super.onStart();
 	}
@@ -110,7 +114,8 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	 * 
 	 * Check if a audio file was provided in the xml
 	 * 
-	 * @param i - position in list
+	 * @param i
+	 *            - position in list
 	 * @return - true if a media file is given
 	 */
 	private boolean checkAudio(int i) {
@@ -121,7 +126,8 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	}
 
 	/**
-	 * @param enable - boolean to control if mediaPlyer buttons are enabled or not
+	 * @param enable
+	 *            - boolean to control if mediaPlyer buttons are enabled or not
 	 */
 	private void setMediaButtonsEnabled(boolean enable) {
 		ImageButton a = (ImageButton) this.findViewById(R.id.btnPlay);
@@ -133,7 +139,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		c.setEnabled(enable);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.support.v7.app.ActionBarActivity#onStop()
 	 */
 	@Override
@@ -145,7 +153,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
@@ -165,7 +175,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
+	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		// Respond to the action bar's Up/Home button
 		case android.R.id.home:
@@ -177,7 +187,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 			FragmentDialogAudioLookup dialog = new FragmentDialogAudioLookup();
 			dialog.show(m, "Audio Playback");
 			break;
-		case R.id.audio_settings:	
+		case R.id.audio_settings:
 			int i = vPager.getCurrentItem();
 			item.setIcon(MinervaMediaPlayer.changeStreamType(this));
 			// check if audio is applicable
@@ -224,10 +234,8 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// check audio state to continue
-		outState.putBoolean("isPlaying",
-				player.mediaPlayer.isPlaying());
-		outState.putInt("progress",
-				player.mediaPlayer.getCurrentPosition());
+		outState.putBoolean("isPlaying", player.mediaPlayer.isPlaying());
+		outState.putInt("progress", player.mediaPlayer.getCurrentPosition());
 		super.onSaveInstanceState(outState);
 	}
 
@@ -239,8 +247,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		savedInstanceState.getBoolean("isPlaying");
-		player.mediaPlayer.seekTo(savedInstanceState
-				.getInt("progress"));
+		player.mediaPlayer.seekTo(savedInstanceState.getInt("progress"));
 		if (savedInstanceState.getBoolean("isPlaying")) {
 			player.play();
 		}
