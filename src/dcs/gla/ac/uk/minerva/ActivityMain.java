@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +38,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("Create", "calling on create");
 
 		super.onCreate(savedInstanceState);
 		resources = getResources();
@@ -50,15 +52,21 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 
 		setContentView(R.layout.point_pager);
 		// retrieve information from intent
+		int start;
 		Bundle b = this.getIntent().getExtras();
 		pList = b.getParcelableArrayList("pList");
-		int Start = b.getInt("pos");
+		if(savedInstanceState!=null){
+			start=savedInstanceState.getInt("pos");
+		}
+		else{
+		start = b.getInt("pos");
+		}
 		// setup pager and adapter
 		sPagerAdapter = new MinervaFragmentStatePagerAdapter(
 				getSupportFragmentManager(), pList);
 		vPager = (ViewPager) findViewById(R.id.pagerPoints);
 		vPager.setAdapter(sPagerAdapter);
-		vPager.setCurrentItem(Start);
+		vPager.setCurrentItem(start);
 
 		// setup buttons
 		ImageButton speakBtn = (ImageButton) findViewById(R.id.btnPlay);
@@ -96,6 +104,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	public void onStart() {
 		// check if audio file is available
 		int i = vPager.getCurrentItem();
+		
+		Log.d("Start", "calling on Start at"+i);
+
 		checkAudio(i);
 		// get audio output method from shared preferences
 		player = new MinervaMediaPlayer(this);
@@ -234,7 +245,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// check audio state to continue
+		outState.putInt("pos", vPager.getCurrentItem());
 		outState.putBoolean("isPlaying", player.mediaPlayer.isPlaying());
+		Log.d("MeidaPlayer", "currently playing ="+player.mediaPlayer.isPlaying());
 		outState.putInt("progress", player.mediaPlayer.getCurrentPosition());
 		super.onSaveInstanceState(outState);
 	}
@@ -246,9 +259,11 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 	 */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		Log.d("MeidaPlayer", "restoring palying was = "+savedInstanceState.getBoolean("isPlaying"));
 		savedInstanceState.getBoolean("isPlaying");
 		player.mediaPlayer.seekTo(savedInstanceState.getInt("progress"));
 		if (savedInstanceState.getBoolean("isPlaying")) {
+			Log.d("mediaPlayer", "calling play");
 			player.play();
 		}
 		super.onRestoreInstanceState(savedInstanceState);

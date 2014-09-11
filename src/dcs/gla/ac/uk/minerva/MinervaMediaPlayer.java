@@ -10,6 +10,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * MediaPlayer control class to allow the MediaPlayer to be used easily over
@@ -84,6 +85,7 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener {
 				mediaPlayer.start();
 			} catch (IllegalStateException e) {
 				// TODO Auto-generated catch block
+				Log.d("Error", e.toString());
 			}
 		}
 	}
