@@ -15,10 +15,12 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -160,9 +162,7 @@ public class FragmentMapView extends Fragment implements
 
 	private void createGroundOverlay() {
 		// get screen dimensions
-		Display display = getActivity().getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
+		Point size = getScreenDimensions();
 		int width = size.x;
 		int height = size.y;
 
@@ -285,5 +285,23 @@ public class FragmentMapView extends Fragment implements
 		detailIntent.putExtra("pos", Integer.parseInt(item.getUid()));
 		startActivity(detailIntent);
 		return true;
+	}
+	
+	public Point getScreenDimensions(){
+		// get screen dimensions
+		Display display = getActivity().getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return size;
+	}
+	
+	class MapLoaderTask extends AsyncTask<Integer, Void, Bitmap>{
+
+		@Override
+		protected Bitmap doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
 	}
 }
