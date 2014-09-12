@@ -18,9 +18,12 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,23 +159,48 @@ public class FragmentMapView extends Fragment implements
 	}
 
 	private void createGroundOverlay() {
-	
-		BoundingBoxE6 bounds = new BoundingBoxE6(55.967402,
-				-3.202895,55.962836, -3.214181);
-		GeoPoint eastPoint=new GeoPoint(bounds.getLatNorthE6(),bounds.getLonEastE6());
-		GeoPoint westPoint=new GeoPoint(bounds.getLatNorthE6(),bounds.getLonWestE6());
-		int length=eastPoint.distanceTo(westPoint);
-		GeoPoint centerPoint=bounds.getCenter();
+		// get screen dimensions
+		Display display = getActivity().getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int width = size.x;
+		int height = size.y;
+
+		// position overlay
+		BoundingBoxE6 bounds = new BoundingBoxE6(55.967402, -3.202895,
+				55.962836, -3.214181);
+		GeoPoint eastPoint = new GeoPoint(bounds.getLatNorthE6(),
+				bounds.getLonEastE6());
+		GeoPoint westPoint = new GeoPoint(bounds.getLatNorthE6(),
+				bounds.getLonWestE6());
+		int length = eastPoint.distanceTo(westPoint);
+		GeoPoint centerPoint = bounds.getCenter();
 		minervaMapView.setScrollableAreaLimit(bounds);
 		GroundOverlay groundOverlay = new GroundOverlay(getActivity());
 		groundOverlay.setPosition(centerPoint);
+		// get image
 		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inSampleSize = 8;
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(getActivity().getResources(), R.raw.map,
+				options);
+		options.inJustDecodeBounds = false;
+		final int h = options.outHeight;
+		final int w = options.outWidth;
+		int sampleSize = 1;
+
+		if (h > height || w > width) {
+			while (((h) / sampleSize) > height
+					&& ((w) / sampleSize) > width) {
+				sampleSize *= 2;
+			}
+		}
+		options.inSampleSize = sampleSize;
+		Log.d("SampleSize", "" + sampleSize);
 		groundOverlay.setImage(new BitmapDrawable(this.getActivity()
 				.getResources(), BitmapFactory.decodeResource(getActivity()
 				.getResources(), R.raw.map, options)));
-		groundOverlay.setDimensions(length);		
-		minervaMapView.getOverlays().add(0,groundOverlay);
+		groundOverlay.setDimensions(length);
+		minervaMapView.getOverlays().add(0, groundOverlay);
 	}
 
 	/**

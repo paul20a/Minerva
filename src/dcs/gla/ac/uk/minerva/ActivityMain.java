@@ -12,12 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 /**
  * 
- * Activity that displays a Point on screen using an instance of
+ * Activity that displays a TourPoint on screen using an instance of
  * FragmentViewPoint
  * 
  * @author Paul
@@ -75,8 +74,6 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		pauseBtn.setOnClickListener(this);
 		ImageButton replayBtn = (ImageButton) findViewById(R.id.btnReplay);
 		replayBtn.setOnClickListener(this);
-		Button directBtn = (Button) findViewById(R.id.btnDirect);
-		directBtn.setOnClickListener(this);
 		vPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 			@Override
 			public void onPageSelected(int position) {
@@ -228,10 +225,6 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 			break;
 		case R.id.btnReplay:
 			player.restart();
-		case R.id.btnDirect:
-			FragmentManager m = getFragmentManager();
-			DirectionsDialogFragment dialog = new DirectionsDialogFragment();
-			dialog.show(m, "Audio Playback");
 		}
 	}
 

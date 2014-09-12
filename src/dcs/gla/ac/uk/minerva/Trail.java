@@ -1,7 +1,7 @@
 package dcs.gla.ac.uk.minerva;
 
 
-public class Trail extends Point{	
+public class Trail extends TourPoint{	
 	private String file;
 	
 	/**

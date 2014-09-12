@@ -9,7 +9,7 @@ import android.os.Parcelable;
  *class for describing a waypoint
  *
  */
-public class Waypoint extends Point implements Parcelable {
+public class Waypoint extends TourPoint implements Parcelable {
 	private int id;
 	private Double lat;
 	private Double lng;

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 /**
  * 
- * Creates the view of a Point showing its title image and description
+ * Creates the view of a TourPoint showing its title image and description
  * 
  * @author Paul Cairney
  * 

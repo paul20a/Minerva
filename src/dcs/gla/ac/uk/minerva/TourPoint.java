@@ -8,7 +8,7 @@ import android.os.Parcel;
  *Abstract class to define a basic display point
  *
  */
-public abstract class Point {
+public abstract class TourPoint {
 	protected String title;
 	protected String description;
 	protected String image;
@@ -21,7 +21,7 @@ public abstract class Point {
 	 * @param description - description of point
 	 * @param image - name of image file
 	 */
-	protected Point(String title, String description,String image) {
+	protected TourPoint(String title, String description,String image) {
 		this.title = title;
 		this.description = description;
 		this.image=image;
@@ -32,7 +32,7 @@ public abstract class Point {
 	 * 
 	 * @param in - Parcel object
 	 */
-	public Point(Parcel in) {
+	public TourPoint(Parcel in) {
 		title=in.readString();
 		description=in.readString();
 		image=in.readString();
