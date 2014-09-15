@@ -40,6 +40,17 @@ public class FragmentMapView extends Fragment implements
 	private double latMin = 1000, latMax = -1000, lngMin = 1000,
 			lngMax = -1000;
 	private Drawable marker;
+	private GroundOverlay groundOverlay;
+	private MapLoaderTask mTask;
+	private boolean firstRun;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mTask = new MapLoaderTask();
+		mTask.execute();
+		firstRun = true;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -53,6 +64,7 @@ public class FragmentMapView extends Fragment implements
 			Bundle savedInstanceState) {
 		// inflate view
 		View v = inflater.inflate(R.layout.map_view, container, false);
+		groundOverlay = new GroundOverlay(getActivity());
 		// create the map
 		StartMap(v);
 		return v;
@@ -81,8 +93,6 @@ public class FragmentMapView extends Fragment implements
 		// create a default resource proxy
 		ResourceProxy resourceProxy = new DefaultResourceProxyImpl(
 				getActivity().getApplicationContext());
-		// create map from image using ground overlay
-		createGroundOverlay();
 		// allow gps to locate position
 		setupMyLocationGps();
 		// process items
@@ -102,7 +112,9 @@ public class FragmentMapView extends Fragment implements
 					@Override
 					public void onGlobalLayout() {
 						// set center point to mid point of trail and zoom to it
-						minervaMapController.zoomToSpan((int)((latMax - latMin)*1E6),(int)((lngMax - lngMin)*1E6));
+						minervaMapController.zoomToSpan(
+								(int) ((latMax - latMin) * 1E6),
+								(int) ((lngMax - lngMin) * 1E6));
 						minervaMapController.zoomIn();
 
 						// check version to remove listener with correct method
@@ -161,11 +173,6 @@ public class FragmentMapView extends Fragment implements
 	}
 
 	private void createGroundOverlay() {
-		// get screen dimensions
-		Point size = getScreenDimensions();
-		int width = size.x;
-		int height = size.y;
-
 		// position overlay
 		BoundingBoxE6 bounds = new BoundingBoxE6(55.967402, -3.202895,
 				55.962836, -3.214181);
@@ -176,29 +183,7 @@ public class FragmentMapView extends Fragment implements
 		int length = eastPoint.distanceTo(westPoint);
 		GeoPoint centerPoint = bounds.getCenter();
 		minervaMapView.setScrollableAreaLimit(bounds);
-		GroundOverlay groundOverlay = new GroundOverlay(getActivity());
 		groundOverlay.setPosition(centerPoint);
-		// get image
-		final BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		BitmapFactory.decodeResource(getActivity().getResources(), R.raw.map,
-				options);
-		options.inJustDecodeBounds = false;
-		final int h = options.outHeight;
-		final int w = options.outWidth;
-		int sampleSize = 1;
-
-		if (h > height || w > width) {
-			while (((h) / sampleSize) > height
-					&& ((w) / sampleSize) > width) {
-				sampleSize *= 2;
-			}
-		}
-		options.inSampleSize = sampleSize;
-		Log.d("SampleSize", "" + sampleSize);
-		groundOverlay.setImage(new BitmapDrawable(this.getActivity()
-				.getResources(), BitmapFactory.decodeResource(getActivity()
-				.getResources(), R.raw.map, options)));
 		groundOverlay.setDimensions(length);
 		minervaMapView.getOverlays().add(0, groundOverlay);
 	}
@@ -234,8 +219,11 @@ public class FragmentMapView extends Fragment implements
 	public void onPause() {
 		// stop gps tracking when view loses focus
 		myLocationOverlay.disableMyLocation();
-		GroundOverlay groundOverlay=(GroundOverlay) minervaMapView.getOverlays().get(0);
+		GroundOverlay groundOverlay = (GroundOverlay) minervaMapView
+				.getOverlays().get(0);
 		groundOverlay.setImage(null);
+		firstRun = false;
+		mTask.cancel(true);
 		super.onPause();
 	}
 
@@ -249,6 +237,10 @@ public class FragmentMapView extends Fragment implements
 		// enable gps tracking when view comes back into focus
 		myLocationOverlay.enableMyLocation();
 		createGroundOverlay();
+		if (!firstRun) {
+			mTask = new MapLoaderTask();
+			mTask.execute();
+		}
 		super.onResume();
 	}
 
@@ -275,7 +267,6 @@ public class FragmentMapView extends Fragment implements
 	 */
 	@Override
 	public boolean onItemSingleTapUp(int arg0, OverlayItem item) {
-
 		Toast.makeText(getActivity(), item.getTitle() + "\n",
 				Toast.LENGTH_SHORT).show();
 		Intent detailIntent = new Intent(getActivity(), ActivityMain.class);
@@ -286,22 +277,55 @@ public class FragmentMapView extends Fragment implements
 		startActivity(detailIntent);
 		return true;
 	}
-	
-	public Point getScreenDimensions(){
+
+	public Point getScreenDimensions() {
 		// get screen dimensions
 		Display display = getActivity().getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 		return size;
 	}
-	
-	class MapLoaderTask extends AsyncTask<Integer, Void, Bitmap>{
+
+	class MapLoaderTask extends AsyncTask<Void, Void, Bitmap> {
 
 		@Override
-		protected Bitmap doInBackground(Integer... params) {
-			// TODO Auto-generated method stub
+		protected Bitmap doInBackground(Void... params) {
+			// get screen dimensions
+			Point size = getScreenDimensions();
+			int width = size.x;
+			int height = size.y;
+
+			final BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inJustDecodeBounds = true;
+			BitmapFactory.decodeResource(getActivity().getResources(),
+					R.raw.map, options);
+			options.inJustDecodeBounds = false;
+			final int h = options.outHeight;
+			final int w = options.outWidth;
+			int sampleSize = 1;
+
+			if (h > height || w > width) {
+				while (((h) / sampleSize) > height
+						&& ((w) / sampleSize) > width) {
+					sampleSize *= 2;
+				}
+			}
+			options.inSampleSize = sampleSize;
+			Log.d("SampleSize", "" + sampleSize);
+			if (!this.isCancelled())
+				return BitmapFactory.decodeResource(getActivity()
+						.getResources(), R.raw.map, options);
 			return null;
 		}
-		
+
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			// TODO Auto-generated method stub
+			if (!this.isCancelled()) {
+				groundOverlay.setImage(new BitmapDrawable(getActivity()
+						.getResources(), result));
+				createGroundOverlay();
+			}
+		}
 	}
 }
