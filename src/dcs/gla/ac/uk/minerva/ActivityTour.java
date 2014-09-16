@@ -101,7 +101,7 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.audio_file_search:
+		case R.id.page_search:
 			FragmentManager m = getFragmentManager();
 			FragmentDialogAudioLookup dialog = new FragmentDialogAudioLookup();
 			dialog.show(m, "Audio Playback");

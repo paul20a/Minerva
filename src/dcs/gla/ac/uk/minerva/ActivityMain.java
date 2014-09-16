@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 /**
  * 
@@ -22,7 +23,7 @@ import android.widget.ImageButton;
  * @author Paul
  * 
  */
-public class ActivityMain extends ActionBarActivity implements OnClickListener {
+public class ActivityMain extends ActionBarActivity implements OnClickListener,FragmentDialogAudioLookup.OnSearchListener {
 	public static final String RES_PREFIX = "android.resource://";
 	private ArrayList<Waypoint> pList;
 	private Resources resources;
@@ -191,7 +192,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 		case android.R.id.home:
 			this.finish();
 			break;
-		case R.id.audio_file_search:
+		case R.id.page_search:
 			player.pause();
 			FragmentManager m = getFragmentManager();
 			FragmentDialogAudioLookup dialog = new FragmentDialogAudioLookup();
@@ -262,5 +263,17 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener {
 			player.play();
 		}
 		super.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
+	public void onPageSearch(int id,FragmentDialogAudioLookup frag) {
+		for(int i=0;i<pList.size();i++){
+			if(pList.get(i).getId()==id){
+				vPager.setCurrentItem(i);
+				frag.dismiss();
+				return;
+			}
+		}
+		Toast.makeText(this, "Unable to find entry with id: "+id, Toast.LENGTH_SHORT).show();
 	}
 }
