@@ -213,10 +213,10 @@ public class FragmentMapView extends Fragment implements
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see android.support.v4.app.Fragment#onPause()
+	 * @see android.support.v4.app.Fragment#onStop()
 	 */
 	@Override
-	public void onPause() {
+	public void onStop() {
 		// stop gps tracking when view loses focus
 		myLocationOverlay.disableMyLocation();
 		GroundOverlay groundOverlay = (GroundOverlay) minervaMapView
@@ -224,16 +224,16 @@ public class FragmentMapView extends Fragment implements
 		groundOverlay.setImage(null);
 		firstRun = false;
 		mTask.cancel(true);
-		super.onPause();
+		super.onStop();
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see android.support.v4.app.Fragment#onResume()
+	 * @see android.support.v4.app.Fragment#onStart()
 	 */
 	@Override
-	public void onResume() {
+	public void onStart() {
 		// enable gps tracking when view comes back into focus
 		myLocationOverlay.enableMyLocation();
 		createGroundOverlay();
@@ -241,7 +241,7 @@ public class FragmentMapView extends Fragment implements
 			mTask = new MapLoaderTask();
 			mTask.execute();
 		}
-		super.onResume();
+		super.onStart();
 	}
 
 	/*

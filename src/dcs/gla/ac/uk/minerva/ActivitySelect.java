@@ -11,12 +11,14 @@ import android.app.FragmentManager;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 /**
  * 
@@ -28,7 +30,7 @@ import android.view.MenuItem;
  * @author Paul Cairney
  * 
  */
-public class ActivitySelect extends ActionBarActivity implements TabListener {
+public class ActivitySelect extends ActionBarActivity implements TabListener,FragmentDialogAudioLookup.OnSearchListener  {
 	MinervaFragmentPagerAdapter pAdapter;
 	SwipelessPager vPager;
 	public ArrayList<Object> pList = new ArrayList<Object>();
@@ -194,5 +196,23 @@ public class ActivitySelect extends ActionBarActivity implements TabListener {
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
 		// feature not enabled
+	}
+
+	@Override
+	public void onPageSearch(int id, FragmentDialogAudioLookup frag) {
+		for(int i=0;i<pList.size();i++){
+			if(((Waypoint)pList.get(i)).getId()==id){
+				Intent detailIntent = new Intent(this,
+						ActivityMain.class);
+				// Need to update this class is too dependent on ActivitySelect
+				detailIntent.putExtra("pList",pList);
+				detailIntent.putExtra("pos", i);
+				Toast.makeText(this, "Loading", Toast.LENGTH_SHORT)
+						.show();
+				startActivity(detailIntent);
+				frag.dismiss();
+				return;
+			}
+		}
 	}
 }

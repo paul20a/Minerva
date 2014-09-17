@@ -6,13 +6,10 @@ import java.util.ArrayList;
 
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -77,40 +74,6 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 		// setup tour start button
 		Button startBtn = (Button) findViewById(R.id.btnStart);
 		startBtn.setOnClickListener(this);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		MenuItem item = menu.findItem(R.id.audio_settings);
-		item.setIcon(MinervaMediaPlayer.initialiseStreamType());
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.page_search:
-			FragmentManager m = getFragmentManager();
-			FragmentDialogAudioLookup dialog = new FragmentDialogAudioLookup();
-			dialog.show(m, "Audio Playback");
-			return true;
-		case R.id.audio_settings:
-			item.setIcon(MinervaMediaPlayer.changeStreamType(this));
-			return true;
-		}
-		return false;
 	}
 
 	/*

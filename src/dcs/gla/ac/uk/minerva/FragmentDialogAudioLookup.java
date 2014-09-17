@@ -27,7 +27,7 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 
 	// Container Activity must implement this interface
 	public interface OnSearchListener {
-		public void onPageSearch(int position,FragmentDialogAudioLookup frag);
+		public void onPageSearch(int id,FragmentDialogAudioLookup frag);
 	}
 
 	@Override
