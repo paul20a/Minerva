@@ -156,9 +156,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,F
 	@Override
 	protected void onStop() {
 		Log.d("MainActivity", "stopping");
-
 		// release the mediaPlayer
-		
 		player.release();
 		// update preferences to store audio output
 		super.onStop();
