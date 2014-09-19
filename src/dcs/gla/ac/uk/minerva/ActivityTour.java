@@ -88,6 +88,5 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 			intent.putExtra(TRAILPATH, ((Trail) tList.get(0)).getFile());
 			startActivity(intent);
 		}
-
 	}
 }

@@ -21,11 +21,4 @@
         android:ems="10"
         android:inputType="number" />
 
-    <include
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtNumIn"
-        android:layout_marginTop="16dp"
-        layout="@layout/media_button_layout" />
-
 </RelativeLayout>

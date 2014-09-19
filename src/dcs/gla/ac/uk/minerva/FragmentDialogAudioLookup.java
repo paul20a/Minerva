@@ -52,7 +52,7 @@ public class FragmentDialogAudioLookup extends DialogFragment implements
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		// Instantiate view
-		this.getDialog().setTitle("Numbered Audio Search");
+		this.getDialog().setTitle("Search by ID");
 		View v = inflater.inflate(R.layout.lookup_layout, container);
 		// set up button + listener
 		Button btnGo = (Button) v.findViewById(R.id.btnGo);
