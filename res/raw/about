@@ -1,4 +1,5 @@
 Developed by the University of Glasgow.
 
 credits
-Map view uses osmdroid package
+Map view uses osmdroid (license located at https://github.com/osmdroid/osmdroid/blob/master/LICENSE)
+and the osmbonuspack (https://github.com/grote/OSMBonusPacks).

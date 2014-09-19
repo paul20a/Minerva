@@ -86,6 +86,10 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 		if (v.getId() == (R.id.btnStart)) {
 			Intent intent = new Intent(this, ActivitySelect.class);
 			intent.putExtra(TRAILPATH, ((Trail) tList.get(0)).getFile());
+			intent.putExtra("north", ((Trail) tList.get(0)).getLatNorth());
+			intent.putExtra("south", ((Trail) tList.get(0)).getLatSouth());
+			intent.putExtra("east", ((Trail) tList.get(0)).getLngEast());
+			intent.putExtra("west", ((Trail) tList.get(0)).getLonWest());
 			startActivity(intent);
 		}
 	}

@@ -3,10 +3,10 @@
     <trail
         image="dsc4175"
         map="map"
-        latitudeNE=""
-        longitudeNE="" 
-        latitudeSW=""
-        longitudeSW="">
+        latitudeN="55.967402"
+        longitudeE="-3.202895" 
+        latitudeS="55.962836"
+        longitudeW="-3.214181">
         <title>
 <![CDATA[ Glasshouses - Windows on the World ]]></title>
 

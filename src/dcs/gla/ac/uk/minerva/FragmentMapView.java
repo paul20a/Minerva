@@ -17,9 +17,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,16 +37,18 @@ public class FragmentMapView extends Fragment implements
 	private MapView minervaMapView;
 	private CustomItemizedOverlay customItemizedOverlay = null;
 	private MyLocationNewOverlay myLocationOverlay;
-	private double latMin = 1000, latMax = -1000, lngMin = 1000,
-			lngMax = -1000;
+	private double latMin = 1000, latMax = -1000, lngMin = 1000,lngMax = -1000;
 	private Drawable marker;
 	private GroundOverlay groundOverlay;
 	private MapLoaderTask mTask;
 	private boolean firstRun;
-
+	private BoundingBoxE6 bounds;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		final Intent i=getActivity().getIntent();
+		Bundle b=i.getExtras();
+		bounds=new BoundingBoxE6(b.getInt("north"),b.getInt("east"),b.getInt("south"),b.getInt("west"));
 		mTask = new MapLoaderTask();
 		mTask.execute();
 		firstRun = true;
@@ -172,17 +174,15 @@ public class FragmentMapView extends Fragment implements
 		return itemList;
 	}
 
-	private void createGroundOverlay() {
+	private void createGroundOverlay(BoundingBoxE6 b) {
 		// position overlay
-		BoundingBoxE6 bounds = new BoundingBoxE6(55.967402, -3.202895,
-				55.962836, -3.214181);
-		GeoPoint eastPoint = new GeoPoint(bounds.getLatNorthE6(),
-				bounds.getLonEastE6());
-		GeoPoint westPoint = new GeoPoint(bounds.getLatNorthE6(),
-				bounds.getLonWestE6());
+		GeoPoint eastPoint = new GeoPoint(b.getLatNorthE6(),
+				b.getLonEastE6());
+		GeoPoint westPoint = new GeoPoint(b.getLatNorthE6(),
+				b.getLonWestE6());
 		int length = eastPoint.distanceTo(westPoint);
-		GeoPoint centerPoint = bounds.getCenter();
-		minervaMapView.setScrollableAreaLimit(bounds);
+		GeoPoint centerPoint = b.getCenter();
+		minervaMapView.setScrollableAreaLimit(b);
 		groundOverlay.setPosition(centerPoint);
 		groundOverlay.setDimensions(length);
 		minervaMapView.getOverlays().add(0, groundOverlay);
@@ -236,7 +236,7 @@ public class FragmentMapView extends Fragment implements
 	public void onStart() {
 		// enable gps tracking when view comes back into focus
 		myLocationOverlay.enableMyLocation();
-		createGroundOverlay();
+		createGroundOverlay(bounds);
 		if (!firstRun) {
 			mTask = new MapLoaderTask();
 			mTask.execute();
@@ -324,7 +324,7 @@ public class FragmentMapView extends Fragment implements
 			if (!this.isCancelled()) {
 				groundOverlay.setImage(new BitmapDrawable(getActivity()
 						.getResources(), result));
-				createGroundOverlay();
+				createGroundOverlay(bounds);
 			}
 		}
 	}
