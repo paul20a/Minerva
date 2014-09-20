@@ -11,8 +11,8 @@ import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
-import android.util.Log;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 
 /**
  * MediaPlayer control class to allow the MediaPlayer to be used easily over
@@ -28,7 +28,7 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 	private static int streamType;
 	private Activity context;
 	private int audioId;
-
+	private ImageButton btnPlay;
 	/**
 	 * 
 	 * Parameterised constructor
@@ -38,13 +38,14 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 	 */
 	public MinervaMediaPlayer(Activity context) {
 		this.context = context;
+		btnPlay=(ImageButton) this.context.findViewById(R.id.btnPlay);
 		SharedPreferences settings = context
 				.getPreferences(ActivityMain.MODE_PRIVATE);
 		streamType = settings
 				.getInt("audioOut", AudioManager.STREAM_VOICE_CALL);
 		context.setVolumeControlStream(streamType);
 		a = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
+		
 	}
 
 	/**
@@ -55,6 +56,7 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 	public boolean setupMediaPlayer(int i) {
 		// store locally to handle audio focus loss
 		audioId = i;
+		btnPlay.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_play));
 		// reset and create media player
 		if (mediaPlayer != null)
 			mediaPlayer.reset();
@@ -73,8 +75,7 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 
 		} catch (IllegalArgumentException | SecurityException
 				| IllegalStateException | NotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
+			e.printStackTrace();
 			return false;
 		}
 		return true;
@@ -89,17 +90,21 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 	 * begin playing audio
 	 */
 	public void play() {
+		if (mediaPlayer.isPlaying()) {
+			pause();
+			return;
+		}
 		int result = a.requestAudioFocus(this, streamType,
 				AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 		if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
 			try {
+				btnPlay.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_pause));
 				mediaPlayer.start();
 				context.getWindow().addFlags(
 						WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 				mediaPlayer.setOnCompletionListener(this);
 			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				Log.d("Error", e.toString());
+				e.printStackTrace();
 			}
 		}
 	}
@@ -110,6 +115,7 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 	public void pause() {
 		if (mediaPlayer.isPlaying()) {
 			mediaPlayer.pause();
+			btnPlay.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_play));
 			context.getWindow().clearFlags(
 					WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		}
@@ -125,17 +131,20 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 	@Override
 	public void onAudioFocusChange(int focusChange) {
 		if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-			Log.d("AudioFocus", "Transient focus lost");
+			if(mediaPlayer.isPlaying()){
 			mediaPlayer.pause();
+			btnPlay.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_play));
+			}
 		} else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-			Log.d("AudioFocus", "focus gained");
 			if (mediaPlayer == null) {
 				mediaPlayer = new MediaPlayer();
 				setupMediaPlayer(audioId);
 			}
 		} else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-			Log.d("AudioFocus", "focus lost");
-			mediaPlayer.stop();
+			if(mediaPlayer.isPlaying()){
+				mediaPlayer.stop();
+				btnPlay.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_play));
+				}
 			mediaPlayer.release();
 			mediaPlayer = null;
 			a.abandonAudioFocus(this);
@@ -185,6 +194,7 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 		setupMediaPlayer(getAudioFile(s));
 		mediaPlayer.seekTo(t);
 		if (playing) {
+			btnPlay.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_pause));
 			mediaPlayer.start();
 		}
 		context.setVolumeControlStream(streamType);
@@ -241,5 +251,6 @@ public class MinervaMediaPlayer implements OnAudioFocusChangeListener,
 	public void onCompletion(MediaPlayer mp) {
 		context.getWindow().clearFlags(
 				WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		btnPlay.setImageDrawable(context.getResources().getDrawable(android.R.drawable.ic_media_play));
 	}
 }

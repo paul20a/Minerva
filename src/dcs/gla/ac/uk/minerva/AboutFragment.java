@@ -30,11 +30,16 @@ public class AboutFragment extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater,
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		// Instantiate view
-		this.getDialog().setTitle("About");
+		Bundle b= this.getArguments();
+		String title=b.getString("title");
+		String filename=b.getString("filename");
+		this.getDialog().setTitle(title);
 		View v = inflater.inflate(R.layout.about, container);
 		TextView textView = (TextView) v.findViewById(R.id.txtAbout);
 		try{
-		InputStream inStream = getResources().openRawResource(R.raw.about);
+			int rID = getActivity().getResources().getIdentifier(filename, "raw",
+					getActivity().getPackageName());
+		InputStream inStream = getResources().openRawResource(rID);
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		int i;
 		i = inStream.read();
@@ -47,7 +52,6 @@ public class AboutFragment extends DialogFragment {
 		  byteArrayOutputStream.close();
 		  inStream.close();
 		} catch (IOException e) {
-		 // TODO Auto-generated catch block
 		e.printStackTrace();
 		}
 		return v;

@@ -1,5 +1,9 @@
 package dcs.gla.ac.uk.minerva;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 
 import org.osmdroid.DefaultResourceProxyImpl;
@@ -14,6 +18,8 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,7 +47,6 @@ public class FragmentMapView extends Fragment implements
 	private Drawable marker;
 	private GroundOverlay groundOverlay;
 	private MapLoaderTask mTask;
-	private boolean firstRun;
 	private BoundingBoxE6 bounds;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,10 +54,8 @@ public class FragmentMapView extends Fragment implements
 		final Intent i=getActivity().getIntent();
 		Bundle b=i.getExtras();
 		bounds=new BoundingBoxE6(b.getInt("north"),b.getInt("east"),b.getInt("south"),b.getInt("west"));
-		mTask = new MapLoaderTask();
-		mTask.execute();
-		firstRun = true;
 	}
+
 
 	/*
 	 * (non-Javadoc)
@@ -72,6 +75,20 @@ public class FragmentMapView extends Fragment implements
 		return v;
 	}
 
+	/**
+	 * 
+	 * return application directory
+	 * 
+	 * @return
+	 */
+	private File getDirectory(){
+        ContextWrapper wrapper = new ContextWrapper(getActivity().getApplicationContext());
+        File directory = wrapper.getDir("maps", Context.MODE_PRIVATE);
+        directory.getAbsolutePath();
+		return directory;
+	}
+	
+	
 	/**
 	 * 
 	 * setup the MapView, this will initialise the map, add markers to it,
@@ -114,10 +131,8 @@ public class FragmentMapView extends Fragment implements
 					@Override
 					public void onGlobalLayout() {
 						// set center point to mid point of trail and zoom to it
-						minervaMapController.zoomToSpan(
-								(int) ((latMax - latMin) * 1E6),
-								(int) ((lngMax - lngMin) * 1E6));
-						minervaMapController.zoomIn();
+						minervaMapController.setZoom(16);
+						minervaMapController.setCenter(new GeoPoint((latMax + latMin/2),(lngMax + lngMin/2)));
 
 						// check version to remove listener with correct method
 						// version.
@@ -174,6 +189,59 @@ public class FragmentMapView extends Fragment implements
 		return itemList;
 	}
 
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param bitmapImage
+	 * @return
+	 */
+	private void saveToInternal(Bitmap bitmapImage){
+       //create file in maps directory
+        File mypath=new File( this.getDirectory(),"map.png");
+        FileOutputStream outStream = null;
+        try {           
+
+        	outStream = new FileOutputStream(mypath);
+       // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            outStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+	
+	/**
+	 * 
+	 * load the file from internal storage
+	 * 
+	 * @param path
+	 */
+	private boolean loadFromStorage()
+	{
+		//try and load the image return true if successful
+	    try {
+	        File f=new File(this.getDirectory().getAbsolutePath(), "map.png");
+	        Bitmap mapBitmap = BitmapFactory.decodeStream(new FileInputStream(f));
+			groundOverlay.setImage(new BitmapDrawable(getActivity()
+					.getResources(), mapBitmap));
+			return true;
+	    } 
+	    catch (FileNotFoundException e) 
+	    {
+	    	//return false if file doesn't exist
+	        e.printStackTrace();
+	        return false;
+	    }
+
+	}
+	
+	/**
+	 * 
+	 * create the ground overlay that displays the map image
+	 * 
+	 * @param b bounding box of map
+	 */
 	private void createGroundOverlay(BoundingBoxE6 b) {
 		// position overlay
 		GeoPoint eastPoint = new GeoPoint(b.getLatNorthE6(),
@@ -222,8 +290,6 @@ public class FragmentMapView extends Fragment implements
 		GroundOverlay groundOverlay = (GroundOverlay) minervaMapView
 				.getOverlays().get(0);
 		groundOverlay.setImage(null);
-		firstRun = false;
-		mTask.cancel(true);
 		super.onStop();
 	}
 
@@ -237,8 +303,8 @@ public class FragmentMapView extends Fragment implements
 		// enable gps tracking when view comes back into focus
 		myLocationOverlay.enableMyLocation();
 		createGroundOverlay(bounds);
-		if (!firstRun) {
-			mTask = new MapLoaderTask();
+		if(!this.loadFromStorage()){
+			mTask= new MapLoaderTask();
 			mTask.execute();
 		}
 		super.onStart();
@@ -322,6 +388,7 @@ public class FragmentMapView extends Fragment implements
 		protected void onPostExecute(Bitmap result) {
 			// TODO Auto-generated method stub
 			if (!this.isCancelled()) {
+				saveToInternal(result);
 				groundOverlay.setImage(new BitmapDrawable(getActivity()
 						.getResources(), result));
 				createGroundOverlay(bounds);

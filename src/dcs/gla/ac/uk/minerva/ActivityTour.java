@@ -51,10 +51,8 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 			in.close();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// bundle arguements up to give them to the fragment

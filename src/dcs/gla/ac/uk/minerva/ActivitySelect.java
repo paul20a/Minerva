@@ -61,10 +61,8 @@ public class ActivitySelect extends ActionBarActivity implements TabListener,Fra
 			in.close();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (XmlPullParserException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// Setup Action bar for navigation
@@ -142,13 +140,29 @@ public class ActivitySelect extends ActionBarActivity implements TabListener,Fra
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		final Bundle args=new Bundle();
+		final FragmentManager m = getFragmentManager();
+
 		switch (item.getItemId()) {
 		// Respond to the action bar's Up/Home button
 		case android.R.id.home:
 			this.finish();
 			return true;
+		case R.id.help:
+			final AboutFragment help = new AboutFragment();
+			args.putString("title", "Help");
+			args.putString("filename", "help");
+			help.setArguments(args);
+			help.show(m, "Help");
+			break;
+		case R.id.about:
+			final AboutFragment about = new AboutFragment();
+			args.putString("title", "About");
+			args.putString("filename", "about");
+			about.setArguments(args);
+			about.show(m, "About");
+			break;
 		case R.id.page_search:
-			FragmentManager m = getFragmentManager();
 			FragmentDialogAudioLookup dialog = new FragmentDialogAudioLookup();
 			dialog.show(m, "Audio Playback");
 			return true;
@@ -181,7 +195,6 @@ public class ActivitySelect extends ActionBarActivity implements TabListener,Fra
 	 */
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
 		// feature not enabled
 	}
 
@@ -194,7 +207,6 @@ public class ActivitySelect extends ActionBarActivity implements TabListener,Fra
 	 */
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		// TODO Auto-generated method stub
 		// feature not enabled
 	}
 
