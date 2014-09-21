@@ -46,8 +46,6 @@ public class ActivitySelect extends ActionBarActivity implements TabListener,Fra
 		final ActionBar navBar = getActionBar();
 		XmlPointParser xParser = new XmlPointParser();
 		Resources resources = getResources();
-		navBar.setIcon(resources.getIdentifier("logo", "raw",
-				"dcs.gla.ac.uk.minerva"));
 		setContentView(R.layout.pager);
 		// try and parse xml document
 		try {
@@ -151,14 +149,14 @@ public class ActivitySelect extends ActionBarActivity implements TabListener,Fra
 		case R.id.help:
 			final AboutFragment help = new AboutFragment();
 			args.putString("title", "Help");
-			args.putString("filename", "help");
+			args.putString("filename", "a_help");
 			help.setArguments(args);
 			help.show(m, "Help");
 			break;
 		case R.id.about:
 			final AboutFragment about = new AboutFragment();
 			args.putString("title", "About");
-			args.putString("filename", "about");
+			args.putString("filename", "a_about");
 			about.setArguments(args);
 			about.show(m, "About");
 			break;

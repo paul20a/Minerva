@@ -3,11 +3,9 @@ package dcs.gla.ac.uk.minerva;
 import java.util.ArrayList;
 
 import android.app.FragmentManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +25,6 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,
 		FragmentDialogAudioLookup.OnSearchListener {
 	public static final String RES_PREFIX = "android.resource://";
 	private ArrayList<Waypoint> pList;
-	private Resources resources;
 	private ViewPager vPager;
 	protected MinervaMediaPlayer player;
 	private MinervaFragmentStatePagerAdapter sPagerAdapter;
@@ -39,15 +36,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d("Create", "calling on create");
-
 		super.onCreate(savedInstanceState);
-		resources = getResources();
-		// included to set logo to relevant icon
-		getActionBar()
-				.setIcon(
-						resources.getIdentifier("logo", "raw",
-								"dcs.gla.ac.uk.minerva"));
 		// allow up nav
 		getActionBar().setHomeButtonEnabled(true);
 
@@ -101,8 +90,6 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,
 		// check if audio file is available
 		int i = vPager.getCurrentItem();
 
-		Log.d("Start", "calling on Start at" + i);
-
 		checkAudio(i);
 		// get audio output method from shared preferences
 		player = new MinervaMediaPlayer(this);
@@ -151,10 +138,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,
 	 */
 	@Override
 	protected void onStop() {
-		Log.d("MainActivity", "stopping");
-
 		// release the mediaPlayer
-
 		player.release();
 		// update preferences to store audio output
 		super.onStop();
@@ -199,7 +183,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,
 			player.pause();
 			final AboutFragment help = new AboutFragment();
 			args.putString("title", "Help");
-			args.putString("filename", "help");
+			args.putString("filename", "a_help");
 			help.setArguments(args);
 			help.show(m, "Help");
 			break;
@@ -207,7 +191,7 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,
 			player.pause();
 			final AboutFragment about = new AboutFragment();
 			args.putString("title", "About");
-			args.putString("filename", "about");
+			args.putString("filename", "a_about");
 			about.setArguments(args);
 			about.show(m, "About");
 			break;
@@ -253,8 +237,6 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,
 		// check audio state to continue
 		outState.putInt("pos", vPager.getCurrentItem());
 		outState.putBoolean("isPlaying", player.mediaPlayer.isPlaying());
-		Log.d("MeidaPlayer",
-				"currently playing =" + player.mediaPlayer.isPlaying());
 		outState.putInt("progress", player.mediaPlayer.getCurrentPosition());
 		super.onSaveInstanceState(outState);
 	}
@@ -266,13 +248,9 @@ public class ActivityMain extends ActionBarActivity implements OnClickListener,
 	 */
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		Log.d("MeidaPlayer",
-				"restoring palying was = "
-						+ savedInstanceState.getBoolean("isPlaying"));
 		savedInstanceState.getBoolean("isPlaying");
 		player.mediaPlayer.seekTo(savedInstanceState.getInt("progress"));
 		if (savedInstanceState.getBoolean("isPlaying")) {
-			Log.d("mediaPlayer", "calling play");
 			player.play();
 		}
 		super.onRestoreInstanceState(savedInstanceState);

@@ -7,7 +7,6 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,7 +111,6 @@ public class FragmentViewPoint extends Fragment {
 			Display display = getActivity().getWindowManager().getDefaultDisplay();
 			Point size = new Point();
 			display.getSize(size);
-			Log.d("SIZE", size.x+"");
 			task.execute(rID,size.x,size.y);
 			// create and assign an async drawable to the Imageview
 			final AsyncDrawable asyncDrawable = new AsyncDrawable(r, null, task);

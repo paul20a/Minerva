@@ -38,14 +38,12 @@ public class ActivityTour extends FragmentActivity implements OnClickListener {
 
 		setContentView(R.layout.activity_trail_select);
 		XmlTrailParser xParser = new XmlTrailParser();
-		getActionBar().setIcon(
-				getResources().getIdentifier("logo", "raw",
-						"dcs.gla.ac.uk.minerva"));
+
 
 		try {
 			Resources resources = getResources();
 			int rID = resources
-					.getIdentifier("trails", "raw", getPackageName());
+					.getIdentifier("a_config", "raw", getPackageName());
 			InputStream in = resources.openRawResource(rID);
 			tList = xParser.parse(in);
 			in.close();

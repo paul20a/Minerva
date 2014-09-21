@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.ImageView;
 
 public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
@@ -87,9 +86,6 @@ public class BitmapProcessor extends AsyncTask<Integer, Void, Bitmap> {
 		data = params[0];
 		int sizex=params[1];
 		int sizey=params[2];
-		Log.d("SIZEY", sizex+"");
-		Log.d("SIZEX", sizey+"");
-
 		// check image isn't recycled or task hasn't been cancelled
 		if (imageViewReference != null || !this.isCancelled()) {
 			// try to process the bitmap
